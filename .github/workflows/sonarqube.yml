@@ -40,6 +40,6 @@ jobs:
             -Dsonar.projectKey=pcjs156_bandit-client \
             -Dsonar.sources=. \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${SONAR_TOKEN}
+            -Dsonar.login=${SONAR_TOKEN} \
             -Dsonar.organization=pcjs156
 
