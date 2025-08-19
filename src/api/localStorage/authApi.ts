@@ -8,13 +8,13 @@ import type {
   ApiError,
 } from "@src/types/api";
 import type { User } from "@src/types/user";
-import type { StoredUser } from "./userStorage";
 import { ApiErrorCode } from "@src/types/api";
-import { LocalStorageUtil } from "./storage";
 import { AuthValidation } from "@src/utils/authValidation";
+import { TokenStorage } from "./tokenStorage";
+import { useUserStore } from "@src/stores/userStore";
 
 /**
- * LocalStorage 기반 인증 API 구현체
+ * Zustand 기반 인증 API 구현체
  */
 export class LocalStorageAuthApi implements AuthApiClient {
   /**
@@ -27,8 +27,10 @@ export class LocalStorageAuthApi implements AuthApiClient {
       throw validationError;
     }
 
+    const userStore = useUserStore.getState();
+
     // 중복 사용자 확인
-    const existingUser = LocalStorageUtil.findUserByUserId(data.userId);
+    const existingUser = userStore.findUserByUserId(data.userId);
     if (existingUser) {
       const error: ApiError = {
         detailCode: ApiErrorCode.USER_ID_ALREADY_EXISTS,
@@ -38,15 +40,15 @@ export class LocalStorageAuthApi implements AuthApiClient {
     }
 
     // 사용자 생성
-    const storedUser = await LocalStorageUtil.createUser(data);
+    const storedUser = await userStore.createUser(data);
     const user = this.toPublicUser(storedUser);
 
     // 토큰 생성
-    const tokens = LocalStorageUtil.generateTokens(user.id);
+    const tokens = TokenStorage.generateTokens(user.id);
 
     // 현재 사용자로 설정
-    LocalStorageUtil.setCurrentUser(user);
-    LocalStorageUtil.setTokens(tokens.accessToken, tokens.refreshToken);
+    userStore.setCurrentUser(user);
+    TokenStorage.setTokens(tokens.accessToken, tokens.refreshToken);
 
     return {
       user,
@@ -68,8 +70,10 @@ export class LocalStorageAuthApi implements AuthApiClient {
       throw validationError;
     }
 
+    const userStore = useUserStore.getState();
+
     // 사용자 찾기
-    const storedUser = LocalStorageUtil.findUserByUserId(data.userId);
+    const storedUser = userStore.findUserByUserId(data.userId);
     if (!storedUser) {
       const error: ApiError = {
         detailCode: ApiErrorCode.INVALID_CREDENTIALS,
@@ -79,12 +83,12 @@ export class LocalStorageAuthApi implements AuthApiClient {
     }
 
     // 비밀번호 확인
-    if (
-      !(await LocalStorageUtil.verifyPassword(
-        data.password,
-        storedUser.passwordHash
-      ))
-    ) {
+    const isPasswordValid = await userStore.verifyPassword(
+      data.password,
+      storedUser.passwordHash
+    );
+
+    if (!isPasswordValid) {
       const error: ApiError = {
         detailCode: ApiErrorCode.INVALID_CREDENTIALS,
         message: "아이디 또는 비밀번호가 잘못되었습니다",
@@ -95,11 +99,11 @@ export class LocalStorageAuthApi implements AuthApiClient {
     const user = this.toPublicUser(storedUser);
 
     // 토큰 생성
-    const tokens = LocalStorageUtil.generateTokens(user.id);
+    const tokens = TokenStorage.generateTokens(user.id);
 
     // 현재 사용자로 설정
-    LocalStorageUtil.setCurrentUser(user);
-    LocalStorageUtil.setTokens(tokens.accessToken, tokens.refreshToken);
+    userStore.setCurrentUser(user);
+    TokenStorage.setTokens(tokens.accessToken, tokens.refreshToken);
 
     return {
       user,
@@ -112,14 +116,16 @@ export class LocalStorageAuthApi implements AuthApiClient {
    * 로그아웃
    */
   async logout(): Promise<void> {
-    LocalStorageUtil.clearAuth();
+    const userStore = useUserStore.getState();
+    userStore.setCurrentUser(null);
+    TokenStorage.clearTokens();
   }
 
   /**
    * 토큰 갱신
    */
   async refreshToken(data: RefreshTokenRequest): Promise<AuthTokens> {
-    const payload = LocalStorageUtil.parseToken(data.refreshToken);
+    const payload = TokenStorage.parseToken(data.refreshToken);
 
     if (!payload || payload.type !== "refresh") {
       const error: ApiError = {
@@ -129,8 +135,10 @@ export class LocalStorageAuthApi implements AuthApiClient {
       throw error;
     }
 
+    const userStore = useUserStore.getState();
+
     // 사용자 확인
-    const storedUser = LocalStorageUtil.findUserById(payload.userId);
+    const storedUser = userStore.findUserById(payload.userId);
     if (!storedUser) {
       const error: ApiError = {
         detailCode: ApiErrorCode.INVALID_REFRESH_TOKEN,
@@ -140,8 +148,8 @@ export class LocalStorageAuthApi implements AuthApiClient {
     }
 
     // 새 토큰 생성
-    const tokens = LocalStorageUtil.generateTokens(payload.userId);
-    LocalStorageUtil.setTokens(tokens.accessToken, tokens.refreshToken);
+    const tokens = TokenStorage.generateTokens(payload.userId);
+    TokenStorage.setTokens(tokens.accessToken, tokens.refreshToken);
 
     return tokens;
   }
@@ -149,7 +157,7 @@ export class LocalStorageAuthApi implements AuthApiClient {
   /**
    * 내부 저장용 사용자 객체를 공개 사용자 객체로 변환
    */
-  private toPublicUser(storedUser: StoredUser): User {
+  private toPublicUser(storedUser: { passwordHash: string } & User): User {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash, ...publicUser } = storedUser;
     return publicUser;
