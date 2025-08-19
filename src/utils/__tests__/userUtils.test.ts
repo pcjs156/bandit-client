@@ -6,9 +6,21 @@ import {
   findUserById,
   updateUserInArray,
   updateUserWithTimestamp,
+  createStoredUser,
+  verifyUserPassword,
 } from "../userUtils";
+import * as userUtilsModule from "../userUtils";
+import { PasswordUtils } from "../passwordUtils";
 import type { StoredUser } from "@src/stores/userStore";
-import type { User } from "@src/types/user";
+import type { User, CreateUserData } from "@src/types/user";
+
+// PasswordUtils 모킹
+vi.mock("../passwordUtils", () => ({
+  PasswordUtils: {
+    hashPassword: vi.fn(),
+    verifyPassword: vi.fn(),
+  },
+}));
 
 describe("userUtils", () => {
   // 테스트용 샘플 데이터
@@ -253,6 +265,99 @@ describe("userUtils", () => {
 
       expect(result.updatedUser).toBeNull();
       expect(result.updatedUsers).toBe(emptyArray);
+    });
+  });
+
+  describe("createStoredUser", () => {
+    it("새 사용자 객체를 생성해야 한다", async () => {
+      const userData: CreateUserData = {
+        userId: "testuser",
+        nickname: "테스트유저",
+        password: "testPassword123!",
+      };
+
+      // PasswordUtils.hashPassword 모킹
+      const mockHashedPassword = "$2a$12$hashedPassword";
+      vi.mocked(PasswordUtils.hashPassword).mockResolvedValue(
+        mockHashedPassword
+      );
+
+      // 시간 모킹
+      const mockDate = new Date("2024-01-01T12:00:00.000Z");
+      vi.setSystemTime(mockDate);
+
+      const result = await createStoredUser(userData);
+
+      // UUID는 실제로 생성되므로 존재 여부만 확인
+      expect(result.id).toBeDefined();
+      expect(result.id).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      );
+
+      expect(result).toEqual({
+        id: expect.any(String),
+        userId: "testuser",
+        nickname: "테스트유저",
+        passwordHash: mockHashedPassword,
+        createdAt: "2024-01-01T12:00:00.000Z",
+        updatedAt: "2024-01-01T12:00:00.000Z",
+      });
+
+      expect(PasswordUtils.hashPassword).toHaveBeenCalledWith(
+        "testPassword123!"
+      );
+    });
+
+    it("비밀번호 해싱이 실패하면 에러를 전파해야 한다", async () => {
+      const userData: CreateUserData = {
+        userId: "testuser",
+        nickname: "테스트유저",
+        password: "testPassword123!",
+      };
+
+      // PasswordUtils.hashPassword가 에러를 던지도록 모킹
+      const hashError = new Error("해싱 실패");
+      vi.mocked(PasswordUtils.hashPassword).mockRejectedValue(hashError);
+
+      await expect(createStoredUser(userData)).rejects.toThrow("해싱 실패");
+    });
+  });
+
+  describe("verifyUserPassword", () => {
+    it("올바른 비밀번호일 때 true를 반환해야 한다", async () => {
+      const password = "testPassword123!";
+      const hash = "$2a$12$hashedPassword";
+
+      vi.mocked(PasswordUtils.verifyPassword).mockResolvedValue(true);
+
+      const result = await verifyUserPassword(password, hash);
+
+      expect(result).toBe(true);
+      expect(PasswordUtils.verifyPassword).toHaveBeenCalledWith(password, hash);
+    });
+
+    it("잘못된 비밀번호일 때 false를 반환해야 한다", async () => {
+      const password = "wrongPassword";
+      const hash = "$2a$12$hashedPassword";
+
+      vi.mocked(PasswordUtils.verifyPassword).mockResolvedValue(false);
+
+      const result = await verifyUserPassword(password, hash);
+
+      expect(result).toBe(false);
+      expect(PasswordUtils.verifyPassword).toHaveBeenCalledWith(password, hash);
+    });
+
+    it("검증 중 에러가 발생하면 에러를 전파해야 한다", async () => {
+      const password = "testPassword";
+      const hash = "invalidHash";
+      const verifyError = new Error("검증 실패");
+
+      vi.mocked(PasswordUtils.verifyPassword).mockRejectedValue(verifyError);
+
+      await expect(verifyUserPassword(password, hash)).rejects.toThrow(
+        "검증 실패"
+      );
     });
   });
 });
