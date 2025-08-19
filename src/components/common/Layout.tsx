@@ -69,13 +69,6 @@ function Layout() {
             <Menu.Dropdown>
               <Menu.Label>내 계정</Menu.Label>
               <Menu.Item leftSection={<IconUser size={14} />}>프로필</Menu.Item>
-              <Menu.Item
-                leftSection={<IconSettings size={14} />}
-                component={Link}
-                to="/settings"
-              >
-                설정
-              </Menu.Item>
               <Menu.Divider />
               <Menu.Item
                 color="red"

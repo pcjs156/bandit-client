@@ -6,4 +6,5 @@ alwaysApply: true
 
 Always run eslint after any changes.
 Never run development server without my instruction.
+Commit message should be in Korean and with 'conventional commits' style.
 Never commit without my instruction.
