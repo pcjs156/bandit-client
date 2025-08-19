@@ -198,8 +198,6 @@ describe("useColorForm", () => {
     });
 
     it("onAddColor에서 에러가 발생하면 에러 알림을 표시해야 한다", async () => {
-      const { result } = renderHook(() => useColorForm(defaultProps));
-
       // onAddColor가 에러를 던지도록 설정
       const errorOnAddColor = vi.fn(() => {
         throw new Error("색상 추가 실패");

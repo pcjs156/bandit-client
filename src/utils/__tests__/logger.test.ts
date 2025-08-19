@@ -4,6 +4,8 @@ import {
   ConsoleLogOutput,
   Logger,
   createUserMetadata,
+  createLogger,
+  logger,
 } from "../logger";
 import type { LogEntry, LogMetadata } from "../logger";
 
@@ -283,7 +285,7 @@ describe("logger", () => {
   });
 
   describe("createUserMetadata", () => {
-    let sessionStorageSpy: ReturnType<typeof vi.spyOn>;
+    let sessionStorageSpy: ReturnType<typeof vi.spyOn<Storage, "getItem">>;
 
     beforeEach(() => {
       sessionStorageSpy = vi.spyOn(Storage.prototype, "getItem");
@@ -357,6 +359,78 @@ describe("logger", () => {
         userId: "user123",
         sessionId: "custom-session", // 덮어쓰여짐
       });
+    });
+  });
+
+  describe("createLogger", () => {
+    it("지정된 소스로 새 로거를 생성해야 한다", () => {
+      const moduleLogger = createLogger("TestModule") as Logger;
+
+      // Mock output to capture logs
+      const mockOutput = {
+        write: vi.fn(),
+      };
+      moduleLogger.addOutput(mockOutput);
+
+      moduleLogger.info("테스트 메시지");
+
+      expect(mockOutput.write).toHaveBeenCalledWith(
+        expect.objectContaining({
+          source: "TestModule",
+          message: "테스트 메시지",
+          level: LogLevel.INFO,
+        })
+      );
+    });
+
+    it("전역 로거의 레벨을 상속해야 한다", () => {
+      // 전역 로거 레벨을 ERROR로 설정
+      const originalLevel = logger["level"];
+      logger.setLevel(LogLevel.ERROR);
+
+      const moduleLogger = createLogger("TestModule") as Logger;
+      const mockOutput = {
+        write: vi.fn(),
+      };
+      moduleLogger.addOutput(mockOutput);
+
+      // INFO 레벨 로그는 무시되어야 함
+      moduleLogger.info("무시될 메시지");
+      expect(mockOutput.write).not.toHaveBeenCalled();
+
+      // ERROR 레벨 로그는 출력되어야 함
+      moduleLogger.error("출력될 메시지");
+      expect(mockOutput.write).toHaveBeenCalledWith(
+        expect.objectContaining({
+          level: LogLevel.ERROR,
+          message: "출력될 메시지",
+        })
+      );
+
+      // 원래 레벨로 복원
+      logger.setLevel(originalLevel);
+    });
+  });
+
+  describe("전역 로거 인스턴스", () => {
+    it("전역 로거가 올바르게 초기화되어야 한다", () => {
+      // 전역 로거 인스턴스가 존재해야 함
+      expect(logger).toBeDefined();
+
+      // 기본 소스가 "App"이어야 함
+      const mockOutput = {
+        write: vi.fn(),
+      };
+      logger.addOutput(mockOutput);
+
+      logger.info("테스트 메시지");
+
+      expect(mockOutput.write).toHaveBeenCalledWith(
+        expect.objectContaining({
+          source: "App",
+          message: "테스트 메시지",
+        })
+      );
     });
   });
 });
