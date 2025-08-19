@@ -6,6 +6,7 @@ alwaysApply: true
 
 Always run eslint after any changes.
 After all changes, review the code and do refactoring if needed.
+After all changes, write or update test file and run test.
 
 Never run development server without my instruction.
 Commit message should be in Korean and with 'conventional commits' style.
