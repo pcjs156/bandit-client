@@ -1,0 +1,9 @@
+---
+alwaysApply: true
+---
+
+# What to do
+
+Always run eslint after any changes.
+Never run development server without my instruction.
+Never commit without my instruction.
