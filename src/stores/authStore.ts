@@ -4,6 +4,7 @@ import type { User } from "@src/types/user";
 import type { RegisterRequest, LoginRequest, ApiError } from "@src/types/api";
 import { apiClient } from "@src/api";
 import { createLogger, createUserMetadata } from "@src/utils/logger";
+import { TokenStorage } from "@src/api/localStorage/tokenStorage";
 
 /**
  * 인증 상태 타입
@@ -26,6 +27,7 @@ interface AuthStore {
   refreshToken: () => Promise<void>;
   updateProfile: (nickname: string) => Promise<void>;
   clearError: () => void;
+  clearAllStorage: () => void;
 
   // 초기화
   initialize: () => Promise<void>;
@@ -159,6 +161,9 @@ export const useAuthStore = create<AuthStore>()(
             createUserMetadata(currentUser?.id, { error: String(error) })
           );
         } finally {
+          // localStorage 완전 정리
+          localStorage.clear();
+
           set({
             status: "unauthenticated",
             user: null,
@@ -171,17 +176,15 @@ export const useAuthStore = create<AuthStore>()(
       refreshToken: async () => {
         logger.debug("토큰 갱신 시작");
 
-        const tokens = JSON.parse(
-          localStorage.getItem("bandit_refresh_token") || "null"
-        );
-        if (!tokens) {
+        const { refreshToken } = TokenStorage.getTokens();
+        if (!refreshToken) {
           logger.warn("리프레시 토큰 없음");
           set({ status: "unauthenticated", user: null });
           return;
         }
 
         try {
-          await apiClient.auth.refreshToken({ refreshToken: tokens });
+          await apiClient.auth.refreshToken({ refreshToken });
           // 토큰 갱신 성공 시 사용자 정보 다시 조회
           const user = await apiClient.user.getMe();
 
@@ -242,6 +245,17 @@ export const useAuthStore = create<AuthStore>()(
         set({ error: null });
       },
 
+      // localStorage 완전 정리 (디버깅용)
+      clearAllStorage: () => {
+        logger.warn("localStorage 완전 정리 실행");
+        localStorage.clear();
+        set({
+          status: "unauthenticated",
+          user: null,
+          error: null,
+        });
+      },
+
       // 앱 시작 시 초기화
       initialize: async () => {
         logger.info("인증 상태 초기화 시작");
@@ -253,9 +267,19 @@ export const useAuthStore = create<AuthStore>()(
 
           logger.info("인증 상태 초기화 성공", createUserMetadata(user.id));
           set({ status: "authenticated", user, error: null });
-        } catch {
+        } catch (error) {
           // 인증 정보가 없거나 만료된 경우
-          logger.debug("인증 정보 없음 또는 만료됨");
+          logger.debug("인증 정보 없음 또는 만료됨", { error: String(error) });
+
+          // JSON 파싱 에러가 발생한 경우 localStorage 정리
+          if (
+            String(error).includes("JSON") ||
+            String(error).includes("not valid JSON")
+          ) {
+            logger.warn("localStorage 데이터 손상 감지, 정리 중...");
+            localStorage.clear();
+          }
+
           set({ status: "unauthenticated", user: null, error: null });
         }
       },
