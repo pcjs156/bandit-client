@@ -1,71 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { usePasswordStrength } from "../usePasswordStrength";
+import { createPasswordStrengthTests } from "@src/test/helpers/hookTestHelpers";
+import { passwordStrengthCases } from "@src/test/data/testCases";
 
 describe("usePasswordStrength", () => {
   describe("비밀번호 강도 계산", () => {
-    it("빈 문자열은 강도 0이어야 한다", () => {
-      const { result } = renderHook(() => usePasswordStrength(""));
+    // 공통 테스트 케이스 사용
+    const strengthTests = createPasswordStrengthTests(passwordStrengthCases);
 
-      expect(result.current.strength).toBe(0);
-      expect(result.current.label).toBe("약함");
-      expect(result.current.color).toBe("red");
-    });
-
-    it("8자 미만은 기본 점수만 받아야 한다", () => {
-      const { result } = renderHook(() => usePasswordStrength("abc123"));
-
-      // 영문(25) + 숫자(25) = 50점
-      expect(result.current.strength).toBe(50);
-      expect(result.current.label).toBe("보통");
-      expect(result.current.color).toBe("yellow");
-    });
-
-    it("8자 이상은 길이 보너스를 받아야 한다", () => {
-      const { result } = renderHook(() => usePasswordStrength("abc12345"));
-
-      // 길이8자(25) + 영문(25) + 숫자(25) = 75점
-      expect(result.current.strength).toBe(75);
-      expect(result.current.label).toBe("강함");
-      expect(result.current.color).toBe("blue");
-    });
-
-    it("12자 이상은 추가 길이 보너스를 받아야 한다", () => {
-      const { result } = renderHook(() => usePasswordStrength("abc123456789"));
-
-      // 길이8자(25) + 길이12자(25) + 영문(25) + 숫자(25) = 100점
-      expect(result.current.strength).toBe(100);
-      expect(result.current.label).toBe("매우 강함");
-      expect(result.current.color).toBe("green");
-    });
-
-    it("대문자가 포함되면 추가 점수를 받아야 한다", () => {
-      const { result } = renderHook(() => usePasswordStrength("Abc123"));
-
-      // 소문자(25) + 대문자(25) + 숫자(25) = 75점
-      expect(result.current.strength).toBe(75);
-      expect(result.current.label).toBe("강함");
-      expect(result.current.color).toBe("blue");
-    });
-
-    it("특수문자가 포함되면 추가 점수를 받아야 한다", () => {
-      const { result } = renderHook(() => usePasswordStrength("abc123!"));
-
-      // 소문자(25) + 숫자(25) + 특수문자(25) = 75점
-      expect(result.current.strength).toBe(75);
-      expect(result.current.label).toBe("강함");
-      expect(result.current.color).toBe("blue");
-    });
-
-    it("모든 조건을 만족하면 최대 점수를 받아야 한다", () => {
-      const { result } = renderHook(() =>
-        usePasswordStrength("Abc123456789!@#")
-      );
-
-      // 길이8자(25) + 길이12자(25) + 소문자(25) + 대문자(25) + 숫자(25) + 특수문자(25) = 150점 → 100점으로 제한
-      expect(result.current.strength).toBe(100);
-      expect(result.current.label).toBe("매우 강함");
-      expect(result.current.color).toBe("green");
+    strengthTests.forEach(({ name, test }) => {
+      it(name, () => test(usePasswordStrength));
     });
   });
 
