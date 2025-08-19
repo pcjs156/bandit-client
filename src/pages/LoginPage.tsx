@@ -28,20 +28,6 @@ function LoginPage() {
       userId: "",
       password: "",
     },
-    validate: {
-      userId: (value) =>
-        !value
-          ? "아이디를 입력해주세요"
-          : value.length < 4
-          ? "아이디는 4자 이상이어야 합니다"
-          : null,
-      password: (value) =>
-        !value
-          ? "비밀번호를 입력해주세요"
-          : value.length < 8
-          ? "비밀번호는 8자 이상이어야 합니다"
-          : null,
-    },
   });
 
   const handleSubmit = async (values: LoginRequest) => {

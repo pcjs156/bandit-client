@@ -95,14 +95,9 @@ export class AuthValidation {
   /**
    * 로그인 입력값 검증
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static validateLoginInput(userId: string, password: string): ApiError | null {
-    if (!userId || !password) {
-      return {
-        detailCode: ApiErrorCode.VALIDATION_ERROR,
-        message: "아이디와 비밀번호를 모두 입력해주세요",
-      };
-    }
-
+    // 로그인 시에는 검증하지 않음
     return null;
   }
 }
