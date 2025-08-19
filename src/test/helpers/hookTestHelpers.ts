@@ -75,12 +75,12 @@ export interface ValidationTestCase {
   shouldBeValid?: boolean;
 }
 
-export function createValidationTests(
+export function createValidationTests<T>(
   testCases: ValidationTestCase[],
-  hookFn: () => any,
+  hookFn: () => T,
   fieldName: string,
-  setFieldAction: (result: any, value: string) => void,
-  validateAction: (result: any) => void
+  setFieldAction: (result: { current: T }, value: string) => void,
+  validateAction: (result: { current: T }) => void
 ) {
   return testCases.map(({ name, input, expectedError, shouldBeValid }) => ({
     name,
@@ -118,7 +118,7 @@ export function createPasswordStrengthTests(
   return testCases.map(
     ({ name, password, expectedStrength, expectedLabel, expectedColor }) => ({
       name,
-      test: (hookFn: (password: string) => any) => {
+      test: <T>(hookFn: (password: string) => T) => {
         const { result } = renderHook(() => hookFn(password));
 
         expect(result.current.strength).toBe(expectedStrength);

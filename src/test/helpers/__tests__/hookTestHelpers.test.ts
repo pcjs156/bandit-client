@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { useState } from "react";
-import { renderHook, act } from "@testing-library/react";
+
 import {
   expectInitialState,
   expectStateChange,
@@ -232,21 +232,6 @@ describe("hookTestHelpers", () => {
       // 테스트 함수들이 존재하는지 확인
       expect(typeof tests[0].test).toBe("function");
       expect(typeof tests[1].test).toBe("function");
-
-      // Mock hook function으로 실제 테스트 실행
-      const mockPasswordHook = (password: string) => {
-        const strengthMap: { [key: string]: any } = {
-          "123": { strength: 1, label: "약함", color: "red" },
-          "StrongPassword123!": {
-            strength: 4,
-            label: "매우 강함",
-            color: "green",
-          },
-        };
-        return (
-          strengthMap[password] || { strength: 0, label: "없음", color: "gray" }
-        );
-      };
 
       // 테스트 함수 구조 확인
       expect(tests[0]).toHaveProperty("test");

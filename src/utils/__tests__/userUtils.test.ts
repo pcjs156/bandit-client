@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   generateUUID,
   toPublicUser,
@@ -9,7 +9,7 @@ import {
   createStoredUser,
   verifyUserPassword,
 } from "../userUtils";
-import * as userUtilsModule from "../userUtils";
+
 import { PasswordUtils } from "../passwordUtils";
 import type { StoredUser } from "@src/stores/userStore";
 import type { User, CreateUserData } from "@src/types/user";

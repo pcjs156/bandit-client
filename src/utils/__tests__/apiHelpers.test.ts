@@ -36,8 +36,10 @@ import { useUserStore } from "@src/stores/userStore";
 import { TokenStorage } from "@src/api/localStorage/tokenStorage";
 
 // 타입 단언
-const mockUseUserStore = useUserStore as { getState: ReturnType<typeof vi.fn> };
-const mockTokenStorage = TokenStorage as {
+const mockUseUserStore = useUserStore as unknown as {
+  getState: ReturnType<typeof vi.fn>;
+};
+const mockTokenStorage = TokenStorage as unknown as {
   generateTokens: ReturnType<typeof vi.fn>;
   setTokens: ReturnType<typeof vi.fn>;
   parseToken: ReturnType<typeof vi.fn>;
@@ -50,6 +52,7 @@ describe("apiHelpers", () => {
     userId: "testuser",
     nickname: "테스트유저",
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   const mockStoredUser: StoredUser = {
@@ -130,9 +133,10 @@ describe("apiHelpers", () => {
 
       try {
         findAndValidateUser("nonexistent");
-      } catch (error: any) {
-        expect(error.detailCode).toBe(ApiErrorCode.INVALID_CREDENTIALS);
-        expect(error.message).toBe(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      } catch (error: unknown) {
+        const apiError = error as { detailCode: string; message: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.INVALID_CREDENTIALS);
+        expect(apiError.message).toBe(ERROR_MESSAGES.INVALID_CREDENTIALS);
       }
     });
   });
@@ -157,9 +161,10 @@ describe("apiHelpers", () => {
 
       try {
         validateUserIdNotExists("testuser");
-      } catch (error: any) {
-        expect(error.detailCode).toBe(ApiErrorCode.USER_ID_ALREADY_EXISTS);
-        expect(error.message).toBe(ERROR_MESSAGES.USER_ALREADY_EXISTS);
+      } catch (error: unknown) {
+        const apiError = error as { detailCode: string; message: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.USER_ID_ALREADY_EXISTS);
+        expect(apiError.message).toBe(ERROR_MESSAGES.USER_ALREADY_EXISTS);
       }
     });
   });
@@ -188,9 +193,10 @@ describe("apiHelpers", () => {
 
       try {
         await validatePassword("wrongPassword", "hashedPassword");
-      } catch (error: any) {
-        expect(error.detailCode).toBe(ApiErrorCode.INVALID_CREDENTIALS);
-        expect(error.message).toBe(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      } catch (error: unknown) {
+        const apiError = error as { detailCode: string; message: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.INVALID_CREDENTIALS);
+        expect(apiError.message).toBe(ERROR_MESSAGES.INVALID_CREDENTIALS);
       }
     });
   });
@@ -287,9 +293,10 @@ describe("apiHelpers", () => {
 
       try {
         validateAndParseRefreshToken("invalid-token");
-      } catch (error: any) {
-        expect(error.detailCode).toBe(ApiErrorCode.INVALID_REFRESH_TOKEN);
-        expect(error.message).toBe(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
+      } catch (error: unknown) {
+        const apiError = error as { detailCode: string; message: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.INVALID_REFRESH_TOKEN);
+        expect(apiError.message).toBe(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
       }
     });
 
@@ -306,9 +313,10 @@ describe("apiHelpers", () => {
 
       try {
         validateAndParseRefreshToken("access-token");
-      } catch (error: any) {
-        expect(error.detailCode).toBe(ApiErrorCode.INVALID_REFRESH_TOKEN);
-        expect(error.message).toBe(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
+      } catch (error: unknown) {
+        const apiError = error as { detailCode: string; message: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.INVALID_REFRESH_TOKEN);
+        expect(apiError.message).toBe(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
       }
     });
   });
@@ -338,9 +346,10 @@ describe("apiHelpers", () => {
 
       try {
         findUserByIdForRefresh("nonexistent");
-      } catch (error: any) {
-        expect(error.detailCode).toBe(ApiErrorCode.INVALID_REFRESH_TOKEN);
-        expect(error.message).toBe(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
+      } catch (error: unknown) {
+        const apiError = error as { detailCode: string; message: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.INVALID_REFRESH_TOKEN);
+        expect(apiError.message).toBe(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
       }
     });
   });
