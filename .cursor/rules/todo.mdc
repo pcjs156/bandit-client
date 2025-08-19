@@ -4,7 +4,7 @@ alwaysApply: true
 
 # What to do
 
-Always run eslint after any changes.
+After all changes, run eslint and fix all errors and warnings.
 After all changes, review the code and do refactoring if needed.
 After all changes, write or update test file and run test with 'npm run test:run'.
 After all changes, review that there are duplicated code and refactor it.
