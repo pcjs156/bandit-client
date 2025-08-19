@@ -2,7 +2,14 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { User } from "@src/types/user";
 import type { CreateUserData } from "@src/types/user";
-import { PasswordUtils } from "@src/utils/passwordUtils";
+import {
+  createStoredUser,
+  findUserByUserId,
+  findUserById,
+  updateUserInArray,
+  toPublicUser,
+  verifyUserPassword,
+} from "@src/utils/userUtils";
 
 /**
  * 저장용 사용자 타입 (비밀번호 해시 포함)
@@ -30,23 +37,8 @@ interface UserStore {
 }
 
 /**
- * UUID 생성 함수
- */
-function generateUUID(): string {
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-
-  // Fallback for older browsers
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
-/**
  * 사용자 데이터 관리 스토어
+ * 유틸리티 함수로 로직 분리하여 간소화
  */
 export const useUserStore = create<UserStore>()(
   persist(
@@ -57,18 +49,7 @@ export const useUserStore = create<UserStore>()(
 
       // 새 사용자 생성
       createUser: async (userData: CreateUserData) => {
-        const passwordHash = await PasswordUtils.hashPassword(
-          userData.password
-        );
-
-        const newUser: StoredUser = {
-          id: generateUUID(),
-          userId: userData.userId,
-          nickname: userData.nickname,
-          passwordHash,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
+        const newUser = await createStoredUser(userData);
 
         set((state) => ({
           users: [...state.users, newUser],
@@ -80,13 +61,13 @@ export const useUserStore = create<UserStore>()(
       // userId로 사용자 찾기
       findUserByUserId: (userId: string) => {
         const { users } = get();
-        return users.find((user) => user.userId === userId) || null;
+        return findUserByUserId(users, userId);
       },
 
       // ID로 사용자 찾기
       findUserById: (id: string) => {
         const { users } = get();
-        return users.find((user) => user.id === id) || null;
+        return findUserById(users, id);
       },
 
       // 현재 사용자 설정
@@ -96,28 +77,20 @@ export const useUserStore = create<UserStore>()(
 
       // 사용자 정보 업데이트
       updateUser: (id: string, updates: Partial<User>) => {
-        const { users } = get();
-        const userIndex = users.findIndex((user) => user.id === id);
+        const { users, currentUser } = get();
+        const { updatedUsers, updatedUser } = updateUserInArray(
+          users,
+          id,
+          updates
+        );
 
-        if (userIndex === -1) return null;
+        if (!updatedUser) return null;
 
-        const updatedUser = {
-          ...users[userIndex],
-          ...updates,
-          updatedAt: new Date().toISOString(),
-        };
-
-        const newUsers = [...users];
-        newUsers[userIndex] = updatedUser;
-
-        set({ users: newUsers });
+        set({ users: updatedUsers });
 
         // 현재 사용자가 업데이트된 사용자인 경우 currentUser도 업데이트
-        const { currentUser } = get();
         if (currentUser && currentUser.id === id) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { passwordHash, ...publicUser } = updatedUser;
-          set({ currentUser: publicUser });
+          set({ currentUser: toPublicUser(updatedUser) });
         }
 
         return updatedUser;
@@ -125,7 +98,7 @@ export const useUserStore = create<UserStore>()(
 
       // 비밀번호 검증
       verifyPassword: async (password: string, hash: string) => {
-        return PasswordUtils.verifyPassword(password, hash);
+        return verifyUserPassword(password, hash);
       },
 
       // 모든 사용자 데이터 삭제 (디버깅용)
