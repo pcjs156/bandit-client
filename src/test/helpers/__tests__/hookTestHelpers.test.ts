@@ -171,10 +171,10 @@ describe("hookTestHelpers", () => {
         useFormWithValidation,
         "name",
         (result, value) => {
-          result.setField("name", value);
+          result.current.setField("name", value);
         },
         (result) => {
-          result.validate();
+          result.current.validate();
         }
       );
 
