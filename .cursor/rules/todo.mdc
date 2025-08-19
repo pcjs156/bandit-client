@@ -6,7 +6,8 @@ alwaysApply: true
 
 Always run eslint after any changes.
 After all changes, review the code and do refactoring if needed.
-After all changes, write or update test file and run test.
+After all changes, write or update test file and run test with 'npm run test:run'.
+After all changes, review that there are duplicated code and refactor it.
 
 Never run development server without my instruction.
 Commit message should be in Korean and with 'conventional commits' style.
