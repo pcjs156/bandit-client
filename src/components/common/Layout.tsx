@@ -1,22 +1,14 @@
-import {
-  AppShell,
-  Group,
-  Button,
-  Text,
-  Container,
-  ActionIcon,
-  Menu,
-  Avatar,
-} from "@mantine/core";
-import {
-  IconMusic,
-  IconSettings,
-  IconLogout,
-  IconUser,
-} from "@tabler/icons-react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { AppShell, Container, Group } from "@mantine/core";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@src/stores/authStore";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import { HeaderLogo } from "@src/components/common/HeaderLogo";
+import {
+  LoadingAuthButton,
+  GuestAuthButtons,
+  AuthenticatedUserButtons,
+} from "@src/components/common/AuthButtons";
+import { LAYOUT_CONSTANTS } from "@src/constants/layout";
 
 function Layout() {
   const navigate = useNavigate();
@@ -27,101 +19,29 @@ function Layout() {
     initialize();
   }, [initialize]);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await logout();
     navigate("/");
-  };
+  }, [logout, navigate]);
 
-  const renderAuthButtons = () => {
+  const renderAuthButtons = useCallback(() => {
     if (status === "loading") {
-      return (
-        <Group>
-          <Button variant="subtle" loading>
-            로그인
-          </Button>
-        </Group>
-      );
+      return <LoadingAuthButton />;
     }
 
     if (status === "authenticated" && user) {
-      return (
-        <Group>
-          <ActionIcon
-            component={Link}
-            to="/settings"
-            variant="subtle"
-            size="lg"
-            aria-label="설정"
-          >
-            <IconSettings size={20} />
-          </ActionIcon>
-
-          <Menu shadow="md" width={200}>
-            <Menu.Target>
-              <Button
-                variant="subtle"
-                leftSection={<Avatar size="sm" radius="xl" />}
-              >
-                {user.nickname}
-              </Button>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              <Menu.Label>내 계정</Menu.Label>
-              <Menu.Item leftSection={<IconUser size={14} />}>프로필</Menu.Item>
-              <Menu.Divider />
-              <Menu.Item
-                color="red"
-                leftSection={<IconLogout size={14} />}
-                onClick={handleLogout}
-              >
-                로그아웃
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-        </Group>
-      );
+      return <AuthenticatedUserButtons user={user} onLogout={handleLogout} />;
     }
 
-    return (
-      <Group>
-        <Button variant="subtle" component={Link} to="/login">
-          로그인
-        </Button>
-        <Button component={Link} to="/register">
-          회원가입
-        </Button>
-      </Group>
-    );
-  };
+    return <GuestAuthButtons />;
+  }, [status, user, handleLogout]);
 
   return (
-    <AppShell header={{ height: 60 }} padding="md">
+    <AppShell header={{ height: LAYOUT_CONSTANTS.HEADER_HEIGHT }} padding="md">
       <AppShell.Header>
         <Container size="lg">
-          <Group h={60} justify="space-between">
-            {/* Logo */}
-            <Group style={{ textDecoration: "none" }}>
-              <Link
-                to="/"
-                style={{
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                <IconMusic
-                  size={28}
-                  style={{ color: "var(--mantine-primary-color-6)" }}
-                />
-                <Text size="xl" fw={700} c="var(--mantine-primary-color-6)">
-                  BANDIT
-                </Text>
-              </Link>
-            </Group>
-
-            {/* Navigation */}
+          <Group h={LAYOUT_CONSTANTS.HEADER_HEIGHT} justify="space-between">
+            <HeaderLogo />
             {renderAuthButtons()}
           </Group>
         </Container>
