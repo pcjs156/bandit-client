@@ -169,6 +169,17 @@ export class Logger implements ILogger {
 }
 
 /**
+ * 환경에 따른 로그 레벨을 설정하는 함수
+ */
+export function setEnvironmentLogLevel(logger: ILogger, isDev: boolean): void {
+  if (isDev) {
+    logger.setLevel(LogLevel.DEBUG);
+  } else {
+    logger.setLevel(LogLevel.INFO);
+  }
+}
+
+/**
  * 전역 로거 인스턴스
  */
 export const logger = new Logger();
@@ -176,11 +187,7 @@ export const logger = new Logger();
 /**
  * 개발 환경에서는 DEBUG 레벨부터, 운영 환경에서는 INFO 레벨부터 출력
  */
-if (import.meta.env.DEV) {
-  logger.setLevel(LogLevel.DEBUG);
-} else {
-  logger.setLevel(LogLevel.INFO);
-}
+setEnvironmentLogLevel(logger, import.meta.env.DEV);
 
 /**
  * 로거 팩토리 함수

@@ -121,6 +121,29 @@ describe("authHelpers", () => {
       });
     });
 
+    it("successMessage가 없는 경우 기본 메시지를 사용해야 한다", async () => {
+      const mockAction = vi.fn().mockResolvedValue({
+        user: mockUser,
+      });
+
+      const result = await executeAuthAction(
+        "회원가입",
+        "testuser",
+        mockSetState,
+        mockAction
+      );
+
+      expect(result).toEqual({
+        user: mockUser,
+      });
+
+      expect(mockSetState).toHaveBeenNthCalledWith(2, {
+        status: "authenticated",
+        user: mockUser,
+        error: null,
+      });
+    });
+
     it("실패한 인증 액션을 처리해야 한다", async () => {
       const mockAction = vi.fn().mockRejectedValue(mockApiError);
 

@@ -6,6 +6,7 @@ import {
   createUserMetadata,
   createLogger,
   logger,
+  setEnvironmentLogLevel,
 } from "../logger";
 import type { LogEntry, LogMetadata } from "../logger";
 
@@ -360,6 +361,17 @@ describe("logger", () => {
         sessionId: "custom-session", // 덮어쓰여짐
       });
     });
+
+    it("sessionStorage가 null인 경우를 처리해야 한다", () => {
+      sessionStorageSpy.mockReturnValue(null);
+
+      const metadata = createUserMetadata("user123");
+
+      expect(metadata).toEqual({
+        userId: "user123",
+        sessionId: undefined,
+      });
+    });
   });
 
   describe("createLogger", () => {
@@ -431,6 +443,24 @@ describe("logger", () => {
           message: "테스트 메시지",
         })
       );
+    });
+  });
+
+  describe("환경별 로그 레벨 설정", () => {
+    it("개발 환경에서는 DEBUG 레벨로 설정해야 한다", () => {
+      const testLogger = new Logger();
+
+      setEnvironmentLogLevel(testLogger, true);
+
+      expect((testLogger as any).level).toBe(LogLevel.DEBUG);
+    });
+
+    it("운영 환경에서는 INFO 레벨로 설정해야 한다", () => {
+      const testLogger = new Logger();
+
+      setEnvironmentLogLevel(testLogger, false);
+
+      expect((testLogger as any).level).toBe(LogLevel.INFO);
     });
   });
 });
