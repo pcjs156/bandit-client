@@ -16,7 +16,7 @@ describe("LocalStorageUserApi", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Mock userStore
     mockUserStore = {
       currentUser: null,
@@ -140,8 +140,13 @@ describe("LocalStorageUserApi", () => {
 
       const result = await userApi.updateMe(mockUpdateData);
 
-      expect(AuthValidation.validateUpdateUserInput).toHaveBeenCalledWith(mockUpdateData);
-      expect(mockUserStore.updateUser).toHaveBeenCalledWith("user-123", mockUpdateData);
+      expect(AuthValidation.validateUpdateUserInput).toHaveBeenCalledWith(
+        mockUpdateData
+      );
+      expect(mockUserStore.updateUser).toHaveBeenCalledWith(
+        "user-123",
+        mockUpdateData
+      );
       expect(result).toEqual({
         id: "user-123",
         userId: "testuser",
@@ -168,11 +173,15 @@ describe("LocalStorageUserApi", () => {
       };
 
       const validationError = new Error("닉네임은 2자 이상이어야 합니다");
-      (AuthValidation.validateUpdateUserInput as any).mockReturnValue(validationError);
+      (AuthValidation.validateUpdateUserInput as any).mockReturnValue(
+        validationError
+      );
 
       mockUserStore.currentUser = mockCurrentUser;
 
-      await expect(userApi.updateMe(mockUpdateData)).rejects.toThrow("닉네임은 2자 이상이어야 합니다");
+      await expect(userApi.updateMe(mockUpdateData)).rejects.toThrow(
+        "닉네임은 2자 이상이어야 합니다"
+      );
     });
 
     it("사용자 업데이트 실패 시 NOT_FOUND 에러를 던져야 한다", async () => {
@@ -209,8 +218,13 @@ describe("LocalStorageUserApi", () => {
 
       const result = await userApi.updateMe(emptyUpdateData);
 
-      expect(AuthValidation.validateUpdateUserInput).toHaveBeenCalledWith(emptyUpdateData);
-      expect(mockUserStore.updateUser).toHaveBeenCalledWith("user-123", emptyUpdateData);
+      expect(AuthValidation.validateUpdateUserInput).toHaveBeenCalledWith(
+        emptyUpdateData
+      );
+      expect(mockUserStore.updateUser).toHaveBeenCalledWith(
+        "user-123",
+        emptyUpdateData
+      );
       expect(result).toBeDefined();
     });
 
@@ -237,7 +251,10 @@ describe("LocalStorageUserApi", () => {
 
       const result = await userApi.updateMe(multiFieldUpdateData);
 
-      expect(mockUserStore.updateUser).toHaveBeenCalledWith("user-123", multiFieldUpdateData);
+      expect(mockUserStore.updateUser).toHaveBeenCalledWith(
+        "user-123",
+        multiFieldUpdateData
+      );
       expect(result.nickname).toBe("새닉네임");
     });
   });

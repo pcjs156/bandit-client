@@ -4,7 +4,11 @@ import { AuthValidation } from "@src/utils/authValidation";
 import { TokenStorage } from "../tokenStorage";
 import { useUserStore } from "@src/stores/userStore";
 import * as apiHelpers from "@src/utils/apiHelpers";
-import type { RegisterRequest, LoginRequest, RefreshTokenRequest } from "@src/types/api";
+import type {
+  RegisterRequest,
+  LoginRequest,
+  RefreshTokenRequest,
+} from "@src/types/api";
 
 // Mock dependencies
 vi.mock("@src/utils/authValidation");
@@ -19,7 +23,7 @@ describe("LocalStorageAuthApi", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Mock userStore
     mockUserStore = {
       createUser: vi.fn(),
@@ -112,8 +116,12 @@ describe("LocalStorageAuthApi", () => {
 
       const result = await authApi.register(mockRegisterData);
 
-      expect(AuthValidation.validateRegisterInput).toHaveBeenCalledWith(mockRegisterData);
-      expect(apiHelpers.validateUserIdNotExists).toHaveBeenCalledWith(mockRegisterData.userId);
+      expect(AuthValidation.validateRegisterInput).toHaveBeenCalledWith(
+        mockRegisterData
+      );
+      expect(apiHelpers.validateUserIdNotExists).toHaveBeenCalledWith(
+        mockRegisterData.userId
+      );
       expect(mockUserStore.createUser).toHaveBeenCalledWith(mockRegisterData);
       expect(apiHelpers.authenticateUser).toHaveBeenCalled();
       expect(apiHelpers.createAuthResponse).toHaveBeenCalled();
@@ -123,9 +131,13 @@ describe("LocalStorageAuthApi", () => {
 
     it("입력값 검증 실패 시 에러를 던져야 한다", async () => {
       const validationError = new Error("입력값 검증 실패");
-      (AuthValidation.validateRegisterInput as any).mockReturnValue(validationError);
+      (AuthValidation.validateRegisterInput as any).mockReturnValue(
+        validationError
+      );
 
-      await expect(authApi.register(mockRegisterData)).rejects.toThrow("입력값 검증 실패");
+      await expect(authApi.register(mockRegisterData)).rejects.toThrow(
+        "입력값 검증 실패"
+      );
     });
 
     it("중복 사용자 확인 실패 시 에러를 던져야 한다", async () => {
@@ -134,14 +146,18 @@ describe("LocalStorageAuthApi", () => {
         throw duplicateError;
       });
 
-      await expect(authApi.register(mockRegisterData)).rejects.toThrow("이미 존재하는 사용자입니다");
+      await expect(authApi.register(mockRegisterData)).rejects.toThrow(
+        "이미 존재하는 사용자입니다"
+      );
     });
 
     it("사용자 생성 실패 시 에러를 던져야 한다", async () => {
       const createError = new Error("사용자 생성 실패");
       mockUserStore.createUser.mockRejectedValue(createError);
 
-      await expect(authApi.register(mockRegisterData)).rejects.toThrow("사용자 생성 실패");
+      await expect(authApi.register(mockRegisterData)).rejects.toThrow(
+        "사용자 생성 실패"
+      );
     });
   });
 
@@ -154,8 +170,13 @@ describe("LocalStorageAuthApi", () => {
     it("성공적인 로그인을 처리해야 한다", async () => {
       const result = await authApi.login(mockLoginData);
 
-      expect(apiHelpers.findAndValidateUser).toHaveBeenCalledWith(mockLoginData.userId);
-      expect(apiHelpers.validatePassword).toHaveBeenCalledWith(mockLoginData.password, "hashedPassword");
+      expect(apiHelpers.findAndValidateUser).toHaveBeenCalledWith(
+        mockLoginData.userId
+      );
+      expect(apiHelpers.validatePassword).toHaveBeenCalledWith(
+        mockLoginData.password,
+        "hashedPassword"
+      );
       expect(apiHelpers.authenticateUser).toHaveBeenCalled();
       expect(apiHelpers.createAuthResponse).toHaveBeenCalled();
       expect(result).toHaveProperty("user");
@@ -168,14 +189,18 @@ describe("LocalStorageAuthApi", () => {
         throw findError;
       });
 
-      await expect(authApi.login(mockLoginData)).rejects.toThrow("사용자를 찾을 수 없습니다");
+      await expect(authApi.login(mockLoginData)).rejects.toThrow(
+        "사용자를 찾을 수 없습니다"
+      );
     });
 
     it("비밀번호 검증 실패 시 에러를 던져야 한다", async () => {
       const passwordError = new Error("비밀번호가 일치하지 않습니다");
       (apiHelpers.validatePassword as any).mockRejectedValue(passwordError);
 
-      await expect(authApi.login(mockLoginData)).rejects.toThrow("비밀번호가 일치하지 않습니다");
+      await expect(authApi.login(mockLoginData)).rejects.toThrow(
+        "비밀번호가 일치하지 않습니다"
+      );
     });
   });
 
@@ -196,20 +221,30 @@ describe("LocalStorageAuthApi", () => {
     it("성공적인 토큰 갱신을 처리해야 한다", async () => {
       const result = await authApi.refreshToken(mockRefreshData);
 
-      expect(apiHelpers.validateAndParseRefreshToken).toHaveBeenCalledWith(mockRefreshData.refreshToken);
-      expect(apiHelpers.findUserByIdForRefresh).toHaveBeenCalledWith("user-123");
-      expect(apiHelpers.generateAndStoreTokens).toHaveBeenCalledWith("user-123");
+      expect(apiHelpers.validateAndParseRefreshToken).toHaveBeenCalledWith(
+        mockRefreshData.refreshToken
+      );
+      expect(apiHelpers.findUserByIdForRefresh).toHaveBeenCalledWith(
+        "user-123"
+      );
+      expect(apiHelpers.generateAndStoreTokens).toHaveBeenCalledWith(
+        "user-123"
+      );
       expect(result).toHaveProperty("accessToken");
       expect(result).toHaveProperty("refreshToken");
     });
 
     it("리프레시 토큰 검증 실패 시 에러를 던져야 한다", async () => {
       const tokenError = new Error("유효하지 않은 토큰입니다");
-      (apiHelpers.validateAndParseRefreshToken as any).mockImplementation(() => {
-        throw tokenError;
-      });
+      (apiHelpers.validateAndParseRefreshToken as any).mockImplementation(
+        () => {
+          throw tokenError;
+        }
+      );
 
-      await expect(authApi.refreshToken(mockRefreshData)).rejects.toThrow("유효하지 않은 토큰입니다");
+      await expect(authApi.refreshToken(mockRefreshData)).rejects.toThrow(
+        "유효하지 않은 토큰입니다"
+      );
     });
 
     it("사용자 찾기 실패 시 에러를 던져야 한다", async () => {
@@ -218,7 +253,9 @@ describe("LocalStorageAuthApi", () => {
         throw userError;
       });
 
-      await expect(authApi.refreshToken(mockRefreshData)).rejects.toThrow("사용자를 찾을 수 없습니다");
+      await expect(authApi.refreshToken(mockRefreshData)).rejects.toThrow(
+        "사용자를 찾을 수 없습니다"
+      );
     });
   });
 });

@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import { beforeEach, afterEach, vi, beforeAll, afterAll } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
+import { MantineProvider } from "@mantine/core";
 
 // 전역 테스트 설정
 beforeAll(() => {

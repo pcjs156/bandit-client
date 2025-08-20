@@ -53,7 +53,7 @@ describe("API Index", () => {
         auth: {} as AuthApiClient,
         user: {} as UserApiClient,
       };
-      
+
       expect(dummyApiClient).toBeDefined();
       expect(dummyApiClient.auth).toBeDefined();
       expect(dummyApiClient.user).toBeDefined();
@@ -67,7 +67,7 @@ describe("API Index", () => {
         logout: async () => {},
         refreshToken: async () => ({} as any),
       };
-      
+
       expect(dummyAuthClient).toBeDefined();
       expect(typeof dummyAuthClient.register).toBe("function");
       expect(typeof dummyAuthClient.login).toBe("function");
@@ -81,7 +81,7 @@ describe("API Index", () => {
         getMe: async () => ({} as any),
         updateMe: async () => ({} as any),
       };
-      
+
       expect(dummyUserClient).toBeDefined();
       expect(typeof dummyUserClient.getMe).toBe("function");
       expect(typeof dummyUserClient.updateMe).toBe("function");
@@ -92,7 +92,7 @@ describe("API Index", () => {
     it("환경에 따라 다른 구현체를 사용할 수 있어야 한다", () => {
       // 현재는 localStorage 기반이지만, 나중에 HTTP API로 교체 가능
       expect(apiClient).toBe(localStorageApiClient);
-      
+
       // 만약 HTTP API로 교체한다면:
       // export const apiClient: ApiClient = httpApiClient;
       // 이렇게 변경할 수 있어야 함

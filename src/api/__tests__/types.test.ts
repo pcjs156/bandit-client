@@ -1,16 +1,12 @@
 import { describe, it, expect } from "vitest";
-import type { 
-  AuthApiClient, 
-  UserApiClient, 
-  ApiClient 
-} from "../types";
-import type { 
-  RegisterRequest, 
-  LoginRequest, 
-  RefreshTokenRequest, 
-  UpdateUserRequest, 
-  AuthResponse, 
-  AuthTokens 
+import type { AuthApiClient, UserApiClient, ApiClient } from "../types";
+import type {
+  RegisterRequest,
+  LoginRequest,
+  RefreshTokenRequest,
+  UpdateUserRequest,
+  AuthResponse,
+  AuthTokens,
 } from "@src/types/api";
 import type { User } from "@src/types/user";
 
@@ -32,7 +28,9 @@ describe("API Types", () => {
           };
         },
         logout: async (): Promise<void> => {},
-        refreshToken: async (data: RefreshTokenRequest): Promise<AuthTokens> => {
+        refreshToken: async (
+          data: RefreshTokenRequest
+        ): Promise<AuthTokens> => {
           return {} as AuthTokens;
         },
       };
@@ -99,7 +97,9 @@ describe("API Types", () => {
         register: async () => ({} as AuthResponse),
         login: async () => ({} as AuthResponse),
         logout: async () => {},
-        refreshToken: async (data: RefreshTokenRequest): Promise<AuthTokens> => {
+        refreshToken: async (
+          data: RefreshTokenRequest
+        ): Promise<AuthTokens> => {
           expect(data).toHaveProperty("refreshToken");
           return {} as AuthTokens;
         },
