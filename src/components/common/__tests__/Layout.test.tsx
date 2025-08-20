@@ -6,7 +6,10 @@ import Layout from "../Layout";
 import { useAuthStore } from "@src/stores/authStore";
 
 // Mock useAuthStore
-vi.mock("@src/stores/authStore");
+vi.mock("@src/stores/authStore", () => ({
+  useAuthStore: vi.fn(),
+}));
+
 const mockUseAuthStore = vi.mocked(useAuthStore);
 
 // Mock useNavigate
@@ -225,12 +228,10 @@ describe("Layout", () => {
 
   describe("사용자 상태 변화", () => {
     it("사용자 상태가 변경되면 적절한 버튼이 렌더링되어야 한다", () => {
-      const { rerender } = render(<Layout />);
-
       // 초기 상태 (idle)
       let mockStore = createAuthStoreMock({ status: "idle" });
       mockUseAuthStore.mockReturnValue(mockStore);
-      rerender(<Layout />);
+      const { rerender } = render(<Layout />);
 
       expect(screen.getByTestId("guest-auth-buttons")).toBeInTheDocument();
 
