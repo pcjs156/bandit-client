@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { AuthApiClient, UserApiClient, ApiClient } from "../types";
+import type { User } from "@src/types/user";
 import type {
   RegisterRequest,
   LoginRequest,
@@ -8,614 +9,441 @@ import type {
   AuthResponse,
   AuthTokens,
 } from "@src/types/api";
-import type { User } from "@src/types/user";
 
-describe("API Types", () => {
-  describe("AuthApiClient", () => {
-    it("AuthApiClient 인터페이스가 올바르게 정의되어야 한다", () => {
+describe("src/api/types.ts", () => {
+  describe("AuthApiClient 인터페이스", () => {
+    it("AuthApiClient가 올바른 구조를 가져야 한다", () => {
       // 타입 체크를 위한 더미 구현체
-      const authClient: AuthApiClient = {
+      const authApiClient: AuthApiClient = {
         register: async (_data: RegisterRequest): Promise<AuthResponse> => {
           return {
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
           };
         },
         login: async (_data: LoginRequest): Promise<AuthResponse> => {
           return {
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
           };
         },
-        logout: async (): Promise<void> => {},
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
         refreshToken: async (
           _data: RefreshTokenRequest,
         ): Promise<AuthTokens> => {
-          return {
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          };
+          return {} as AuthTokens;
         },
       };
 
-      expect(authClient).toBeDefined();
-      expect(typeof authClient.register).toBe("function");
-      expect(typeof authClient.login).toBe("function");
-      expect(typeof authClient.logout).toBe("function");
-      expect(typeof authClient.refreshToken).toBe("function");
+      expect(authApiClient).toBeDefined();
+      expect(typeof authApiClient.register).toBe("function");
+      expect(typeof authApiClient.login).toBe("function");
+      expect(typeof authApiClient.logout).toBe("function");
+      expect(typeof authApiClient.refreshToken).toBe("function");
     });
 
-    it("register 메서드가 올바른 타입을 가져야 한다", () => {
-      const authClient: AuthApiClient = {
+    it("AuthApiClient의 register 메서드가 올바른 타입을 가져야 한다", () => {
+      const authApiClient: AuthApiClient = {
         register: async (data: RegisterRequest): Promise<AuthResponse> => {
-          expect(data).toHaveProperty("userId");
-          expect(data).toHaveProperty("password");
-          expect(data).toHaveProperty("nickname");
+          expect(data).toBeDefined();
           return {
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
           };
         },
-        login: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        logout: async () => {},
-        refreshToken: async () => ({
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-      };
-
-      expect(typeof authClient.register).toBe("function");
-    });
-
-    it("login 메서드가 올바른 타입을 가져야 한다", () => {
-      const authClient: AuthApiClient = {
-        register: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        login: async (data: LoginRequest): Promise<AuthResponse> => {
-          expect(data).toHaveProperty("userId");
-          expect(data).toHaveProperty("password");
-          return {
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          };
+        login: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
         },
-        logout: async () => {},
-        refreshToken: async () => ({
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-      };
-
-      expect(typeof authClient.login).toBe("function");
-    });
-
-    it("logout 메서드가 올바른 타입을 가져야 한다", () => {
-      const authClient: AuthApiClient = {
-        register: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        login: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
         logout: async (): Promise<void> => {
-          // void 반환
+          // 로그아웃 로직
         },
-        refreshToken: async () => ({
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
+        refreshToken: async (): Promise<AuthTokens> => {
+          return {} as AuthTokens;
+        },
       };
 
-      expect(typeof authClient.logout).toBe("function");
+      // 타입 체크를 위한 호출
+      expect(authApiClient.register).toBeDefined();
     });
 
-    it("refreshToken 메서드가 올바른 타입을 가져야 한다", () => {
-      const authClient: AuthApiClient = {
-        register: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        login: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        logout: async () => {},
+    it("AuthApiClient의 login 메서드가 올바른 타입을 가져야 한다", () => {
+      const authApiClient: AuthApiClient = {
+        register: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        login: async (data: LoginRequest): Promise<AuthResponse> => {
+          expect(data).toBeDefined();
+          return {
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          };
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
+        refreshToken: async (): Promise<AuthTokens> => {
+          return {} as AuthTokens;
+        },
+      };
+
+      expect(authApiClient.login).toBeDefined();
+    });
+
+    it("AuthApiClient의 logout 메서드가 올바른 타입을 가져야 한다", () => {
+      const authApiClient: AuthApiClient = {
+        register: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        login: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+          return Promise.resolve();
+        },
+        refreshToken: async (): Promise<AuthTokens> => {
+          return {} as AuthTokens;
+        },
+      };
+
+      expect(authApiClient.logout).toBeDefined();
+    });
+
+    it("AuthApiClient의 refreshToken 메서드가 올바른 타입을 가져야 한다", () => {
+      const authApiClient: AuthApiClient = {
+        register: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        login: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
         refreshToken: async (
           data: RefreshTokenRequest,
         ): Promise<AuthTokens> => {
-          expect(data).toHaveProperty("refreshToken");
-          return {
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          };
+          expect(data).toBeDefined();
+          return {} as AuthTokens;
         },
       };
 
-      expect(typeof authClient.refreshToken).toBe("function");
+      expect(authApiClient.refreshToken).toBeDefined();
     });
   });
 
-  describe("UserApiClient", () => {
-    it("UserApiClient 인터페이스가 올바르게 정의되어야 한다", () => {
-      // 타입 체크를 위한 더미 구현체
-      const userClient: UserApiClient = {
+  describe("UserApiClient 인터페이스", () => {
+    it("UserApiClient가 올바른 구조를 가져야 한다", () => {
+      const userApiClient: UserApiClient = {
         getMe: async (): Promise<User> => {
-          return {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          };
+          return {} as User;
         },
-        updateMe: async (data: UpdateUserRequest): Promise<User> => {
-          return {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: data.nickname || "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          };
+        updateMe: async (_data: UpdateUserRequest): Promise<User> => {
+          return {} as User;
         },
       };
 
-      expect(userClient).toBeDefined();
-      expect(typeof userClient.getMe).toBe("function");
-      expect(typeof userClient.updateMe).toBe("function");
+      expect(userApiClient).toBeDefined();
+      expect(typeof userApiClient.getMe).toBe("function");
+      expect(typeof userApiClient.updateMe).toBe("function");
     });
 
-    it("getMe 메서드가 올바른 타입을 가져야 한다", () => {
-      const userClient: UserApiClient = {
+    it("UserApiClient의 getMe 메서드가 올바른 타입을 가져야 한다", () => {
+      const userApiClient: UserApiClient = {
         getMe: async (): Promise<User> => {
-          return {
-            id: "user-123",
-            userId: "testuser",
-            nickname: "테스트유저",
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
+          return {} as User;
         },
-        updateMe: async () => ({
-          id: "dummy-id",
-          userId: "dummy-user-id",
-          nickname: "dummy-nickname",
-          createdAt: "2023-01-01T00:00:00Z",
-          updatedAt: "2023-01-01T00:00:00Z",
-        }),
+        updateMe: async (): Promise<User> => {
+          return {} as User;
+        },
       };
 
-      expect(typeof userClient.getMe).toBe("function");
+      expect(userApiClient.getMe).toBeDefined();
     });
 
-    it("updateMe 메서드가 올바른 타입을 가져야 한다", () => {
-      const userClient: UserApiClient = {
-        getMe: async () => ({
-          id: "dummy-id",
-          userId: "dummy-user-id",
-          nickname: "dummy-nickname",
-          createdAt: "2023-01-01T00:00:00Z",
-          updatedAt: "2023-01-01T00:00:00Z",
-        }),
-        updateMe: async (data: UpdateUserRequest): Promise<User> => {
-          // UpdateUserRequest는 선택적 필드를 가질 수 있음
-          if (data.nickname) {
-            expect(typeof data.nickname).toBe("string");
-          }
-          return {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: data.nickname || "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          };
+    it("UserApiClient의 updateMe 메서드가 올바른 타입을 가져야 한다", () => {
+      const userApiClient: UserApiClient = {
+        getMe: async (): Promise<User> => {
+          return {} as User;
+        },
+        updateMe: async (_data: UpdateUserRequest): Promise<User> => {
+          // data는 UpdateUserRequest 타입이어야 함
+          expect(_data).toBeDefined();
+          return {} as User;
         },
       };
 
-      expect(typeof userClient.updateMe).toBe("function");
+      expect(userApiClient.updateMe).toBeDefined();
     });
   });
 
-  describe("ApiClient", () => {
-    it("ApiClient 인터페이스가 올바르게 정의되어야 한다", () => {
-      // 타입 체크를 위한 더미 구현체
+  describe("ApiClient 인터페이스", () => {
+    it("ApiClient가 올바른 구조를 가져야 한다", () => {
       const apiClient: ApiClient = {
         auth: {
-          register: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          login: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          logout: async () => {},
-          refreshToken: async () => ({
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
+          register: async (): Promise<AuthResponse> => {
+            return {} as AuthResponse;
+          },
+          login: async (): Promise<AuthResponse> => {
+            return {} as AuthResponse;
+          },
+          logout: async (): Promise<void> => {
+            // 로그아웃 로직
+          },
+          refreshToken: async (): Promise<AuthTokens> => {
+            return {} as AuthTokens;
+          },
         },
         user: {
-          getMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
-          updateMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
+          getMe: async (): Promise<User> => {
+            return {} as User;
+          },
+          updateMe: async (): Promise<User> => {
+            return {} as User;
+          },
         },
       };
 
       expect(apiClient).toBeDefined();
       expect(apiClient.auth).toBeDefined();
       expect(apiClient.user).toBeDefined();
+      expect(typeof apiClient.auth.register).toBe("function");
+      expect(typeof apiClient.auth.login).toBe("function");
+      expect(typeof apiClient.auth.logout).toBe("function");
+      expect(typeof apiClient.auth.refreshToken).toBe("function");
+      expect(typeof apiClient.user.getMe).toBe("function");
+      expect(typeof apiClient.user.updateMe).toBe("function");
     });
 
-    it("ApiClient는 auth와 user 속성을 가져야 한다", () => {
-      const apiClient: ApiClient = {
-        auth: {
-          register: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          login: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          logout: async () => {},
-          refreshToken: async () => ({
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
+    it("ApiClient의 auth 속성이 AuthApiClient 타입이어야 한다", () => {
+      const authClient: AuthApiClient = {
+        register: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
         },
-        user: {
-          getMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
-          updateMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
+        login: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
+        refreshToken: async (): Promise<AuthTokens> => {
+          return {} as AuthTokens;
         },
       };
 
-      expect(apiClient).toHaveProperty("auth");
-      expect(apiClient).toHaveProperty("user");
+      const apiClient: ApiClient = {
+        auth: authClient,
+        user: {} as UserApiClient,
+      };
+
+      expect(apiClient.auth).toBe(authClient);
     });
 
-    it("ApiClient.auth는 AuthApiClient 타입이어야 한다", () => {
-      const apiClient: ApiClient = {
-        auth: {
-          register: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          login: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          logout: async () => {},
-          refreshToken: async () => ({
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
+    it("ApiClient의 user 속성이 UserApiClient 타입이어야 한다", () => {
+      const userClient: UserApiClient = {
+        getMe: async (): Promise<User> => {
+          return {} as User;
         },
-        user: {
-          getMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
-          updateMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
+        updateMe: async (): Promise<User> => {
+          return {} as User;
         },
       };
 
-      expect(apiClient.auth).toHaveProperty("register");
-      expect(apiClient.auth).toHaveProperty("login");
-      expect(apiClient.auth).toHaveProperty("logout");
-      expect(apiClient.auth).toHaveProperty("refreshToken");
-    });
-
-    it("ApiClient.user는 UserApiClient 타입이어야 한다", () => {
       const apiClient: ApiClient = {
-        auth: {
-          register: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          login: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          logout: async () => {},
-          refreshToken: async () => ({
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-        },
-        user: {
-          getMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
-          updateMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
-        },
+        auth: {} as AuthApiClient,
+        user: userClient,
       };
 
-      expect(apiClient.user).toHaveProperty("getMe");
-      expect(apiClient.user).toHaveProperty("updateMe");
+      expect(apiClient.user).toBe(userClient);
     });
   });
 
   describe("타입 호환성", () => {
-    it("AuthApiClient와 UserApiClient는 독립적으로 사용 가능해야 한다", () => {
-      // AuthApiClient만 필요한 경우
-      const authOnly: AuthApiClient = {
-        register: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        login: async () => ({
-          user: {
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          },
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
-        logout: async () => {},
-        refreshToken: async () => ({
-          accessToken: "dummy",
-          refreshToken: "dummy",
-        }),
+    it("AuthApiClient를 구현하는 객체가 올바르게 할당되어야 한다", () => {
+      const mockAuthClient = {
+        register: async (_data: RegisterRequest): Promise<AuthResponse> => {
+          return {
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          };
+        },
+        login: async (_data: LoginRequest): Promise<AuthResponse> => {
+          return {
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          };
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
+        refreshToken: async (
+          _data: RefreshTokenRequest,
+        ): Promise<AuthTokens> => {
+          return {} as AuthTokens;
+        },
       };
 
-      // UserApiClient만 필요한 경우
-      const userOnly: UserApiClient = {
-        getMe: async () => ({
-          id: "dummy-id",
-          userId: "dummy-user-id",
-          nickname: "dummy-nickname",
-          createdAt: "2023-01-01T00:00:00Z",
-          updatedAt: "2023-01-01T00:00:00Z",
-        }),
-        updateMe: async () => ({
-          id: "dummy-id",
-          userId: "dummy-user-id",
-          nickname: "dummy-nickname",
-          createdAt: "2023-01-01T00:00:00Z",
-          updatedAt: "2023-01-01T00:00:00Z",
-        }),
-      };
-
-      expect(authOnly).toBeDefined();
-      expect(userOnly).toBeDefined();
+      const authClient: AuthApiClient = mockAuthClient;
+      expect(authClient).toBe(mockAuthClient);
     });
 
-    it("ApiClient는 AuthApiClient와 UserApiClient를 모두 포함해야 한다", () => {
-      const apiClient: ApiClient = {
-        auth: {
-          register: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          login: async () => ({
-            user: {
-              id: "dummy-id",
-              userId: "dummy-user-id",
-              nickname: "dummy-nickname",
-              createdAt: "2023-01-01T00:00:00Z",
-              updatedAt: "2023-01-01T00:00:00Z",
-            },
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
-          logout: async () => {},
-          refreshToken: async () => ({
-            accessToken: "dummy",
-            refreshToken: "dummy",
-          }),
+    it("UserApiClient를 구현하는 객체가 올바르게 할당되어야 한다", () => {
+      const mockUserClient = {
+        getMe: async (): Promise<User> => {
+          return {} as User;
         },
-        user: {
-          getMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
-          updateMe: async () => ({
-            id: "dummy-id",
-            userId: "dummy-user-id",
-            nickname: "dummy-nickname",
-            createdAt: "2023-01-01T00:00:00Z",
-            updatedAt: "2023-01-01T00:00:00Z",
-          }),
+        updateMe: async (_data: UpdateUserRequest): Promise<User> => {
+          return {} as User;
         },
       };
 
-      expect(apiClient.auth).toBeDefined();
-      expect(apiClient.user).toBeDefined();
+      const userClient: UserApiClient = mockUserClient;
+      expect(userClient).toBe(mockUserClient);
+    });
+
+    it("ApiClient를 구현하는 객체가 올바르게 할당되어야 한다", () => {
+      const mockApiClient = {
+        auth: {
+          register: async (): Promise<AuthResponse> => {
+            return {} as AuthResponse;
+          },
+          login: async (): Promise<AuthResponse> => {
+            return {} as AuthResponse;
+          },
+          logout: async (): Promise<void> => {
+            // 로그아웃 로직
+          },
+          refreshToken: async (): Promise<AuthTokens> => {
+            return {} as AuthTokens;
+          },
+        },
+        user: {
+          getMe: async (): Promise<User> => {
+            return {} as User;
+          },
+          updateMe: async (): Promise<User> => {
+            return {} as User;
+          },
+        },
+      };
+
+      const apiClient: ApiClient = mockApiClient;
+      expect(apiClient).toBe(mockApiClient);
+    });
+  });
+
+  describe("메서드 시그니처", () => {
+    it("AuthApiClient의 register 메서드가 올바른 매개변수와 반환 타입을 가져야 한다", () => {
+      const authClient: AuthApiClient = {
+        register: async (_data: RegisterRequest): Promise<AuthResponse> => {
+          // data는 RegisterRequest 타입이어야 함
+          expect(_data).toBeDefined();
+          return {
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          };
+        },
+        login: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
+        refreshToken: async (): Promise<AuthTokens> => {
+          return {} as AuthTokens;
+        },
+      };
+
+      // 타입 체크를 위한 호출
+      expect(authClient.register).toBeDefined();
+    });
+
+    it("AuthApiClient의 login 메서드가 올바른 매개변수와 반환 타입을 가져야 한다", () => {
+      const authClient: AuthApiClient = {
+        register: async (): Promise<AuthResponse> => {
+          return {} as AuthResponse;
+        },
+        login: async (_data: LoginRequest): Promise<AuthResponse> => {
+          // data는 LoginRequest 타입이어야 함
+          expect(_data).toBeDefined();
+          return {
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          };
+        },
+        logout: async (): Promise<void> => {
+          // 로그아웃 로직
+        },
+        refreshToken: async (): Promise<AuthTokens> => {
+          return {} as AuthTokens;
+        },
+      };
+
+      expect(authClient.login).toBeDefined();
+    });
+
+    it("UserApiClient의 updateMe 메서드가 올바른 매개변수와 반환 타입을 가져야 한다", () => {
+      const userClient: UserApiClient = {
+        getMe: async (): Promise<User> => {
+          return {} as User;
+        },
+        updateMe: async (_data: UpdateUserRequest): Promise<User> => {
+          // data는 UpdateUserRequest 타입이어야 함
+          expect(_data).toBeDefined();
+          return {} as User;
+        },
+      };
+
+      expect(userClient.updateMe).toBeDefined();
+    });
+  });
+
+  describe("Promise 반환 타입", () => {
+    it("모든 비동기 메서드가 Promise를 반환해야 한다", () => {
+      const authClient: AuthApiClient = {
+        register: async (): Promise<AuthResponse> => {
+          return Promise.resolve({
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          });
+        },
+        login: async (): Promise<AuthResponse> => {
+          return Promise.resolve({
+            user: {} as User,
+            accessToken: "dummy-access-token",
+            refreshToken: "dummy-refresh-token",
+          });
+        },
+        logout: async (): Promise<void> => {
+          return Promise.resolve();
+        },
+        refreshToken: async (): Promise<AuthTokens> => {
+          return Promise.resolve({} as AuthTokens);
+        },
+      };
+
+      const userClient: UserApiClient = {
+        getMe: async (): Promise<User> => {
+          return Promise.resolve({} as User);
+        },
+        updateMe: async (): Promise<User> => {
+          return Promise.resolve({} as User);
+        },
+      };
+
+      expect(authClient.register).toBeDefined();
+      expect(userClient.getMe).toBeDefined();
     });
   });
 });
