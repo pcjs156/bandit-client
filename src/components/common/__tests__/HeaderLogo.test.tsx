@@ -72,14 +72,14 @@ describe("HeaderLogo", () => {
       render(<HeaderLogo />);
 
       const link = screen.getByRole("link");
-      expect(link).toHaveStyle({ textDecoration: "none" });
+      expect(link.getAttribute("style")).toContain("text-decoration: none");
     });
 
     it("링크가 상속된 색상을 가져야 한다", () => {
       render(<HeaderLogo />);
 
       const link = screen.getByRole("link");
-      expect(link).toHaveStyle({ color: "inherit" });
+      expect(link.getAttribute("style")).toContain("color: inherit");
     });
   });
 
@@ -100,7 +100,7 @@ describe("HeaderLogo", () => {
       render(<HeaderLogo />);
 
       const text = screen.getByText("BANDIT");
-      expect(text).toHaveStyle({ userSelect: "none" });
+      expect(text.getAttribute("style")).toContain("user-select: none");
     });
   });
 
