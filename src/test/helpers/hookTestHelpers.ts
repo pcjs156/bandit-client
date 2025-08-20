@@ -174,32 +174,32 @@ export function createFormValidationTests<T>(
 export function createCompleteFormTests<T>(
   hookFn: () => T,
   setFieldAction: (
-    result: { current: T },
+    result: T,
     field: string,
     value: string
   ) => void,
-  validateAction: (result: { current: T }) => void
+  validateAction: (result: T) => void
 ) {
   const fieldConfigs = [
     {
       fieldName: "userId",
       testCases: userIdValidationTests,
       setFieldAction: (result: { current: T }, value: string) =>
-        setFieldAction(result, "userId", value),
+        setFieldAction(result.current, "userId", value),
       validateAction,
     },
     {
       fieldName: "password",
       testCases: passwordValidationTests,
       setFieldAction: (result: { current: T }, value: string) =>
-        setFieldAction(result, "password", value),
+        setFieldAction(result.current, "password", value),
       validateAction,
     },
     {
       fieldName: "nickname",
       testCases: nicknameValidationTests,
       setFieldAction: (result: { current: T }, value: string) =>
-        setFieldAction(result, "nickname", value),
+        setFieldAction(result.current, "nickname", value),
       validateAction,
     },
   ];
