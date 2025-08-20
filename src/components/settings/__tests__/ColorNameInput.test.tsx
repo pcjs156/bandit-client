@@ -19,12 +19,12 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByLabelText("색상 이름")).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText("예: 내가 좋아하는 파란색"),
+        screen.getByPlaceholderText("예: 내가 좋아하는 파란색")
       ).toBeInTheDocument();
     });
 
@@ -32,7 +32,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByText("색상 이름")).toBeInTheDocument();
@@ -42,11 +42,11 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(
-        screen.getByPlaceholderText("예: 내가 좋아하는 파란색"),
+        screen.getByPlaceholderText("예: 내가 좋아하는 파란색")
       ).toBeInTheDocument();
     });
   });
@@ -57,7 +57,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} value={testValue} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름") as HTMLInputElement;
@@ -68,7 +68,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} value="" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름") as HTMLInputElement;
@@ -80,7 +80,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} value={longValue} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름") as HTMLInputElement;
@@ -92,7 +92,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} value={specialValue} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름") as HTMLInputElement;
@@ -106,7 +106,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} onChange={mockOnChange} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -123,7 +123,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} onChange={mockOnChange} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -138,7 +138,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} onChange={mockOnChange} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -154,7 +154,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} error={true} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -167,7 +167,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} error={false} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -178,7 +178,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -194,7 +194,7 @@ describe("ColorNameInput", () => {
             error={true}
             onErrorClear={mockOnErrorClear}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -213,7 +213,7 @@ describe("ColorNameInput", () => {
             error={false}
             onErrorClear={mockOnErrorClear}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -227,7 +227,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} error={true} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -244,7 +244,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} disabled={true} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -255,7 +255,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} disabled={false} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -266,7 +266,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -282,7 +282,7 @@ describe("ColorNameInput", () => {
             onChange={mockOnChange}
             disabled={true}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -298,7 +298,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -310,7 +310,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} onChange={mockOnChange} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -336,7 +336,7 @@ describe("ColorNameInput", () => {
             onErrorClear={mockOnErrorClear}
             disabled={true}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -361,7 +361,7 @@ describe("ColorNameInput", () => {
             onChange={mockOnChange}
             onErrorClear={mockOnErrorClear}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       // 에러 상태로 변경
@@ -374,7 +374,7 @@ describe("ColorNameInput", () => {
             error={true}
             onErrorClear={mockOnErrorClear}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름") as HTMLInputElement;
@@ -388,7 +388,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByLabelText("색상 이름");
@@ -399,7 +399,7 @@ describe("ColorNameInput", () => {
       render(
         <TestWrapper>
           <ColorNameInput {...defaultProps} />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const input = screen.getByPlaceholderText("예: 내가 좋아하는 파란색");

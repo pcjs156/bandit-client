@@ -41,7 +41,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.queryByTestId("icon-check")).not.toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-x")).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const iconX = screen.getByTestId("icon-x");
@@ -83,7 +83,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       // 빈 문자열은 falsy이므로 에러가 없는 것으로 간주
@@ -99,7 +99,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-check")).toBeInTheDocument();
@@ -112,7 +112,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       const iconCheck = screen.getByTestId("icon-check");
@@ -128,7 +128,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="nickname" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(mockForm.validateField).toHaveBeenCalledWith("nickname");
@@ -150,7 +150,7 @@ describe("ValidationIcon", () => {
               fieldName={fieldName}
               value="test"
             />
-          </TestWrapper>,
+          </TestWrapper>
         );
 
         expect(mockForm.validateField).toHaveBeenCalledWith(fieldName);
@@ -170,7 +170,7 @@ describe("ValidationIcon", () => {
             fieldName="userId"
             value="testuser123"
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-check")).toBeInTheDocument();
@@ -182,7 +182,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="a" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-check")).toBeInTheDocument();
@@ -199,7 +199,7 @@ describe("ValidationIcon", () => {
             fieldName="userId"
             value={longValue}
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-check")).toBeInTheDocument();
@@ -215,7 +215,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-x")).toBeInTheDocument();
@@ -228,7 +228,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="test" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-x")).toBeInTheDocument();
@@ -246,7 +246,7 @@ describe("ValidationIcon", () => {
             fieldName="password"
             value="testpassword"
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-check")).toBeInTheDocument();
@@ -263,7 +263,7 @@ describe("ValidationIcon", () => {
             fieldName="nickname"
             value="testnickname"
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(mockForm.validateField).toHaveBeenCalled();
@@ -275,7 +275,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="testuser" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(mockForm.validateField).toHaveBeenCalledWith("userId");
@@ -291,7 +291,7 @@ describe("ValidationIcon", () => {
             fieldName="userId"
             value="testvalue"
           />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       // value가 있으면 아이콘이 렌더링되어야 함
@@ -306,7 +306,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="   " />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       // 공백만 있는 값은 truthy로 처리되어야 함
@@ -319,7 +319,7 @@ describe("ValidationIcon", () => {
       render(
         <TestWrapper>
           <ValidationIcon form={mockForm} fieldName="userId" value="0" />
-        </TestWrapper>,
+        </TestWrapper>
       );
 
       expect(screen.getByTestId("icon-check")).toBeInTheDocument();

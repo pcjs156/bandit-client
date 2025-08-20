@@ -33,7 +33,7 @@ describe("src/api/types.ts", () => {
           // 로그아웃 로직
         },
         refreshToken: async (
-          _data: RefreshTokenRequest,
+          _data: RefreshTokenRequest
         ): Promise<AuthTokens> => {
           return {} as AuthTokens;
         },
@@ -127,7 +127,7 @@ describe("src/api/types.ts", () => {
           // 로그아웃 로직
         },
         refreshToken: async (
-          data: RefreshTokenRequest,
+          data: RefreshTokenRequest
         ): Promise<AuthTokens> => {
           expect(data).toBeDefined();
           return {} as AuthTokens;
@@ -285,7 +285,7 @@ describe("src/api/types.ts", () => {
           // 로그아웃 로직
         },
         refreshToken: async (
-          _data: RefreshTokenRequest,
+          _data: RefreshTokenRequest
         ): Promise<AuthTokens> => {
           return {} as AuthTokens;
         },
