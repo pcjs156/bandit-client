@@ -121,7 +121,7 @@ export const createNicknameValidationCases = () => [
 
 // 컴포넌트 테스트 데이터 팩토리
 export const createComponentTestProps = (
-  overrides: Record<string, any> = {}
+  overrides: Record<string, unknown> = {}
 ) => ({
   // 기본 컴포넌트 props
   ...overrides,

@@ -18,7 +18,7 @@ import type { ReactElement } from "react";
 export class ComponentTestHelper {
   private element: HTMLElement;
 
-  constructor(ui: ReactElement, options?: any) {
+  constructor(ui: ReactElement, options?: RenderOptions) {
     const result = render(ui, options);
     this.element = result.container;
   }
@@ -32,7 +32,7 @@ export class ComponentTestHelper {
     return screen.getByText(text);
   }
 
-  findByRole(role: string, options?: any) {
+  findByRole(role: string, options?: ByRoleOptions) {
     return screen.getByRole(role, options);
   }
 
@@ -75,9 +75,9 @@ export class ComponentTestHelper {
 
 // 폼 테스트 전용 헬퍼
 export class FormTestHelper {
-  private result: any;
+  private result: RenderHookResult<unknown, unknown>;
 
-  constructor(hookFn: () => any) {
+  constructor(hookFn: () => unknown) {
     const { result } = renderHook(hookFn);
     this.result = result;
   }
@@ -135,9 +135,11 @@ export class FormTestHelper {
   }
 
   // 상태 확인
-  expectState(expectedState: Partial<any>) {
+  expectState(expectedState: Partial<Record<string, unknown>>) {
     Object.entries(expectedState).forEach(([key, value]) => {
-      expect(this.result.current[key]).toEqual(value);
+      expect((this.result.current as Record<string, unknown>)[key]).toEqual(
+        value
+      );
     });
     return this;
   }
@@ -145,10 +147,10 @@ export class FormTestHelper {
 
 // API 모킹 헬퍼
 export class ApiMockHelper {
-  private mocks: Map<string, any> = new Map();
+  private mocks: Map<string, Response> = new Map();
 
   // API 응답 모킹
-  mockApiResponse(endpoint: string, response: any, status: number = 200) {
+  mockApiResponse(endpoint: string, response: unknown, status: number = 200) {
     const mockResponse = {
       ok: status >= 200 && status < 300,
       status,
@@ -204,15 +206,17 @@ export class ApiMockHelper {
 
 // 비동기 테스트 헬퍼
 export class AsyncTestHelper {
-  private result: any;
+  private result: RenderHookResult<unknown, unknown>;
 
-  constructor(hookFn: () => any) {
+  constructor(hookFn: () => unknown) {
     const { result } = renderHook(hookFn);
     this.result = result;
   }
 
   // 비동기 액션 실행
-  async executeAction(action: (result: any) => Promise<void>) {
+  async executeAction(
+    action: (result: RenderHookResult<unknown, unknown>) => Promise<void>
+  ) {
     await act(async () => {
       await action(this.result);
     });
@@ -221,13 +225,15 @@ export class AsyncTestHelper {
 
   // 상태 변경 대기
   async waitForStateChange(
-    expectedState: Partial<any>,
+    expectedState: Partial<Record<string, unknown>>,
     timeout: number = 1000
   ) {
     await waitFor(
       () => {
         Object.entries(expectedState).forEach(([key, value]) => {
-          expect(this.result.current[key]).toEqual(value);
+          expect((this.result.current as Record<string, unknown>)[key]).toEqual(
+            value
+          );
         });
       },
       { timeout }
@@ -237,13 +243,17 @@ export class AsyncTestHelper {
 
   // 로딩 상태 확인
   expectLoading(expectedLoading: boolean) {
-    expect(this.result.current.isLoading).toBe(expectedLoading);
+    expect((this.result.current as Record<string, unknown>).isLoading).toBe(
+      expectedLoading
+    );
     return this;
   }
 
   // 에러 상태 확인
   expectError(expectedError: string | null) {
-    expect(this.result.current.error).toBe(expectedError);
+    expect((this.result.current as Record<string, unknown>).error).toBe(
+      expectedError
+    );
     return this;
   }
 }

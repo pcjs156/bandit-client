@@ -31,7 +31,7 @@ vi.mock("@src/components/common/HeaderLogo", () => ({
 vi.mock("@src/components/common/AuthButtons", () => ({
   LoadingAuthButton: () => <div data-testid="loading-auth-button">Loading</div>,
   GuestAuthButtons: () => <div data-testid="guest-auth-buttons">Guest</div>,
-  AuthenticatedUserButtons: ({ user, onLogout }: any) => (
+  AuthenticatedUserButtons: ({ user, onLogout }: { user: { nickname: string }; onLogout: () => void }) => (
     <div data-testid="authenticated-user-buttons">
       <button onClick={onLogout} data-testid="logout-button">
         로그아웃

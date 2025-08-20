@@ -154,7 +154,7 @@ export const testUtils = {
   }),
 
   // API 응답 모킹 헬퍼
-  mockApiResponse: (data: any, success = true) => ({
+  mockApiResponse: (data: unknown, success = true) => ({
     success,
     data,
     timestamp: new Date().toISOString(),
@@ -202,31 +202,29 @@ export const testUtils = {
 };
 
 // 전역 타입 선언
-declare global {
-  namespace Vi {
-    interface JestAssertion<T> {
-      toBeInTheDocument(): T;
-      toHaveClass(className: string): T;
-      toHaveAttribute(attr: string, value?: string): T;
-      toHaveTextContent(text: string | RegExp): T;
-      toHaveValue(value: string | string[] | number): T;
-      toBeChecked(): T;
-      toBeDisabled(): T;
-      toBeEmpty(): T;
-      toBeEmptyDOMElement(): T;
-      toBeEnabled(): T;
-      toBeInvalid(): T;
-      toBeRequired(): T;
-      toBeValid(): T;
-      toBeVisible(): T;
-      toContainElement(element: HTMLElement | null): T;
-      toContainHTML(htmlText: string): T;
-      toHaveDisplayValue(value: string | string[]): T;
-      toHaveFormValues(expectedValues: Record<string, any>): T;
-      toHaveStyle(css: string | Record<string, any>): T;
-      toHaveFocus(): T;
-      toBePartiallyChecked(): T;
-      toHaveDescription(text: string | RegExp): T;
-    }
+declare module "vitest" {
+  interface JestAssertion<T> {
+    toBeInTheDocument(): T;
+    toHaveClass(className: string): T;
+    toHaveAttribute(attr: string, value?: string): T;
+    toHaveTextContent(text: string | RegExp): T;
+    toHaveValue(value: string | string[] | number): T;
+    toBeChecked(): T;
+    toBeDisabled(): T;
+    toBeEmpty(): T;
+    toBeEmptyDOMElement(): T;
+    toBeEnabled(): T;
+    toBeInvalid(): T;
+    toBeRequired(): T;
+    toBeValid(): T;
+    toBeVisible(): T;
+    toContainElement(element: HTMLElement | null): T;
+    toContainHTML(htmlText: string): T;
+    toHaveDisplayValue(value: string | string[]): T;
+    toHaveFormValues(expectedValues: Record<string, unknown>): T;
+    toHaveStyle(css: string | Record<string, unknown>): T;
+    toHaveFocus(): T;
+    toBePartiallyChecked(): T;
+    toHaveDescription(text: string | RegExp): T;
   }
 }

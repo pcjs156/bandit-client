@@ -36,10 +36,6 @@ const mockLocalStorage = {
   removeItem: vi.fn(),
 };
 
-vi.mock("global", () => ({
-  localStorage: mockLocalStorage,
-}));
-
 describe("authHelpers", () => {
   // 테스트용 데이터
   const mockUser: User = {
@@ -66,6 +62,12 @@ describe("authHelpers", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSetState = vi.fn();
+
+    // localStorage 모킹 설정
+    Object.defineProperty(global, "localStorage", {
+      value: mockLocalStorage,
+      writable: true,
+    });
   });
 
   describe("executeAuthAction", () => {
