@@ -289,7 +289,8 @@ describe("logger", () => {
     let sessionStorageSpy: ReturnType<typeof vi.spyOn<Storage, "getItem">>;
 
     beforeEach(() => {
-      sessionStorageSpy = vi.spyOn(Storage.prototype, "getItem");
+      // sessionStorage.getItem을 구체적으로 모킹
+      sessionStorageSpy = vi.spyOn(sessionStorage, "getItem");
     });
 
     afterEach(() => {
