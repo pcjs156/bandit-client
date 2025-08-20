@@ -15,21 +15,23 @@ describe("API Types", () => {
     it("AuthApiClient 인터페이스가 올바르게 정의되어야 한다", () => {
       // 타입 체크를 위한 더미 구현체
       const authClient: AuthApiClient = {
-        register: async (data: RegisterRequest): Promise<AuthResponse> => {
+        register: async (_data: RegisterRequest): Promise<AuthResponse> => {
           return {
             user: {} as User,
-            tokens: {} as AuthTokens,
+            accessToken: "dummy",
+            refreshToken: "dummy",
           };
         },
-        login: async (data: LoginRequest): Promise<AuthResponse> => {
+        login: async (_data: LoginRequest): Promise<AuthResponse> => {
           return {
             user: {} as User,
-            tokens: {} as AuthTokens,
+            accessToken: "dummy",
+            refreshToken: "dummy",
           };
         },
         logout: async (): Promise<void> => {},
         refreshToken: async (
-          data: RefreshTokenRequest
+          _data: RefreshTokenRequest
         ): Promise<AuthTokens> => {
           return {} as AuthTokens;
         },
@@ -50,7 +52,8 @@ describe("API Types", () => {
           expect(data).toHaveProperty("nickname");
           return {
             user: {} as User,
-            tokens: {} as AuthTokens,
+            accessToken: "dummy",
+            refreshToken: "dummy",
           };
         },
         login: async () => ({} as AuthResponse),
@@ -69,7 +72,8 @@ describe("API Types", () => {
           expect(data).toHaveProperty("password");
           return {
             user: {} as User,
-            tokens: {} as AuthTokens,
+            accessToken: "dummy",
+            refreshToken: "dummy",
           };
         },
         logout: async () => {},
@@ -116,7 +120,7 @@ describe("API Types", () => {
         getMe: async (): Promise<User> => {
           return {} as User;
         },
-        updateMe: async (data: UpdateUserRequest): Promise<User> => {
+        updateMe: async (_data: UpdateUserRequest): Promise<User> => {
           return {} as User;
         },
       };

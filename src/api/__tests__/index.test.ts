@@ -62,10 +62,21 @@ describe("API Index", () => {
     it("AuthApiClient 타입이 내보내져야 한다", () => {
       // 타입 체크를 위한 더미 객체
       const dummyAuthClient: AuthApiClient = {
-        register: async () => ({ user: {} as any, tokens: {} as any }),
-        login: async () => ({ user: {} as any, tokens: {} as any }),
+        register: async () => ({
+          user: {} as any,
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
+        login: async () => ({
+          user: {} as any,
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
         logout: async () => {},
-        refreshToken: async () => ({} as any),
+        refreshToken: async () => ({
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
       };
 
       expect(dummyAuthClient).toBeDefined();
