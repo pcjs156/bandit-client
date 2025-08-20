@@ -63,7 +63,7 @@ export class TokenStorage {
    * 토큰 검증 및 파싱
    */
   static parseToken(
-    token: string
+    token: string,
   ): { userId: string; exp: number; type: string } | null {
     try {
       const payload = JSON.parse(atob(token));

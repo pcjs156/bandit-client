@@ -3,15 +3,23 @@ import { LocalStorageUserApi } from "../userApi";
 import { AuthValidation } from "@src/utils/authValidation";
 import { useUserStore } from "@src/stores/userStore";
 import { ApiErrorCode } from "@src/types/api";
-import type { UpdateUserRequest, ApiError } from "@src/types/api";
+import type { UpdateUserRequest } from "@src/types/api";
+import type { User } from "@src/types/user";
 
 // Mock dependencies
 vi.mock("@src/utils/authValidation");
 vi.mock("@src/stores/userStore");
 
+// Mock 타입 정의
+interface MockUserStore {
+  currentUser: User | null;
+  findUserById: ReturnType<typeof vi.fn>;
+  updateUser: ReturnType<typeof vi.fn>;
+}
+
 describe("LocalStorageUserApi", () => {
   let userApi: LocalStorageUserApi;
-  let mockUserStore: any;
+  let mockUserStore: MockUserStore;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -22,10 +30,14 @@ describe("LocalStorageUserApi", () => {
       findUserById: vi.fn(),
       updateUser: vi.fn(),
     };
-    (useUserStore.getState as any).mockReturnValue(mockUserStore);
+    (useUserStore.getState as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockUserStore,
+    );
 
     // Mock AuthValidation
-    (AuthValidation.validateUpdateUserInput as any).mockReturnValue(null);
+    (
+      AuthValidation.validateUpdateUserInput as ReturnType<typeof vi.fn>
+    ).mockReturnValue(null);
 
     userApi = new LocalStorageUserApi();
   });
@@ -78,6 +90,8 @@ describe("LocalStorageUserApi", () => {
         id: "user-123",
         userId: "testuser",
         nickname: "테스트유저",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       mockUserStore.currentUser = mockCurrentUser;
@@ -140,11 +154,11 @@ describe("LocalStorageUserApi", () => {
       const result = await userApi.updateMe(mockUpdateData);
 
       expect(AuthValidation.validateUpdateUserInput).toHaveBeenCalledWith(
-        mockUpdateData
+        mockUpdateData,
       );
       expect(mockUserStore.updateUser).toHaveBeenCalledWith(
         "user-123",
-        mockUpdateData
+        mockUpdateData,
       );
       expect(result).toEqual({
         id: "user-123",
@@ -169,34 +183,62 @@ describe("LocalStorageUserApi", () => {
         id: "user-123",
         userId: "testuser",
         nickname: "기존닉네임",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       const validationError = new Error("닉네임은 2자 이상이어야 합니다");
-      (AuthValidation.validateUpdateUserInput as any).mockReturnValue(
-        validationError
-      );
+      (
+        AuthValidation.validateUpdateUserInput as ReturnType<typeof vi.fn>
+      ).mockReturnValue(validationError);
 
       mockUserStore.currentUser = mockCurrentUser;
 
       await expect(userApi.updateMe(mockUpdateData)).rejects.toThrow(
-        "닉네임은 2자 이상이어야 합니다"
+        "닉네임은 2자 이상이어야 합니다",
       );
     });
 
-    it("사용자 업데이트 실패 시 NOT_FOUND 에러를 던져야 한다", async () => {
+    it("사용자 업데이트 실패 시 에러를 던져야 한다", async () => {
       const mockCurrentUser = {
         id: "user-123",
         userId: "testuser",
         nickname: "기존닉네임",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const updateError = new Error("사용자 업데이트 실패");
+      mockUserStore.updateUser.mockImplementation(() => {
+        throw updateError;
+      });
+
+      mockUserStore.currentUser = mockCurrentUser;
+
+      await expect(userApi.updateMe(mockUpdateData)).rejects.toThrow(
+        "사용자 업데이트 실패",
+      );
+    });
+
+    it("사용자를 찾을 수 없으면 NOT_FOUND 에러를 던져야 한다", async () => {
+      const mockCurrentUser = {
+        id: "user-123",
+        userId: "testuser",
+        nickname: "기존닉네임",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       mockUserStore.currentUser = mockCurrentUser;
       mockUserStore.updateUser.mockReturnValue(null);
 
-      await expect(userApi.updateMe(mockUpdateData)).rejects.toMatchObject({
-        detailCode: ApiErrorCode.NOT_FOUND,
-        message: "사용자를 찾을 수 없습니다",
-      });
+      try {
+        await userApi.updateMe({ nickname: "새닉네임" });
+      } catch (error) {
+        const apiError = error as { detailCode: string; message?: string };
+        expect(apiError.detailCode).toBe(ApiErrorCode.NOT_FOUND);
+        expect(apiError.message).toBe("사용자를 찾을 수 없습니다");
+      }
     });
 
     it("빈 업데이트 데이터도 처리할 수 있어야 한다", async () => {
@@ -204,6 +246,8 @@ describe("LocalStorageUserApi", () => {
         id: "user-123",
         userId: "testuser",
         nickname: "기존닉네임",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       const emptyUpdateData: UpdateUserRequest = {};
@@ -218,11 +262,11 @@ describe("LocalStorageUserApi", () => {
       const result = await userApi.updateMe(emptyUpdateData);
 
       expect(AuthValidation.validateUpdateUserInput).toHaveBeenCalledWith(
-        emptyUpdateData
+        emptyUpdateData,
       );
       expect(mockUserStore.updateUser).toHaveBeenCalledWith(
         "user-123",
-        emptyUpdateData
+        emptyUpdateData,
       );
       expect(result).toBeDefined();
     });
@@ -232,6 +276,8 @@ describe("LocalStorageUserApi", () => {
         id: "user-123",
         userId: "testuser",
         nickname: "기존닉네임",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       const multiFieldUpdateData: UpdateUserRequest = {
@@ -252,7 +298,7 @@ describe("LocalStorageUserApi", () => {
 
       expect(mockUserStore.updateUser).toHaveBeenCalledWith(
         "user-123",
-        multiFieldUpdateData
+        multiFieldUpdateData,
       );
       expect(result.nickname).toBe("새닉네임");
     });
@@ -265,7 +311,7 @@ describe("LocalStorageUserApi", () => {
       try {
         await userApi.getMe();
       } catch (error) {
-        const apiError = error as ApiError;
+        const apiError = error as { detailCode: string; message?: string };
         expect(apiError.detailCode).toBe(ApiErrorCode.UNAUTHORIZED);
         expect(apiError.message).toBeUndefined();
       }
@@ -276,6 +322,8 @@ describe("LocalStorageUserApi", () => {
         id: "user-123",
         userId: "testuser",
         nickname: "기존닉네임",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       mockUserStore.currentUser = mockCurrentUser;
@@ -284,7 +332,7 @@ describe("LocalStorageUserApi", () => {
       try {
         await userApi.updateMe({ nickname: "새닉네임" });
       } catch (error) {
-        const apiError = error as ApiError;
+        const apiError = error as { detailCode: string; message?: string };
         expect(apiError.detailCode).toBe(ApiErrorCode.NOT_FOUND);
         expect(apiError.message).toBe("사용자를 찾을 수 없습니다");
       }

@@ -10,7 +10,7 @@ export const createUser = (
     password: string;
     nickname: string;
     email?: string;
-  }> = {}
+  }> = {},
 ) => ({
   userId: "testuser123",
   password: "password123",
@@ -20,7 +20,7 @@ export const createUser = (
 
 export const createInvalidUser = (
   field: "userId" | "password" | "nickname",
-  type: "empty" | "tooShort" | "tooLong" | "invalidFormat"
+  type: "empty" | "tooShort" | "tooLong" | "invalidFormat",
 ) => {
   const invalidValues = {
     userId: {
@@ -51,7 +51,7 @@ export const createPasswordStrengthTest = (
   password: string,
   expectedStrength: number,
   expectedLabel: string,
-  expectedColor: string
+  expectedColor: string,
 ) => ({
   password,
   expectedStrength,
@@ -71,7 +71,7 @@ export const createPasswordStrengthCases = () => [
 export const createValidationTest = (
   input: string,
   expectedError?: string,
-  shouldBeValid: boolean = false
+  shouldBeValid: boolean = false,
 ) => ({
   input,
   expectedError,
@@ -84,7 +84,7 @@ export const createUserIdValidationCases = () => [
   createValidationTest("a".repeat(21), "아이디는 20자 이하여야 합니다"),
   createValidationTest(
     "test@user",
-    "아이디는 영문과 숫자만 사용할 수 있습니다"
+    "아이디는 영문과 숫자만 사용할 수 있습니다",
   ),
   createValidationTest("testuser123", undefined, true),
   createValidationTest("test", undefined, true), // 경계값
@@ -97,11 +97,11 @@ export const createPasswordValidationCases = () => [
   createValidationTest("a".repeat(51), "비밀번호는 50자 이하여야 합니다"),
   createValidationTest(
     "12345678",
-    "비밀번호는 영문과 숫자를 모두 포함해야 합니다"
+    "비밀번호는 영문과 숫자를 모두 포함해야 합니다",
   ),
   createValidationTest(
     "password",
-    "비밀번호는 영문과 숫자를 모두 포함해야 합니다"
+    "비밀번호는 영문과 숫자를 모두 포함해야 합니다",
   ),
   createValidationTest("password123", undefined, true),
   createValidationTest("pass1234", undefined, true), // 경계값
@@ -121,7 +121,7 @@ export const createNicknameValidationCases = () => [
 
 // 컴포넌트 테스트 데이터 팩토리
 export const createComponentTestProps = (
-  overrides: Record<string, unknown> = {}
+  overrides: Record<string, unknown> = {},
 ) => ({
   // 기본 컴포넌트 props
   ...overrides,
@@ -131,7 +131,7 @@ export const createComponentTestProps = (
 export const createApiResponse = <T>(
   data: T,
   success: boolean = true,
-  message?: string
+  message?: string,
 ) => ({
   success,
   data,
@@ -152,7 +152,7 @@ export const createErrorResponse = (message: string, code?: string) => ({
 export const createColorTest = (
   name: string,
   hex: string,
-  isCustom: boolean = false
+  isCustom: boolean = false,
 ) => ({
   name,
   hex,
@@ -173,7 +173,7 @@ export const createTestConfig = (
     enableLogging: boolean;
     mockApi: boolean;
     testTimeout: number;
-  }> = {}
+  }> = {},
 ) => ({
   enableLogging: false,
   mockApi: true,

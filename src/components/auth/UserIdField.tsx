@@ -29,7 +29,7 @@ export const UserIdField = memo(
         />
       }
     />
-  )
+  ),
 );
 
 UserIdField.displayName = "UserIdField";

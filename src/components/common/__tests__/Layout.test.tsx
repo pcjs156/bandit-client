@@ -31,7 +31,13 @@ vi.mock("@src/components/common/HeaderLogo", () => ({
 vi.mock("@src/components/common/AuthButtons", () => ({
   LoadingAuthButton: () => <div data-testid="loading-auth-button">Loading</div>,
   GuestAuthButtons: () => <div data-testid="guest-auth-buttons">Guest</div>,
-  AuthenticatedUserButtons: ({ user, onLogout }: { user: { nickname: string }; onLogout: () => void }) => (
+  AuthenticatedUserButtons: ({
+    user,
+    onLogout,
+  }: {
+    user: { nickname: string };
+    onLogout: () => void;
+  }) => (
     <div data-testid="authenticated-user-buttons">
       <button onClick={onLogout} data-testid="logout-button">
         로그아웃
@@ -102,10 +108,10 @@ describe("Layout", () => {
 
       expect(screen.getByTestId("loading-auth-button")).toBeInTheDocument();
       expect(
-        screen.queryByTestId("guest-auth-buttons")
+        screen.queryByTestId("guest-auth-buttons"),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByTestId("authenticated-user-buttons")
+        screen.queryByTestId("authenticated-user-buttons"),
       ).not.toBeInTheDocument();
     });
 
@@ -117,10 +123,10 @@ describe("Layout", () => {
 
       expect(screen.getByTestId("guest-auth-buttons")).toBeInTheDocument();
       expect(
-        screen.queryByTestId("loading-auth-button")
+        screen.queryByTestId("loading-auth-button"),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByTestId("authenticated-user-buttons")
+        screen.queryByTestId("authenticated-user-buttons"),
       ).not.toBeInTheDocument();
     });
 
@@ -135,16 +141,16 @@ describe("Layout", () => {
       render(<Layout />);
 
       expect(
-        screen.getByTestId("authenticated-user-buttons")
+        screen.getByTestId("authenticated-user-buttons"),
       ).toBeInTheDocument();
       expect(screen.getByTestId("user-nickname")).toHaveTextContent(
-        "테스트유저"
+        "테스트유저",
       );
       expect(
-        screen.queryByTestId("loading-auth-button")
+        screen.queryByTestId("loading-auth-button"),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByTestId("guest-auth-buttons")
+        screen.queryByTestId("guest-auth-buttons"),
       ).not.toBeInTheDocument();
     });
   });
@@ -252,7 +258,7 @@ describe("Layout", () => {
       rerender(<Layout />);
 
       expect(
-        screen.getByTestId("authenticated-user-buttons")
+        screen.getByTestId("authenticated-user-buttons"),
       ).toBeInTheDocument();
     });
   });

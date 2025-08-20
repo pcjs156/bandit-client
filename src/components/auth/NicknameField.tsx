@@ -29,7 +29,7 @@ export const NicknameField = memo(
         />
       }
     />
-  )
+  ),
 );
 
 NicknameField.displayName = "NicknameField";

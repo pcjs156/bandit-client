@@ -23,7 +23,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
 
 const customRender = (
   ui: React.ReactElement,
-  options: CustomRenderOptions = {}
+  options: CustomRenderOptions = {},
 ) => {
   const { wrapper: TestWrapperComponent = TestWrapper, ...renderOptions } =
     options;

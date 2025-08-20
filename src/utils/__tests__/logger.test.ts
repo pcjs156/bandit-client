@@ -62,7 +62,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringMatching(/\[DEBUG\].*\[TestSource\].*Debug message/)
+        expect.stringMatching(/\[DEBUG\].*\[TestSource\].*Debug message/),
       );
     });
 
@@ -77,7 +77,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.info).toHaveBeenCalledWith(
-        expect.stringContaining("[INFO]")
+        expect.stringContaining("[INFO]"),
       );
     });
 
@@ -92,7 +92,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.warn).toHaveBeenCalledWith(
-        expect.stringContaining("[WARN]")
+        expect.stringContaining("[WARN]"),
       );
     });
 
@@ -107,7 +107,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringContaining("[ERROR]")
+        expect.stringContaining("[ERROR]"),
       );
     });
 
@@ -142,7 +142,7 @@ describe("logger", () => {
       expect(consoleSpy.info).toHaveBeenCalledWith(expect.any(String));
       expect(consoleSpy.info).not.toHaveBeenCalledWith(
         expect.any(String),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -204,7 +204,7 @@ describe("logger", () => {
         logger.info("Test message");
 
         expect(mockOutput.write).toHaveBeenCalledWith(
-          expect.objectContaining({ source: "App" })
+          expect.objectContaining({ source: "App" }),
         );
       });
 
@@ -213,7 +213,7 @@ describe("logger", () => {
         logger.info("Test message");
 
         expect(mockOutput.write).toHaveBeenCalledWith(
-          expect.objectContaining({ source: "CustomModule" })
+          expect.objectContaining({ source: "CustomModule" }),
         );
       });
     });
@@ -245,7 +245,7 @@ describe("logger", () => {
               timestamp: "2024-01-01T12:00:00.000Z",
               userAgent: expect.any(String), // jsdom에서는 userAgent가 있음
             }),
-          })
+          }),
         );
       });
     });
@@ -277,7 +277,7 @@ describe("logger", () => {
         expect(mockOutput.write).toHaveBeenCalledTimes(1);
         expect(consoleErrorSpy).toHaveBeenCalledWith(
           "로그 출력 중 오류 발생:",
-          expect.any(Error)
+          expect.any(Error),
         );
 
         consoleErrorSpy.mockRestore();
@@ -392,7 +392,7 @@ describe("logger", () => {
           source: "TestModule",
           message: "테스트 메시지",
           level: LogLevel.INFO,
-        })
+        }),
       );
     });
 
@@ -417,7 +417,7 @@ describe("logger", () => {
         expect.objectContaining({
           level: LogLevel.ERROR,
           message: "출력될 메시지",
-        })
+        }),
       );
 
       // 원래 레벨로 복원
@@ -442,7 +442,7 @@ describe("logger", () => {
         expect.objectContaining({
           source: "App",
           message: "테스트 메시지",
-        })
+        }),
       );
     });
   });

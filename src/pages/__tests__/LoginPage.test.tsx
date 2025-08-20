@@ -49,7 +49,7 @@ describe("LoginPage", () => {
       createAuthStoreMock({
         login: mockLogin,
         clearError: mockClearError,
-      })
+      }),
     );
   });
 
@@ -58,15 +58,15 @@ describe("LoginPage", () => {
       renderLoginPage();
 
       expect(
-        screen.getByRole("heading", { name: "BANDIT" })
+        screen.getByRole("heading", { name: "BANDIT" }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("heading", { name: "로그인" })
+        screen.getByRole("heading", { name: "로그인" }),
       ).toBeInTheDocument();
       expect(screen.getByLabelText("아이디")).toBeInTheDocument();
       expect(screen.getByLabelText("비밀번호")).toBeInTheDocument();
       expect(
-        screen.getByRole("button", { name: "로그인" })
+        screen.getByRole("button", { name: "로그인" }),
       ).toBeInTheDocument();
       expect(screen.getByText("계정이 없으신가요?")).toBeInTheDocument();
       expect(screen.getByText("회원가입")).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe("LoginPage", () => {
 
       // BANDIT 제목이 표시되어야 함
       expect(
-        screen.getByRole("heading", { name: "BANDIT" })
+        screen.getByRole("heading", { name: "BANDIT" }),
       ).toBeInTheDocument();
 
       // 음악 아이콘이 표시되어야 함 (SVG 요소)
@@ -91,10 +91,10 @@ describe("LoginPage", () => {
       renderLoginPage();
 
       expect(
-        screen.getByPlaceholderText("아이디를 입력하세요")
+        screen.getByPlaceholderText("아이디를 입력하세요"),
       ).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText("비밀번호를 입력하세요")
+        screen.getByPlaceholderText("비밀번호를 입력하세요"),
       ).toBeInTheDocument();
     });
 
@@ -196,7 +196,7 @@ describe("LoginPage", () => {
           login: mockLogin,
           status: "loading",
           clearError: mockClearError,
-        })
+        }),
       );
 
       renderLoginPage();
@@ -241,7 +241,7 @@ describe("LoginPage", () => {
           login: mockLogin,
           error: errorMessage,
           clearError: mockClearError,
-        })
+        }),
       );
 
       renderLoginPage();
@@ -255,7 +255,7 @@ describe("LoginPage", () => {
         createAuthStoreMock({
           login: mockLogin,
           clearError: mockClearError,
-        })
+        }),
       );
 
       renderLoginPage();
@@ -270,7 +270,7 @@ describe("LoginPage", () => {
           login: mockLogin,
           error: networkError,
           clearError: mockClearError,
-        })
+        }),
       );
 
       renderLoginPage();
@@ -329,7 +329,7 @@ describe("LoginPage", () => {
         createAuthStoreMock({
           login: mockLogin,
           clearError: mockClearError,
-        })
+        }),
       );
 
       renderLoginPage();
@@ -360,7 +360,7 @@ describe("LoginPage", () => {
           login: mockLogin,
           error: errorMessage,
           clearError: mockClearError,
-        })
+        }),
       );
 
       renderLoginPage();

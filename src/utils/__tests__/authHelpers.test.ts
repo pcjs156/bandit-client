@@ -81,7 +81,7 @@ describe("authHelpers", () => {
         "로그인",
         "testuser",
         mockSetState,
-        mockAction
+        mockAction,
       );
 
       // 결과 검증
@@ -112,7 +112,7 @@ describe("authHelpers", () => {
         "작업",
         undefined,
         mockSetState,
-        mockAction
+        mockAction,
       );
 
       expect(result).toEqual({
@@ -135,7 +135,7 @@ describe("authHelpers", () => {
         "회원가입",
         "testuser",
         mockSetState,
-        mockAction
+        mockAction,
       );
 
       expect(result).toEqual({
@@ -153,7 +153,7 @@ describe("authHelpers", () => {
       const mockAction = vi.fn().mockRejectedValue(mockApiError);
 
       await expect(
-        executeAuthAction("로그인", "testuser", mockSetState, mockAction)
+        executeAuthAction("로그인", "testuser", mockSetState, mockAction),
       ).rejects.toThrow();
 
       // setState 호출 검증
@@ -174,7 +174,7 @@ describe("authHelpers", () => {
       const mockAction = vi.fn().mockRejectedValue(errorWithoutMessage);
 
       await expect(
-        executeAuthAction("로그인", "testuser", mockSetState, mockAction)
+        executeAuthAction("로그인", "testuser", mockSetState, mockAction),
       ).rejects.toThrow();
 
       expect(mockSetState).toHaveBeenNthCalledWith(2, {
@@ -244,7 +244,7 @@ describe("authHelpers", () => {
         mockUser,
         "업데이트된유저",
         mockSetState,
-        mockUpdateAction
+        mockUpdateAction,
       );
 
       // 업데이트 액션 호출 검증
@@ -265,8 +265,8 @@ describe("authHelpers", () => {
           mockUser,
           "업데이트된유저",
           mockSetState,
-          mockUpdateAction
-        )
+          mockUpdateAction,
+        ),
       ).rejects.toThrow();
 
       // 에러 상태 설정 검증
@@ -284,8 +284,8 @@ describe("authHelpers", () => {
           mockUser,
           "업데이트된유저",
           mockSetState,
-          mockUpdateAction
-        )
+          mockUpdateAction,
+        ),
       ).rejects.toThrow();
 
       expect(mockSetState).toHaveBeenCalledWith({
@@ -316,7 +316,7 @@ describe("authHelpers", () => {
       const mockRefreshAction = vi.fn().mockRejectedValue(mockError);
 
       await expect(
-        executeTokenRefresh(mockSetState, mockRefreshAction)
+        executeTokenRefresh(mockSetState, mockRefreshAction),
       ).rejects.toThrow();
 
       // 상태 업데이트 검증

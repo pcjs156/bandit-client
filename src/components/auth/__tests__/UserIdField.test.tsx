@@ -41,29 +41,45 @@ describe("UserIdField", () => {
 
   describe("기본 렌더링", () => {
     it("아이디 라벨을 표시해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       expect(screen.getByText("아이디")).toBeInTheDocument();
     });
 
     it("올바른 placeholder를 표시해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       expect(
-        screen.getByPlaceholderText("영문, 숫자 4-20자")
+        screen.getByPlaceholderText("영문, 숫자 4-20자"),
       ).toBeInTheDocument();
     });
 
     it("설명 텍스트를 표시해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       expect(
-        screen.getByText("영문과 숫자만 사용 가능합니다")
+        screen.getByText("영문과 숫자만 사용 가능합니다"),
       ).toBeInTheDocument();
     });
 
     it("TextInput을 렌더링해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const input = screen.getByRole("textbox");
       expect(input).toBeInTheDocument();
@@ -72,7 +88,11 @@ describe("UserIdField", () => {
 
   describe("폼 연동", () => {
     it("form.getInputProps를 호출해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       expect(mockForm.getInputProps).toHaveBeenCalledWith("userId");
     });
@@ -83,7 +103,11 @@ describe("UserIdField", () => {
         values: { userId: "testuser" },
       };
 
-      renderWithMantine(<UserIdField form={formWithValue as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={formWithValue as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const validationIcon = screen.getByTestId("validation-icon-userId");
       expect(validationIcon).toHaveAttribute("data-value", "testuser");
@@ -92,13 +116,21 @@ describe("UserIdField", () => {
 
   describe("ValidationIcon", () => {
     it("ValidationIcon을 렌더링해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       expect(screen.getByTestId("validation-icon-userId")).toBeInTheDocument();
     });
 
     it("ValidationIcon에 올바른 props를 전달해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const validationIcon = screen.getByTestId("validation-icon-userId");
       expect(validationIcon).toBeInTheDocument();
@@ -108,7 +140,10 @@ describe("UserIdField", () => {
   describe("disabled 상태", () => {
     it("disabled가 false일 때 입력 필드가 활성화되어야 한다", () => {
       renderWithMantine(
-        <UserIdField form={mockForm as any} disabled={false} />
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+          disabled={false}
+        />,
       );
 
       const input = screen.getByRole("textbox");
@@ -116,14 +151,23 @@ describe("UserIdField", () => {
     });
 
     it("disabled가 true일 때 입력 필드가 비활성화되어야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} disabled={true} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+          disabled={true}
+        />,
+      );
 
       const input = screen.getByRole("textbox");
       expect(input).toBeDisabled();
     });
 
     it("disabled prop이 없을 때 기본값 false를 사용해야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const input = screen.getByRole("textbox");
       expect(input).not.toBeDisabled();
@@ -132,14 +176,22 @@ describe("UserIdField", () => {
 
   describe("스타일링", () => {
     it("size가 md로 설정되어야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const input = screen.getByRole("textbox");
       expect(input).toHaveClass("mantine-TextInput-input");
     });
 
     it("rightSection에 ValidationIcon이 배치되어야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const validationIcon = screen.getByTestId("validation-icon-userId");
 
@@ -149,7 +201,11 @@ describe("UserIdField", () => {
 
   describe("접근성", () => {
     it("label과 input이 올바르게 연결되어야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const label = screen.getByText("아이디");
       const input = screen.getByRole("textbox");
@@ -159,7 +215,11 @@ describe("UserIdField", () => {
     });
 
     it("placeholder가 올바르게 설정되어야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={mockForm as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       const input = screen.getByPlaceholderText("영문, 숫자 4-20자");
       expect(input).toBeInTheDocument();
@@ -178,10 +238,14 @@ describe("UserIdField", () => {
         })),
       };
 
-      renderWithMantine(<UserIdField form={formWithError as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={formWithError as unknown as UseFormReturnType<RegisterRequest>}
+        />,
+      );
 
       expect(
-        screen.getByText("아이디는 4자 이상이어야 합니다")
+        screen.getByText("아이디는 4자 이상이어야 합니다"),
       ).toBeInTheDocument();
     });
 
@@ -197,7 +261,13 @@ describe("UserIdField", () => {
         })),
       };
 
-      renderWithMantine(<UserIdField form={formWithOnChange as any} />);
+      renderWithMantine(
+        <UserIdField
+          form={
+            formWithOnChange as unknown as UseFormReturnType<RegisterRequest>
+          }
+        />,
+      );
 
       const input = screen.getByRole("textbox");
       input.focus();
@@ -215,7 +285,8 @@ describe("UserIdField", () => {
 
   describe("타입 안정성", () => {
     it("RegisterRequest 타입과 호환되어야 한다", () => {
-      const form: UseFormReturnType<RegisterRequest> = mockForm as any;
+      const form: UseFormReturnType<RegisterRequest> =
+        mockForm as unknown as UseFormReturnType<RegisterRequest>;
 
       renderWithMantine(<UserIdField form={form} />);
 

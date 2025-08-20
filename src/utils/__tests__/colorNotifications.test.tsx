@@ -42,7 +42,7 @@ describe("colorNotifications", () => {
       expect(mockShow).toHaveBeenCalledWith(
         expect.objectContaining({
           icon: expect.any(Object),
-        })
+        }),
       );
     });
 
@@ -60,7 +60,7 @@ describe("colorNotifications", () => {
         expect.objectContaining({
           title: "성공",
           message: `"${colorName}" 색상이 추가되었습니다.`,
-        })
+        }),
       );
     });
   });
@@ -88,7 +88,7 @@ describe("colorNotifications", () => {
       expect(mockShow).toHaveBeenCalledWith(
         expect.objectContaining({
           icon: expect.any(Object),
-        })
+        }),
       );
     });
 
@@ -105,7 +105,7 @@ describe("colorNotifications", () => {
         expect.objectContaining({
           title: "오류",
           message: "색상 추가 중 오류가 발생했습니다.",
-        })
+        }),
       );
     });
   });

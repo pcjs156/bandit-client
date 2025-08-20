@@ -247,7 +247,7 @@ describe("themeStore", () => {
       const state = useThemeStore.getState();
       expect(state.customColors).toHaveLength(2);
       expect(
-        state.customColors.find((c) => c.id === "custom-2")
+        state.customColors.find((c) => c.id === "custom-2"),
       ).toBeUndefined();
       expect(state.customColors.find((c) => c.id === "custom-1")).toBeDefined();
       expect(state.customColors.find((c) => c.id === "custom-3")).toBeDefined();

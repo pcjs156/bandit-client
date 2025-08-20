@@ -26,7 +26,7 @@ export function useRegisterSubmit() {
         setIsLoading(false);
       }
     },
-    [register, navigate, clearError]
+    [register, navigate, clearError],
   );
 
   const isSubmitDisabled = useCallback(
@@ -40,7 +40,7 @@ export function useRegisterSubmit() {
         !!form.errors.nickname
       );
     },
-    []
+    [],
   );
 
   const isFormDisabled = isLoading || status === "loading";

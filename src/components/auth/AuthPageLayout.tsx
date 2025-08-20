@@ -49,7 +49,7 @@ export const AuthPageLayout = memo(
         </Paper>
       </Stack>
     </Container>
-  )
+  ),
 );
 
 AuthPageLayout.displayName = "AuthPageLayout";

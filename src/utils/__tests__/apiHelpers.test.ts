@@ -92,10 +92,10 @@ describe("apiHelpers", () => {
   describe("ERROR_MESSAGES", () => {
     it("모든 에러 메시지가 정의되어 있어야 한다", () => {
       expect(ERROR_MESSAGES.USER_ALREADY_EXISTS).toBe(
-        "이미 사용중인 아이디입니다"
+        "이미 사용중인 아이디입니다",
       );
       expect(ERROR_MESSAGES.INVALID_CREDENTIALS).toBe(
-        "아이디 또는 비밀번호가 잘못되었습니다"
+        "아이디 또는 비밀번호가 잘못되었습니다",
       );
       expect(ERROR_MESSAGES.INVALID_REFRESH_TOKEN).toBe("다시 로그인해주세요");
     });
@@ -119,7 +119,7 @@ describe("apiHelpers", () => {
 
       expect(result).toEqual(mockStoredUser);
       expect(mockUseUserStore.getState().findUserByUserId).toHaveBeenCalledWith(
-        "testuser"
+        "testuser",
       );
     });
 
@@ -177,7 +177,7 @@ describe("apiHelpers", () => {
       });
 
       await expect(
-        validatePassword("correctPassword", "hashedPassword")
+        validatePassword("correctPassword", "hashedPassword"),
       ).resolves.not.toThrow();
     });
 
@@ -188,7 +188,7 @@ describe("apiHelpers", () => {
       });
 
       await expect(
-        validatePassword("wrongPassword", "hashedPassword")
+        validatePassword("wrongPassword", "hashedPassword"),
       ).rejects.toThrow();
 
       try {
@@ -211,7 +211,7 @@ describe("apiHelpers", () => {
       expect(mockTokenStorage.generateTokens).toHaveBeenCalledWith("user-123");
       expect(mockTokenStorage.setTokens).toHaveBeenCalledWith(
         mockTokens.accessToken,
-        mockTokens.refreshToken
+        mockTokens.refreshToken,
       );
       expect(result).toEqual(mockTokens);
     });
@@ -231,7 +231,7 @@ describe("apiHelpers", () => {
       expect(mockTokenStorage.generateTokens).toHaveBeenCalledWith(mockUser.id);
       expect(mockTokenStorage.setTokens).toHaveBeenCalledWith(
         mockTokens.accessToken,
-        mockTokens.refreshToken
+        mockTokens.refreshToken,
       );
       expect(mockSetCurrentUser).toHaveBeenCalledWith(mockUser);
       expect(result).toEqual(mockTokens);
@@ -281,7 +281,7 @@ describe("apiHelpers", () => {
       const result = validateAndParseRefreshToken("valid-refresh-token");
 
       expect(mockTokenStorage.parseToken).toHaveBeenCalledWith(
-        "valid-refresh-token"
+        "valid-refresh-token",
       );
       expect(result).toEqual(mockPayload);
     });
@@ -332,7 +332,7 @@ describe("apiHelpers", () => {
 
       expect(result).toEqual(mockStoredUser);
       expect(mockUseUserStore.getState().findUserById).toHaveBeenCalledWith(
-        "user-123"
+        "user-123",
       );
     });
 

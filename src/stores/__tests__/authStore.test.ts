@@ -81,7 +81,7 @@ describe("authStore", () => {
         "회원가입",
         mockRegisterRequest.userId,
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -98,7 +98,7 @@ describe("authStore", () => {
       vi.mocked(authHelpers.executeAuthAction).mockImplementation(
         async (_action, _userId, _updateState, apiCall) => {
           return await apiCall();
-        }
+        },
       );
 
       const { register } = useAuthStore.getState();
@@ -126,7 +126,7 @@ describe("authStore", () => {
         "로그인",
         mockLoginRequest.userId,
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -143,7 +143,7 @@ describe("authStore", () => {
       vi.mocked(authHelpers.executeAuthAction).mockImplementation(
         async (_action, _userId, _updateState, apiCall) => {
           return await apiCall();
-        }
+        },
       );
 
       const { login } = useAuthStore.getState();
@@ -166,7 +166,7 @@ describe("authStore", () => {
       expect(mockExecuteLogout).toHaveBeenCalledWith(
         mockUser,
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -176,7 +176,7 @@ describe("authStore", () => {
       mockExecuteLogout.mockImplementation(
         async (_user, _updateState, apiCall) => {
           await apiCall();
-        }
+        },
       );
 
       const { logout } = useAuthStore.getState();
@@ -203,7 +203,7 @@ describe("authStore", () => {
 
     it("리프레시 토큰이 있을 때 executeTokenRefresh를 호출해야 한다", async () => {
       const mockExecuteTokenRefresh = vi.mocked(
-        authHelpers.executeTokenRefresh
+        authHelpers.executeTokenRefresh,
       );
 
       vi.mocked(TokenStorage.getTokens).mockReturnValue({
@@ -216,13 +216,13 @@ describe("authStore", () => {
 
       expect(mockExecuteTokenRefresh).toHaveBeenCalledWith(
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
     it("토큰 갱신 시 올바른 API를 호출해야 한다", async () => {
       const mockExecuteTokenRefresh = vi.mocked(
-        authHelpers.executeTokenRefresh
+        authHelpers.executeTokenRefresh,
       );
 
       vi.mocked(TokenStorage.getTokens).mockReturnValue({
@@ -233,7 +233,7 @@ describe("authStore", () => {
       mockExecuteTokenRefresh.mockImplementation(
         async (_updateState, apiCall) => {
           await apiCall();
-        }
+        },
       );
 
       const { refreshToken } = useAuthStore.getState();
@@ -253,13 +253,13 @@ describe("authStore", () => {
       const { updateProfile } = useAuthStore.getState();
 
       await expect(updateProfile("새닉네임")).rejects.toThrow(
-        "로그인이 필요합니다"
+        "로그인이 필요합니다",
       );
     });
 
     it("로그인된 사용자의 프로필을 업데이트해야 한다", async () => {
       const mockExecuteProfileUpdate = vi.mocked(
-        authHelpers.executeProfileUpdate
+        authHelpers.executeProfileUpdate,
       );
 
       useAuthStore.setState({ user: mockUser });
@@ -271,13 +271,13 @@ describe("authStore", () => {
         mockUser,
         "새닉네임",
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
     it("프로필 업데이트 시 올바른 API를 호출해야 한다", async () => {
       const mockExecuteProfileUpdate = vi.mocked(
-        authHelpers.executeProfileUpdate
+        authHelpers.executeProfileUpdate,
       );
 
       useAuthStore.setState({ user: mockUser });
@@ -285,7 +285,7 @@ describe("authStore", () => {
       mockExecuteProfileUpdate.mockImplementation(
         async (_user, _nickname, _updateState, apiCall) => {
           await apiCall();
-        }
+        },
       );
 
       const { updateProfile } = useAuthStore.getState();
@@ -338,7 +338,7 @@ describe("authStore", () => {
 
       expect(mockExecuteInitialize).toHaveBeenCalledWith(
         expect.any(Function),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -348,7 +348,7 @@ describe("authStore", () => {
       mockExecuteInitialize.mockImplementation(
         async (_updateState, apiCall) => {
           await apiCall();
-        }
+        },
       );
 
       const { initialize } = useAuthStore.getState();

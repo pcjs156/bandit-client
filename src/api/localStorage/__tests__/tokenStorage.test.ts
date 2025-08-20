@@ -33,11 +33,11 @@ describe("TokenStorage", () => {
 
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         "bandit_access_token",
-        accessToken
+        accessToken,
       );
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         "bandit_refresh_token",
-        refreshToken
+        refreshToken,
       );
       expect(mockLocalStorage.setItem).toHaveBeenCalledTimes(2);
     });
@@ -47,11 +47,11 @@ describe("TokenStorage", () => {
 
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         "bandit_access_token",
-        ""
+        "",
       );
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         "bandit_refresh_token",
-        ""
+        "",
       );
     });
   });
@@ -68,10 +68,10 @@ describe("TokenStorage", () => {
       const result = TokenStorage.getTokens();
 
       expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
-        "bandit_access_token"
+        "bandit_access_token",
       );
       expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
-        "bandit_refresh_token"
+        "bandit_refresh_token",
       );
       expect(result).toEqual({
         accessToken: mockAccessToken,
@@ -109,10 +109,10 @@ describe("TokenStorage", () => {
       TokenStorage.clearTokens();
 
       expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
-        "bandit_access_token"
+        "bandit_access_token",
       );
       expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
-        "bandit_refresh_token"
+        "bandit_refresh_token",
       );
       expect(mockLocalStorage.removeItem).toHaveBeenCalledTimes(2);
     });

@@ -63,12 +63,24 @@ describe("API Index", () => {
       // 타입 체크를 위한 더미 객체
       const dummyAuthClient: AuthApiClient = {
         register: async () => ({
-          user: {} as any,
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
           accessToken: "dummy",
           refreshToken: "dummy",
         }),
         login: async () => ({
-          user: {} as any,
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
           accessToken: "dummy",
           refreshToken: "dummy",
         }),
@@ -89,8 +101,20 @@ describe("API Index", () => {
     it("UserApiClient 타입이 내보내져야 한다", () => {
       // 타입 체크를 위한 더미 객체
       const dummyUserClient: UserApiClient = {
-        getMe: async () => ({} as any),
-        updateMe: async () => ({} as any),
+        getMe: async () => ({
+          id: "dummy-id",
+          userId: "dummy-user-id",
+          nickname: "dummy-nickname",
+          createdAt: "2023-01-01T00:00:00Z",
+          updatedAt: "2023-01-01T00:00:00Z",
+        }),
+        updateMe: async () => ({
+          id: "dummy-id",
+          userId: "dummy-user-id",
+          nickname: "dummy-nickname",
+          createdAt: "2023-01-01T00:00:00Z",
+          updatedAt: "2023-01-01T00:00:00Z",
+        }),
       };
 
       expect(dummyUserClient).toBeDefined();

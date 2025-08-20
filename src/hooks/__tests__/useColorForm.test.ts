@@ -167,7 +167,7 @@ describe("useColorForm", () => {
       expect(validateColorInput).toHaveBeenCalledWith(
         "  테스트색상  ",
         "#123456",
-        mockCustomColors
+        mockCustomColors,
       );
       expect(mockOnAddColor).toHaveBeenCalledWith("테스트색상", "#123456"); // trim 적용
       expect(mockOnClose).toHaveBeenCalled();
@@ -209,7 +209,7 @@ describe("useColorForm", () => {
       };
 
       const { result: errorResult } = renderHook(() =>
-        useColorForm(propsWithError)
+        useColorForm(propsWithError),
       );
 
       act(() => {
@@ -284,7 +284,7 @@ describe("useColorForm", () => {
       expect(validateColorInput).toHaveBeenCalledWith(
         "테스트",
         "#f63b3e",
-        mockCustomColors
+        mockCustomColors,
       );
 
       // customColors 변경 후 다시 이름 설정 (handleSubmit에서 폼이 리셋되므로)
@@ -309,7 +309,7 @@ describe("useColorForm", () => {
       expect(validateColorInput).toHaveBeenLastCalledWith(
         "테스트2",
         "#f63b3e",
-        newCustomColors
+        newCustomColors,
       );
     });
   });

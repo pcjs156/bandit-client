@@ -58,7 +58,7 @@ describe("AuthButtons", () => {
 
       expect(screen.getByRole("link", { name: "로그인" })).toBeInTheDocument();
       expect(
-        screen.getByRole("link", { name: "회원가입" })
+        screen.getByRole("link", { name: "회원가입" }),
       ).toBeInTheDocument();
     });
 
@@ -169,7 +169,7 @@ describe("AuthButtons", () => {
 
     it("설정 버튼과 사용자 메뉴를 렌더링해야 한다", () => {
       render(
-        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />
+        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />,
       );
 
       expect(screen.getByLabelText("설정")).toBeInTheDocument();
@@ -178,7 +178,7 @@ describe("AuthButtons", () => {
 
     it("설정 버튼이 올바른 링크를 가져야 한다", () => {
       render(
-        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />
+        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />,
       );
 
       const settingsButton = screen.getByLabelText("설정");
@@ -187,7 +187,7 @@ describe("AuthButtons", () => {
 
     it("설정 버튼이 올바른 스타일을 가져야 한다", () => {
       render(
-        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />
+        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />,
       );
 
       const settingsButton = screen.getByLabelText("설정");
@@ -198,7 +198,7 @@ describe("AuthButtons", () => {
     it("사용자 메뉴에 올바른 props를 전달해야 한다", async () => {
       const user = userEvent.setup();
       render(
-        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />
+        <AuthenticatedUserButtons user={testUser} onLogout={mockOnLogout} />,
       );
 
       const menuButton = screen.getByRole("button", { name: "테스트유저" });
@@ -218,7 +218,7 @@ describe("AuthButtons", () => {
       });
 
       render(
-        <AuthenticatedUserButtons user={customUser} onLogout={mockOnLogout} />
+        <AuthenticatedUserButtons user={customUser} onLogout={mockOnLogout} />,
       );
 
       expect(screen.getByText("커스텀유저")).toBeInTheDocument();

@@ -81,7 +81,7 @@ export const useUserStore = create<UserStore>()(
         const { updatedUsers, updatedUser } = updateUserInArray(
           users,
           id,
-          updates
+          updates,
         );
 
         if (!updatedUser) return null;
@@ -116,6 +116,6 @@ export const useUserStore = create<UserStore>()(
         users: state.users,
         currentUser: state.currentUser,
       }),
-    }
-  )
+    },
+  ),
 );

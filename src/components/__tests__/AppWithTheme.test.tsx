@@ -49,7 +49,7 @@ describe("AppWithTheme", () => {
             <div data-testid="notifications">Notifications</div>
             <div data-testid="app">App Component</div>
           </div>
-        </div>
+        </div>,
       );
 
       expect(screen.getByTestId("app-with-theme")).toBeInTheDocument();

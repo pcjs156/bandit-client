@@ -25,7 +25,7 @@ describe("useRegisterSubmit", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockedUseNavigate.mockReturnValue(mockNavigate);
     mockedUseAuthStore.mockReturnValue({
       register: mockRegister,
@@ -119,45 +119,46 @@ describe("useRegisterSubmit", () => {
   describe("isSubmitDisabled", () => {
     const createMockForm = (
       values: Partial<RegisterRequest>,
-      errors: Partial<Record<keyof RegisterRequest, string>> = {}
-    ): UseFormReturnType<RegisterRequest> => ({
-      values: {
-        userId: "",
-        password: "",
-        nickname: "",
-        ...values,
-      },
-      errors: {
-        userId: undefined,
-        password: undefined,
-        nickname: undefined,
-        ...errors,
-      },
-      // 다른 필요한 form 속성들 (실제 사용되지 않는 것들)
-      setValues: vi.fn(),
-      setErrors: vi.fn(),
-      setFieldValue: vi.fn(),
-      setFieldError: vi.fn(),
-      clearFieldError: vi.fn(),
-      clearErrors: vi.fn(),
-      reset: vi.fn(),
-      validate: vi.fn(),
-      isValid: vi.fn(),
-      isDirty: vi.fn(),
-      isTouched: vi.fn(),
-      getInputProps: vi.fn(),
-      onSubmit: vi.fn(),
-      onReset: vi.fn(),
-      insertListItem: vi.fn(),
-      removeListItem: vi.fn(),
-      reorderListItem: vi.fn(),
-      replaceListItem: vi.fn(),
-      getTransformedValues: vi.fn(),
-      key: "test-form",
-      initialized: true,
-      dirty: {},
-      touched: {},
-    } as unknown as UseFormReturnType<RegisterRequest>);
+      errors: Partial<Record<keyof RegisterRequest, string>> = {},
+    ): UseFormReturnType<RegisterRequest> =>
+      ({
+        values: {
+          userId: "",
+          password: "",
+          nickname: "",
+          ...values,
+        },
+        errors: {
+          userId: undefined,
+          password: undefined,
+          nickname: undefined,
+          ...errors,
+        },
+        // 다른 필요한 form 속성들 (실제 사용되지 않는 것들)
+        setValues: vi.fn(),
+        setErrors: vi.fn(),
+        setFieldValue: vi.fn(),
+        setFieldError: vi.fn(),
+        clearFieldError: vi.fn(),
+        clearErrors: vi.fn(),
+        reset: vi.fn(),
+        validate: vi.fn(),
+        isValid: vi.fn(),
+        isDirty: vi.fn(),
+        isTouched: vi.fn(),
+        getInputProps: vi.fn(),
+        onSubmit: vi.fn(),
+        onReset: vi.fn(),
+        insertListItem: vi.fn(),
+        removeListItem: vi.fn(),
+        reorderListItem: vi.fn(),
+        replaceListItem: vi.fn(),
+        getTransformedValues: vi.fn(),
+        key: "test-form",
+        initialized: true,
+        dirty: {},
+        touched: {},
+      }) as unknown as UseFormReturnType<RegisterRequest>;
 
     it("모든 필드가 채워지고 에러가 없으면 false를 반환해야 한다", () => {
       const { result } = renderHook(() => useRegisterSubmit());
@@ -221,7 +222,7 @@ describe("useRegisterSubmit", () => {
         },
         {
           userId: "사용자 ID가 너무 짧습니다",
-        }
+        },
       );
 
       const isDisabled = result.current.isSubmitDisabled(form);
@@ -239,7 +240,7 @@ describe("useRegisterSubmit", () => {
         },
         {
           password: "비밀번호가 너무 약합니다",
-        }
+        },
       );
 
       const isDisabled = result.current.isSubmitDisabled(form);
@@ -257,7 +258,7 @@ describe("useRegisterSubmit", () => {
         },
         {
           nickname: "닉네임이 너무 짧습니다",
-        }
+        },
       );
 
       const isDisabled = result.current.isSubmitDisabled(form);

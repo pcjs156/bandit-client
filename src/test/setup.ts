@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
 import { beforeEach, afterEach, vi, beforeAll, afterAll } from "vitest";
-import { cleanup, render } from "@testing-library/react";
-import { MantineProvider } from "@mantine/core";
+import { cleanup } from "@testing-library/react";
 
 // 전역 테스트 설정
 beforeAll(() => {
@@ -177,7 +176,7 @@ export const testUtils = {
     config: {
       enableLogging?: boolean;
       mockApi?: boolean;
-    } = {}
+    } = {},
   ) => {
     const { enableLogging = false, mockApi = true } = config;
 

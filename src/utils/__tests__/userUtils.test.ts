@@ -279,7 +279,7 @@ describe("userUtils", () => {
       // PasswordUtils.hashPassword 모킹
       const mockHashedPassword = "$2a$12$hashedPassword";
       vi.mocked(PasswordUtils.hashPassword).mockResolvedValue(
-        mockHashedPassword
+        mockHashedPassword,
       );
 
       // 시간 모킹
@@ -291,7 +291,7 @@ describe("userUtils", () => {
       // UUID는 실제로 생성되므로 존재 여부만 확인
       expect(result.id).toBeDefined();
       expect(result.id).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
       );
 
       expect(result).toEqual({
@@ -304,7 +304,7 @@ describe("userUtils", () => {
       });
 
       expect(PasswordUtils.hashPassword).toHaveBeenCalledWith(
-        "testPassword123!"
+        "testPassword123!",
       );
     });
 
@@ -356,7 +356,7 @@ describe("userUtils", () => {
       vi.mocked(PasswordUtils.verifyPassword).mockRejectedValue(verifyError);
 
       await expect(verifyUserPassword(password, hash)).rejects.toThrow(
-        "검증 실패"
+        "검증 실패",
       );
     });
   });

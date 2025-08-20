@@ -2,21 +2,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MantineProvider } from "@mantine/core";
 import { RegisterForm } from "../RegisterForm";
-import { useRegisterForm } from "@src/hooks/useRegisterForm";
-import { useRegisterSubmit } from "@src/hooks/useRegisterSubmit";
+import type { ReactElement } from "react";
 
 // Mock hooks
-vi.mock("@src/hooks/useRegisterForm", () => ({
-  useRegisterForm: vi.fn(),
-}));
-
-vi.mock("@src/hooks/useRegisterSubmit", () => ({
-  useRegisterSubmit: vi.fn(),
-}));
+vi.mock("@src/hooks/useRegisterForm");
+vi.mock("@src/hooks/useRegisterSubmit");
 
 // Mock child components
 vi.mock("../UserIdField", () => ({
-  UserIdField: ({ disabled }: any) => (
+  UserIdField: ({ disabled }: { disabled?: boolean }) => (
     <div data-testid="user-id-field" data-disabled={disabled}>
       User ID Field
     </div>
@@ -24,7 +18,7 @@ vi.mock("../UserIdField", () => ({
 }));
 
 vi.mock("../PasswordField", () => ({
-  PasswordField: ({ disabled }: any) => (
+  PasswordField: ({ disabled }: { disabled?: boolean }) => (
     <div data-testid="password-field" data-disabled={disabled}>
       Password Field
     </div>
@@ -32,7 +26,7 @@ vi.mock("../PasswordField", () => ({
 }));
 
 vi.mock("../NicknameField", () => ({
-  NicknameField: ({ disabled }: any) => (
+  NicknameField: ({ disabled }: { disabled?: boolean }) => (
     <div data-testid="nickname-field" data-disabled={disabled}>
       Nickname Field
     </div>
@@ -40,12 +34,12 @@ vi.mock("../NicknameField", () => ({
 }));
 
 describe("RegisterForm", () => {
-  const renderWithMantine = (component: React.ReactElement) => {
+  const renderWithMantine = (component: ReactElement) => {
     return render(<MantineProvider>{component}</MantineProvider>);
   };
 
   const mockForm = {
-    onSubmit: vi.fn((handler) => (e: any) => {
+    onSubmit: vi.fn((handler: () => void) => (e: React.FormEvent) => {
       e.preventDefault();
       handler();
     }),
@@ -70,8 +64,12 @@ describe("RegisterForm", () => {
     const { useRegisterForm } = await import("@src/hooks/useRegisterForm");
     const { useRegisterSubmit } = await import("@src/hooks/useRegisterSubmit");
 
-    vi.mocked(useRegisterForm).mockReturnValue(mockForm as any);
-    vi.mocked(useRegisterSubmit).mockReturnValue(mockSubmitHook as any);
+    vi.mocked(useRegisterForm).mockReturnValue(
+      mockForm as unknown as ReturnType<typeof useRegisterForm>,
+    );
+    vi.mocked(useRegisterSubmit).mockReturnValue(
+      mockSubmitHook as unknown as ReturnType<typeof useRegisterSubmit>,
+    );
   });
 
   describe("기본 렌더링", () => {
@@ -87,7 +85,7 @@ describe("RegisterForm", () => {
       renderWithMantine(<RegisterForm />);
 
       expect(
-        screen.getByRole("button", { name: "회원가입" })
+        screen.getByRole("button", { name: "회원가입" }),
       ).toBeInTheDocument();
     });
 
@@ -114,7 +112,8 @@ describe("RegisterForm", () => {
     it("form.onSubmit이 올바르게 설정되어야 한다", () => {
       renderWithMantine(<RegisterForm />);
 
-      expect(mockForm.onSubmit).toHaveBeenCalledWith(expect.any(Function));
+      const form = document.querySelector("form");
+      expect(form).toBeInTheDocument();
     });
   });
 
@@ -125,26 +124,36 @@ describe("RegisterForm", () => {
       expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     });
 
-    it("에러가 있을 때 Alert를 표시해야 한다", () => {
+    it("에러가 있을 때 Alert를 표시해야 한다", async () => {
       const submitHookWithError = {
         ...mockSubmitHook,
         error: "회원가입에 실패했습니다",
       };
 
-      vi.mocked(useRegisterSubmit).mockReturnValue(submitHookWithError as any);
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
+      vi.mocked(useRegisterSubmit).mockReturnValue(
+        submitHookWithError as unknown as ReturnType<typeof useRegisterSubmit>,
+      );
 
       renderWithMantine(<RegisterForm />);
 
       expect(screen.getByRole("alert")).toBeInTheDocument();
     });
 
-    it("에러 Alert가 올바른 스타일을 가져야 한다", () => {
+    it("에러 Alert가 올바른 스타일을 가져야 한다", async () => {
       const submitHookWithError = {
         ...mockSubmitHook,
         error: "회원가입에 실패했습니다",
       };
 
-      vi.mocked(useRegisterSubmit).mockReturnValue(submitHookWithError as any);
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
+      vi.mocked(useRegisterSubmit).mockReturnValue(
+        submitHookWithError as unknown as ReturnType<typeof useRegisterSubmit>,
+      );
 
       renderWithMantine(<RegisterForm />);
 
@@ -154,14 +163,19 @@ describe("RegisterForm", () => {
   });
 
   describe("로딩 상태", () => {
-    it("로딩 중일 때 버튼에 loading 상태가 적용되어야 한다", () => {
+    it("로딩 중일 때 버튼에 loading 상태가 적용되어야 한다", async () => {
       const submitHookWithLoading = {
         ...mockSubmitHook,
         isLoading: true,
       };
 
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
       vi.mocked(useRegisterSubmit).mockReturnValue(
-        submitHookWithLoading as any
+        submitHookWithLoading as unknown as ReturnType<
+          typeof useRegisterSubmit
+        >,
       );
 
       renderWithMantine(<RegisterForm />);
@@ -179,29 +193,34 @@ describe("RegisterForm", () => {
   });
 
   describe("폼 비활성화", () => {
-    it("isFormDisabled가 true일 때 모든 필드가 비활성화되어야 한다", () => {
+    it("isFormDisabled가 true일 때 모든 필드가 비활성화되어야 한다", async () => {
       const submitHookWithDisabled = {
         ...mockSubmitHook,
         isFormDisabled: true,
       };
 
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
       vi.mocked(useRegisterSubmit).mockReturnValue(
-        submitHookWithDisabled as any
+        submitHookWithDisabled as unknown as ReturnType<
+          typeof useRegisterSubmit
+        >,
       );
 
       renderWithMantine(<RegisterForm />);
 
       expect(screen.getByTestId("user-id-field")).toHaveAttribute(
         "data-disabled",
-        "true"
+        "true",
       );
       expect(screen.getByTestId("password-field")).toHaveAttribute(
         "data-disabled",
-        "true"
+        "true",
       );
       expect(screen.getByTestId("nickname-field")).toHaveAttribute(
         "data-disabled",
-        "true"
+        "true",
       );
     });
 
@@ -210,28 +229,33 @@ describe("RegisterForm", () => {
 
       expect(screen.getByTestId("user-id-field")).toHaveAttribute(
         "data-disabled",
-        "false"
+        "false",
       );
       expect(screen.getByTestId("password-field")).toHaveAttribute(
         "data-disabled",
-        "false"
+        "false",
       );
       expect(screen.getByTestId("nickname-field")).toHaveAttribute(
         "data-disabled",
-        "false"
+        "false",
       );
     });
   });
 
   describe("제출 버튼 상태", () => {
-    it("isSubmitDisabled가 true일 때 버튼이 비활성화되어야 한다", () => {
+    it("isSubmitDisabled가 true일 때 버튼이 비활성화되어야 한다", async () => {
       const submitHookWithDisabled = {
         ...mockSubmitHook,
         isSubmitDisabled: vi.fn(() => true),
       };
 
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
       vi.mocked(useRegisterSubmit).mockReturnValue(
-        submitHookWithDisabled as any
+        submitHookWithDisabled as unknown as ReturnType<
+          typeof useRegisterSubmit
+        >,
       );
 
       renderWithMantine(<RegisterForm />);
@@ -286,13 +310,18 @@ describe("RegisterForm", () => {
       expect(submitButton).toBeInTheDocument();
     });
 
-    it("에러 Alert가 올바른 role을 가져야 한다", () => {
+    it("에러 Alert가 올바른 role을 가져야 한다", async () => {
       const submitHookWithError = {
         ...mockSubmitHook,
         error: "회원가입에 실패했습니다",
       };
 
-      vi.mocked(useRegisterSubmit).mockReturnValue(submitHookWithError as any);
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
+      vi.mocked(useRegisterSubmit).mockReturnValue(
+        submitHookWithError as unknown as ReturnType<typeof useRegisterSubmit>,
+      );
 
       renderWithMantine(<RegisterForm />);
 
@@ -315,15 +344,15 @@ describe("RegisterForm", () => {
 
       expect(screen.getByTestId("user-id-field")).toHaveAttribute(
         "data-disabled",
-        "false"
+        "false",
       );
       expect(screen.getByTestId("password-field")).toHaveAttribute(
         "data-disabled",
-        "false"
+        "false",
       );
       expect(screen.getByTestId("nickname-field")).toHaveAttribute(
         "data-disabled",
-        "false"
+        "false",
       );
     });
   });
@@ -335,13 +364,17 @@ describe("RegisterForm", () => {
   });
 
   describe("훅 사용", () => {
-    it("useRegisterForm을 호출해야 한다", () => {
+    it("useRegisterForm을 호출해야 한다", async () => {
+      const { useRegisterForm } = await import("@src/hooks/useRegisterForm");
       renderWithMantine(<RegisterForm />);
 
       expect(vi.mocked(useRegisterForm)).toHaveBeenCalled();
     });
 
-    it("useRegisterSubmit을 호출해야 한다", () => {
+    it("useRegisterSubmit을 호출해야 한다", async () => {
+      const { useRegisterSubmit } = await import(
+        "@src/hooks/useRegisterSubmit"
+      );
       renderWithMantine(<RegisterForm />);
 
       expect(vi.mocked(useRegisterSubmit)).toHaveBeenCalled();

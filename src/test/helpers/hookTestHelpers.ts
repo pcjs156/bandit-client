@@ -17,7 +17,7 @@ import {
  */
 export function expectInitialState<T>(
   hookFn: () => T,
-  expectedState: Partial<T>
+  expectedState: Partial<T>,
 ) {
   const { result } = renderHook(hookFn);
 
@@ -34,7 +34,7 @@ export function expectInitialState<T>(
 export function expectStateChange<T>(
   hookFn: () => T,
   action: (hookResult: T) => void,
-  expectedChanges: Partial<T>
+  expectedChanges: Partial<T>,
 ) {
   const { result } = renderHook(hookFn);
 
@@ -55,7 +55,7 @@ export function expectStateChange<T>(
 export async function expectAsyncAction<T>(
   hookFn: () => T,
   action: (hookResult: T) => Promise<void> | void,
-  expectedChanges?: Partial<T>
+  expectedChanges?: Partial<T>,
 ) {
   const { result } = renderHook(hookFn);
 
@@ -87,7 +87,7 @@ export function createValidationTests<T>(
   hookFn: () => T,
   fieldName: string,
   setFieldAction: (result: { current: T }, value: string) => void,
-  validateAction: (result: { current: T }) => void
+  validateAction: (result: { current: T }) => void,
 ) {
   return testCases.map(({ name, input, expectedError, shouldBeValid }) => ({
     name,
@@ -120,7 +120,7 @@ export interface PasswordStrengthTestCase {
 }
 
 export function createPasswordStrengthTests(
-  testCases: PasswordStrengthTestCase[]
+  testCases: PasswordStrengthTestCase[],
 ) {
   return testCases.map(
     ({ name, password, expectedStrength, expectedLabel, expectedColor }) => ({
@@ -132,7 +132,7 @@ export function createPasswordStrengthTests(
         expect(result.current.label).toBe(expectedLabel);
         expect(result.current.color).toBe(expectedColor);
       },
-    })
+    }),
   );
 }
 
@@ -152,7 +152,7 @@ export function createFormValidationTests<T>(
     testCases: ValidationTestCase[];
     setFieldAction: (result: { current: T }, value: string) => void;
     validateAction: (result: { current: T }) => void;
-  }>
+  }>,
 ) {
   return fieldConfigs.map(
     ({ fieldName, testCases, setFieldAction, validateAction }) => ({
@@ -162,9 +162,9 @@ export function createFormValidationTests<T>(
         hookFn,
         fieldName,
         setFieldAction,
-        validateAction
+        validateAction,
       ),
-    })
+    }),
   );
 }
 
@@ -174,7 +174,7 @@ export function createFormValidationTests<T>(
 export function createCompleteFormTests<T>(
   hookFn: () => T,
   setFieldAction: (result: T, field: string, value: string) => void,
-  validateAction: (result: T) => void
+  validateAction: (result: T) => void,
 ) {
   const fieldConfigs = [
     {
@@ -212,7 +212,7 @@ export function createStateTransitionTests<T>(
     name: string;
     action: (result: { current: T }) => void;
     expectedState: Partial<T>;
-  }>
+  }>,
 ) {
   return transitions.map(({ name, action, expectedState }) => ({
     name,
@@ -240,7 +240,7 @@ export function createErrorStateTests<T>(
     setup: (result: { current: T }) => void;
     expectedError: string | null;
     expectedErrorField?: string;
-  }>
+  }>,
 ) {
   return errorScenarios.map(
     ({ name, setup, expectedError, expectedErrorField }) => ({
@@ -258,6 +258,6 @@ export function createErrorStateTests<T>(
           expect(result.current.error).toBe(expectedError);
         }
       },
-    })
+    }),
   );
 }

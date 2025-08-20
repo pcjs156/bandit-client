@@ -138,7 +138,7 @@ export class FormTestHelper {
   expectState(expectedState: Partial<Record<string, unknown>>) {
     Object.entries(expectedState).forEach(([key, value]) => {
       expect((this.result.current as Record<string, unknown>)[key]).toEqual(
-        value
+        value,
       );
     });
     return this;
@@ -215,7 +215,7 @@ export class AsyncTestHelper {
 
   // 비동기 액션 실행
   async executeAction(
-    action: (result: RenderHookResult<unknown, unknown>) => Promise<void>
+    action: (result: RenderHookResult<unknown, unknown>) => Promise<void>,
   ) {
     await act(async () => {
       await action(this.result);
@@ -226,17 +226,17 @@ export class AsyncTestHelper {
   // 상태 변경 대기
   async waitForStateChange(
     expectedState: Partial<Record<string, unknown>>,
-    timeout: number = 1000
+    timeout: number = 1000,
   ) {
     await waitFor(
       () => {
         Object.entries(expectedState).forEach(([key, value]) => {
           expect((this.result.current as Record<string, unknown>)[key]).toEqual(
-            value
+            value,
           );
         });
       },
-      { timeout }
+      { timeout },
     );
     return this;
   }
@@ -244,7 +244,7 @@ export class AsyncTestHelper {
   // 로딩 상태 확인
   expectLoading(expectedLoading: boolean) {
     expect((this.result.current as Record<string, unknown>).isLoading).toBe(
-      expectedLoading
+      expectedLoading,
     );
     return this;
   }
@@ -252,7 +252,7 @@ export class AsyncTestHelper {
   // 에러 상태 확인
   expectError(expectedError: string | null) {
     expect((this.result.current as Record<string, unknown>).error).toBe(
-      expectedError
+      expectedError,
     );
     return this;
   }
@@ -295,7 +295,7 @@ export const createTestEnvironment = (
     enableLogging?: boolean;
     mockApi?: boolean;
     testTimeout?: number;
-  } = {}
+  } = {},
 ) => {
   const { enableLogging = false, mockApi = true, testTimeout = 5000 } = config;
 
@@ -342,7 +342,7 @@ export const createMockMouseEvent = (overrides: Partial<MouseEvent> = {}) => {
 };
 
 export const createMockKeyboardEvent = (
-  overrides: Partial<KeyboardEvent> = {}
+  overrides: Partial<KeyboardEvent> = {},
 ) => {
   const event = new KeyboardEvent("keydown");
   Object.assign(event, overrides);

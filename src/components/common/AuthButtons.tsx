@@ -108,7 +108,7 @@ export const AuthenticatedUserButtons = memo(
       </ActionIcon>
       <UserMenu user={user} onLogout={onLogout} />
     </Group>
-  )
+  ),
 );
 
 AuthenticatedUserButtons.displayName = "AuthenticatedUserButtons";

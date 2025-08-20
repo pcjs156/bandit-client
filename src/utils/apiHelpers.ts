@@ -38,7 +38,7 @@ export function findAndValidateUser(userId: string): StoredUser {
   if (!storedUser) {
     throw createApiError(
       ApiErrorCode.INVALID_CREDENTIALS,
-      ERROR_MESSAGES.INVALID_CREDENTIALS
+      ERROR_MESSAGES.INVALID_CREDENTIALS,
     );
   }
 
@@ -55,7 +55,7 @@ export function validateUserIdNotExists(userId: string): void {
   if (existingUser) {
     throw createApiError(
       ApiErrorCode.USER_ID_ALREADY_EXISTS,
-      ERROR_MESSAGES.USER_ALREADY_EXISTS
+      ERROR_MESSAGES.USER_ALREADY_EXISTS,
     );
   }
 }
@@ -65,7 +65,7 @@ export function validateUserIdNotExists(userId: string): void {
  */
 export async function validatePassword(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<void> {
   const userStore = useUserStore.getState();
   const isPasswordValid = await userStore.verifyPassword(password, hash);
@@ -73,7 +73,7 @@ export async function validatePassword(
   if (!isPasswordValid) {
     throw createApiError(
       ApiErrorCode.INVALID_CREDENTIALS,
-      ERROR_MESSAGES.INVALID_CREDENTIALS
+      ERROR_MESSAGES.INVALID_CREDENTIALS,
     );
   }
 }
@@ -102,7 +102,7 @@ export function authenticateUser(user: User): AuthTokens {
  */
 export function createAuthResponse(
   user: User,
-  tokens: AuthTokens
+  tokens: AuthTokens,
 ): AuthResponse {
   return {
     user,
@@ -129,7 +129,7 @@ export function validateAndParseRefreshToken(refreshToken: string) {
   if (!payload || payload.type !== "refresh") {
     throw createApiError(
       ApiErrorCode.INVALID_REFRESH_TOKEN,
-      ERROR_MESSAGES.INVALID_REFRESH_TOKEN
+      ERROR_MESSAGES.INVALID_REFRESH_TOKEN,
     );
   }
 
@@ -146,7 +146,7 @@ export function findUserByIdForRefresh(userId: string): StoredUser {
   if (!storedUser) {
     throw createApiError(
       ApiErrorCode.INVALID_REFRESH_TOKEN,
-      ERROR_MESSAGES.INVALID_REFRESH_TOKEN
+      ERROR_MESSAGES.INVALID_REFRESH_TOKEN,
     );
   }
 

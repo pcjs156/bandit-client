@@ -128,7 +128,7 @@ describe("colors", () => {
 
       // defaultColorSwatches와 비슷한 개수여야 함
       const countDifference = Math.abs(
-        primaryColors.length - defaultColorSwatches.length
+        primaryColors.length - defaultColorSwatches.length,
       );
       expect(countDifference).toBeLessThanOrEqual(5);
     });

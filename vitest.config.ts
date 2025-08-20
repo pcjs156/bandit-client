@@ -18,9 +18,9 @@ export default defineConfig({
         "**/*.config.*",
         "**/index.html",
         "**/main.tsx",
-        "**/vite-env.d.ts"
-      ]
-    }
+        "**/vite-env.d.ts",
+      ],
+    },
   },
   resolve: {
     alias: {

@@ -32,7 +32,7 @@ export const PasswordField = memo(
         <PasswordStrengthIndicator password={form.values.password} />
       )}
     </Box>
-  )
+  ),
 );
 
 PasswordField.displayName = "PasswordField";

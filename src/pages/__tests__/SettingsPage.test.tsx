@@ -36,7 +36,9 @@ describe("SettingsPage", () => {
 
       expect(screen.getByRole("heading", { name: "설정" })).toBeInTheDocument();
       expect(screen.getByRole("heading", { name: "테마" })).toBeInTheDocument();
-      expect(screen.getByRole("heading", { name: "Primary Color" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Primary Color" }),
+      ).toBeInTheDocument();
     });
 
     it("페이지 제목이 올바르게 표시되어야 한다", () => {
@@ -61,15 +63,19 @@ describe("SettingsPage", () => {
       renderSettingsPage();
 
       expect(
-        screen.getByText("다크모드와 라이트모드를 전환할 수 있습니다.")
+        screen.getByText("다크모드와 라이트모드를 전환할 수 있습니다."),
       ).toBeInTheDocument();
     });
 
     it("라이트모드와 다크모드 버튼이 모두 표시되어야 한다", () => {
       renderSettingsPage();
 
-      expect(screen.getByRole("button", { name: "라이트모드" })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "다크모드" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "라이트모드" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "다크모드" }),
+      ).toBeInTheDocument();
     });
 
     it("현재 다크모드일 때 라이트모드 버튼이 outline 스타일이어야 한다", () => {
@@ -80,7 +86,9 @@ describe("SettingsPage", () => {
 
       renderSettingsPage();
 
-      const lightModeButton = screen.getByRole("button", { name: "라이트모드" });
+      const lightModeButton = screen.getByRole("button", {
+        name: "라이트모드",
+      });
       const darkModeButton = screen.getByRole("button", { name: "다크모드" });
 
       expect(lightModeButton).toHaveAttribute("data-variant", "outline");
@@ -95,7 +103,9 @@ describe("SettingsPage", () => {
 
       renderSettingsPage();
 
-      const lightModeButton = screen.getByRole("button", { name: "라이트모드" });
+      const lightModeButton = screen.getByRole("button", {
+        name: "라이트모드",
+      });
       const darkModeButton = screen.getByRole("button", { name: "다크모드" });
 
       expect(lightModeButton).toHaveAttribute("data-variant", "filled");
@@ -105,7 +115,7 @@ describe("SettingsPage", () => {
     it("라이트모드 버튼 클릭 시 toggleColorScheme이 호출되어야 한다", async () => {
       const user = userEvent.setup();
       const mockToggleColorScheme = vi.fn();
-      
+
       mockUseThemeStore.mockReturnValue({
         ...defaultThemeState,
         colorScheme: "dark",
@@ -114,7 +124,9 @@ describe("SettingsPage", () => {
 
       renderSettingsPage();
 
-      const lightModeButton = screen.getByRole("button", { name: "라이트모드" });
+      const lightModeButton = screen.getByRole("button", {
+        name: "라이트모드",
+      });
       await user.click(lightModeButton);
 
       expect(mockToggleColorScheme).toHaveBeenCalledTimes(1);
@@ -123,7 +135,7 @@ describe("SettingsPage", () => {
     it("다크모드 버튼 클릭 시 toggleColorScheme이 호출되어야 한다", async () => {
       const user = userEvent.setup();
       const mockToggleColorScheme = vi.fn();
-      
+
       mockUseThemeStore.mockReturnValue({
         ...defaultThemeState,
         colorScheme: "light",
@@ -144,14 +156,16 @@ describe("SettingsPage", () => {
       renderSettingsPage();
 
       expect(
-        screen.getByText("앱의 메인 색상을 선택할 수 있습니다.")
+        screen.getByText("앱의 메인 색상을 선택할 수 있습니다."),
       ).toBeInTheDocument();
     });
 
     it("커스텀 색상 추가 버튼이 표시되어야 한다", () => {
       renderSettingsPage();
 
-      const addButton = screen.getByRole("button", { name: "커스텀 색상 추가" });
+      const addButton = screen.getByRole("button", {
+        name: "커스텀 색상 추가",
+      });
       expect(addButton).toBeInTheDocument();
     });
 
@@ -199,7 +213,9 @@ describe("SettingsPage", () => {
 
       renderSettingsPage();
 
-      const addButton = screen.getByRole("button", { name: "커스텀 색상 추가" });
+      const addButton = screen.getByRole("button", {
+        name: "커스텀 색상 추가",
+      });
       await user.click(addButton);
 
       // 모달이 열렸는지 확인 (AddColorModal의 제목이 표시되는지)
@@ -213,7 +229,7 @@ describe("SettingsPage", () => {
     it("색상 선택 시 setPrimaryColor가 호출되어야 한다", async () => {
       const user = userEvent.setup();
       const mockSetPrimaryColor = vi.fn();
-      
+
       mockUseThemeStore.mockReturnValue({
         ...defaultThemeState,
         setPrimaryColor: mockSetPrimaryColor,
@@ -222,7 +238,9 @@ describe("SettingsPage", () => {
       renderSettingsPage();
 
       // Red 색상 버튼을 찾아서 클릭 (현재 선택된 색상)
-      const redColorButton = screen.getByRole("button", { name: "Red 색상 (현재 선택됨)" });
+      const redColorButton = screen.getByRole("button", {
+        name: "Red 색상 (현재 선택됨)",
+      });
       await user.click(redColorButton);
 
       expect(mockSetPrimaryColor).toHaveBeenCalledWith("red");
@@ -260,7 +278,9 @@ describe("SettingsPage", () => {
     it("기본 색상 선택 그룹에 적절한 aria-label이 있어야 한다", () => {
       renderSettingsPage();
 
-      expect(screen.getByRole("group", { name: "기본 색상 선택" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("group", { name: "기본 색상 선택" }),
+      ).toBeInTheDocument();
     });
 
     it("커스텀 색상이 있을 때 커스텀 색상 선택 그룹에 적절한 aria-label이 있어야 한다", () => {
@@ -280,13 +300,17 @@ describe("SettingsPage", () => {
 
       renderSettingsPage();
 
-      expect(screen.getByRole("group", { name: "커스텀 색상 선택" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("group", { name: "커스텀 색상 선택" }),
+      ).toBeInTheDocument();
     });
 
     it("커스텀 색상 추가 버튼에 aria-label이 있어야 한다", () => {
       renderSettingsPage();
 
-      const addButton = screen.getByRole("button", { name: "커스텀 색상 추가" });
+      const addButton = screen.getByRole("button", {
+        name: "커스텀 색상 추가",
+      });
       expect(addButton).toHaveAttribute("aria-label", "커스텀 색상 추가");
     });
   });

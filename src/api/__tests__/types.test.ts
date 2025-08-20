@@ -17,23 +17,38 @@ describe("API Types", () => {
       const authClient: AuthApiClient = {
         register: async (_data: RegisterRequest): Promise<AuthResponse> => {
           return {
-            user: {} as User,
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
             accessToken: "dummy",
             refreshToken: "dummy",
           };
         },
         login: async (_data: LoginRequest): Promise<AuthResponse> => {
           return {
-            user: {} as User,
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
             accessToken: "dummy",
             refreshToken: "dummy",
           };
         },
         logout: async (): Promise<void> => {},
         refreshToken: async (
-          _data: RefreshTokenRequest
+          _data: RefreshTokenRequest,
         ): Promise<AuthTokens> => {
-          return {} as AuthTokens;
+          return {
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          };
         },
       };
 
@@ -51,14 +66,33 @@ describe("API Types", () => {
           expect(data).toHaveProperty("password");
           expect(data).toHaveProperty("nickname");
           return {
-            user: {} as User,
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
             accessToken: "dummy",
             refreshToken: "dummy",
           };
         },
-        login: async () => ({} as AuthResponse),
+        login: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
         logout: async () => {},
-        refreshToken: async () => ({} as AuthTokens),
+        refreshToken: async () => ({
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
       };
 
       expect(typeof authClient.register).toBe("function");
@@ -66,18 +100,37 @@ describe("API Types", () => {
 
     it("login 메서드가 올바른 타입을 가져야 한다", () => {
       const authClient: AuthApiClient = {
-        register: async () => ({} as AuthResponse),
+        register: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
         login: async (data: LoginRequest): Promise<AuthResponse> => {
           expect(data).toHaveProperty("userId");
           expect(data).toHaveProperty("password");
           return {
-            user: {} as User,
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
             accessToken: "dummy",
             refreshToken: "dummy",
           };
         },
         logout: async () => {},
-        refreshToken: async () => ({} as AuthTokens),
+        refreshToken: async () => ({
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
       };
 
       expect(typeof authClient.login).toBe("function");
@@ -85,12 +138,35 @@ describe("API Types", () => {
 
     it("logout 메서드가 올바른 타입을 가져야 한다", () => {
       const authClient: AuthApiClient = {
-        register: async () => ({} as AuthResponse),
-        login: async () => ({} as AuthResponse),
+        register: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
+        login: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
         logout: async (): Promise<void> => {
           // void 반환
         },
-        refreshToken: async () => ({} as AuthTokens),
+        refreshToken: async () => ({
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
       };
 
       expect(typeof authClient.logout).toBe("function");
@@ -98,14 +174,37 @@ describe("API Types", () => {
 
     it("refreshToken 메서드가 올바른 타입을 가져야 한다", () => {
       const authClient: AuthApiClient = {
-        register: async () => ({} as AuthResponse),
-        login: async () => ({} as AuthResponse),
+        register: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
+        login: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
         logout: async () => {},
         refreshToken: async (
-          data: RefreshTokenRequest
+          data: RefreshTokenRequest,
         ): Promise<AuthTokens> => {
           expect(data).toHaveProperty("refreshToken");
-          return {} as AuthTokens;
+          return {
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          };
         },
       };
 
@@ -118,10 +217,22 @@ describe("API Types", () => {
       // 타입 체크를 위한 더미 구현체
       const userClient: UserApiClient = {
         getMe: async (): Promise<User> => {
-          return {} as User;
+          return {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          };
         },
-        updateMe: async (_data: UpdateUserRequest): Promise<User> => {
-          return {} as User;
+        updateMe: async (data: UpdateUserRequest): Promise<User> => {
+          return {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: data.nickname || "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          };
         },
       };
 
@@ -141,7 +252,13 @@ describe("API Types", () => {
             updatedAt: new Date().toISOString(),
           };
         },
-        updateMe: async () => ({} as User),
+        updateMe: async () => ({
+          id: "dummy-id",
+          userId: "dummy-user-id",
+          nickname: "dummy-nickname",
+          createdAt: "2023-01-01T00:00:00Z",
+          updatedAt: "2023-01-01T00:00:00Z",
+        }),
       };
 
       expect(typeof userClient.getMe).toBe("function");
@@ -149,13 +266,25 @@ describe("API Types", () => {
 
     it("updateMe 메서드가 올바른 타입을 가져야 한다", () => {
       const userClient: UserApiClient = {
-        getMe: async () => ({} as User),
+        getMe: async () => ({
+          id: "dummy-id",
+          userId: "dummy-user-id",
+          nickname: "dummy-nickname",
+          createdAt: "2023-01-01T00:00:00Z",
+          updatedAt: "2023-01-01T00:00:00Z",
+        }),
         updateMe: async (data: UpdateUserRequest): Promise<User> => {
           // UpdateUserRequest는 선택적 필드를 가질 수 있음
           if (data.nickname) {
             expect(typeof data.nickname).toBe("string");
           }
-          return {} as User;
+          return {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: data.nickname || "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          };
         },
       };
 
@@ -168,14 +297,49 @@ describe("API Types", () => {
       // 타입 체크를 위한 더미 구현체
       const apiClient: ApiClient = {
         auth: {
-          register: async () => ({} as AuthResponse),
-          login: async () => ({} as AuthResponse),
+          register: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          login: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
           logout: async () => {},
-          refreshToken: async () => ({} as AuthTokens),
+          refreshToken: async () => ({
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
         },
         user: {
-          getMe: async () => ({} as User),
-          updateMe: async () => ({} as User),
+          getMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+          updateMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
         },
       };
 
@@ -186,8 +350,51 @@ describe("API Types", () => {
 
     it("ApiClient는 auth와 user 속성을 가져야 한다", () => {
       const apiClient: ApiClient = {
-        auth: {} as AuthApiClient,
-        user: {} as UserApiClient,
+        auth: {
+          register: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          login: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          logout: async () => {},
+          refreshToken: async () => ({
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+        },
+        user: {
+          getMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+          updateMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+        },
       };
 
       expect(apiClient).toHaveProperty("auth");
@@ -197,12 +404,50 @@ describe("API Types", () => {
     it("ApiClient.auth는 AuthApiClient 타입이어야 한다", () => {
       const apiClient: ApiClient = {
         auth: {
-          register: async () => ({} as AuthResponse),
-          login: async () => ({} as AuthResponse),
+          register: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          login: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
           logout: async () => {},
-          refreshToken: async () => ({} as AuthTokens),
+          refreshToken: async () => ({
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
         },
-        user: {} as UserApiClient,
+        user: {
+          getMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+          updateMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+        },
       };
 
       expect(apiClient.auth).toHaveProperty("register");
@@ -213,10 +458,50 @@ describe("API Types", () => {
 
     it("ApiClient.user는 UserApiClient 타입이어야 한다", () => {
       const apiClient: ApiClient = {
-        auth: {} as AuthApiClient,
+        auth: {
+          register: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          login: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          logout: async () => {},
+          refreshToken: async () => ({
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+        },
         user: {
-          getMe: async () => ({} as User),
-          updateMe: async () => ({} as User),
+          getMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+          updateMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
         },
       };
 
@@ -229,16 +514,51 @@ describe("API Types", () => {
     it("AuthApiClient와 UserApiClient는 독립적으로 사용 가능해야 한다", () => {
       // AuthApiClient만 필요한 경우
       const authOnly: AuthApiClient = {
-        register: async () => ({} as AuthResponse),
-        login: async () => ({} as AuthResponse),
+        register: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
+        login: async () => ({
+          user: {
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          },
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
         logout: async () => {},
-        refreshToken: async () => ({} as AuthTokens),
+        refreshToken: async () => ({
+          accessToken: "dummy",
+          refreshToken: "dummy",
+        }),
       };
 
       // UserApiClient만 필요한 경우
       const userOnly: UserApiClient = {
-        getMe: async () => ({} as User),
-        updateMe: async () => ({} as User),
+        getMe: async () => ({
+          id: "dummy-id",
+          userId: "dummy-user-id",
+          nickname: "dummy-nickname",
+          createdAt: "2023-01-01T00:00:00Z",
+          updatedAt: "2023-01-01T00:00:00Z",
+        }),
+        updateMe: async () => ({
+          id: "dummy-id",
+          userId: "dummy-user-id",
+          nickname: "dummy-nickname",
+          createdAt: "2023-01-01T00:00:00Z",
+          updatedAt: "2023-01-01T00:00:00Z",
+        }),
       };
 
       expect(authOnly).toBeDefined();
@@ -247,8 +567,51 @@ describe("API Types", () => {
 
     it("ApiClient는 AuthApiClient와 UserApiClient를 모두 포함해야 한다", () => {
       const apiClient: ApiClient = {
-        auth: {} as AuthApiClient,
-        user: {} as UserApiClient,
+        auth: {
+          register: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          login: async () => ({
+            user: {
+              id: "dummy-id",
+              userId: "dummy-user-id",
+              nickname: "dummy-nickname",
+              createdAt: "2023-01-01T00:00:00Z",
+              updatedAt: "2023-01-01T00:00:00Z",
+            },
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+          logout: async () => {},
+          refreshToken: async () => ({
+            accessToken: "dummy",
+            refreshToken: "dummy",
+          }),
+        },
+        user: {
+          getMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+          updateMe: async () => ({
+            id: "dummy-id",
+            userId: "dummy-user-id",
+            nickname: "dummy-nickname",
+            createdAt: "2023-01-01T00:00:00Z",
+            updatedAt: "2023-01-01T00:00:00Z",
+          }),
+        },
       };
 
       expect(apiClient.auth).toBeDefined();

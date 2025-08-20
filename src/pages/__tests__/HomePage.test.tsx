@@ -49,10 +49,10 @@ describe("HomePage", () => {
       renderHomePage();
 
       expect(
-        screen.getByRole("heading", { name: "Bandit" })
+        screen.getByRole("heading", { name: "Bandit" }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("link", { name: "회원가입" })
+        screen.getByRole("link", { name: "회원가입" }),
       ).toBeInTheDocument();
       expect(screen.getByRole("link", { name: "로그인" })).toBeInTheDocument();
     });
@@ -62,7 +62,7 @@ describe("HomePage", () => {
 
       // Bandit 제목이 표시되어야 함
       expect(
-        screen.getByRole("heading", { name: "Bandit" })
+        screen.getByRole("heading", { name: "Bandit" }),
       ).toBeInTheDocument();
 
       // 제목이 H1 태그여야 함
@@ -106,7 +106,7 @@ describe("HomePage", () => {
         createAuthStoreMock({
           user: testUser,
           status: "authenticated",
-        })
+        }),
       );
     });
 
@@ -116,7 +116,7 @@ describe("HomePage", () => {
       expect(
         screen.getByRole("heading", {
           name: `환영합니다, ${testUser.nickname}님!`,
-        })
+        }),
       ).toBeInTheDocument();
     });
 
@@ -124,10 +124,10 @@ describe("HomePage", () => {
       renderHomePage();
 
       expect(
-        screen.getByRole("button", { name: "밴드 만들기" })
+        screen.getByRole("button", { name: "밴드 만들기" }),
       ).toBeInTheDocument();
       expect(
-        screen.getByRole("button", { name: "밴드 찾기" })
+        screen.getByRole("button", { name: "밴드 찾기" }),
       ).toBeInTheDocument();
     });
 
@@ -146,16 +146,16 @@ describe("HomePage", () => {
       renderHomePage();
 
       expect(
-        screen.getByRole("heading", { name: "빠른 시작" })
+        screen.getByRole("heading", { name: "빠른 시작" }),
       ).toBeInTheDocument();
       expect(
-        screen.getByText("• 새로운 밴드를 만들어 멤버를 모집하세요")
+        screen.getByText("• 새로운 밴드를 만들어 멤버를 모집하세요"),
       ).toBeInTheDocument();
       expect(
-        screen.getByText("• 기존 밴드에 가입 요청을 보내세요")
+        screen.getByText("• 기존 밴드에 가입 요청을 보내세요"),
       ).toBeInTheDocument();
       expect(
-        screen.getByText("• 설정에서 프로필을 꾸며보세요")
+        screen.getByText("• 설정에서 프로필을 꾸며보세요"),
       ).toBeInTheDocument();
     });
 
@@ -197,16 +197,16 @@ describe("HomePage", () => {
       mockUseAuthStore.mockReturnValue(
         createAuthStoreMock({
           status: "loading",
-        })
+        }),
       );
 
       renderHomePage();
 
       expect(
-        screen.getByRole("heading", { name: "Bandit" })
+        screen.getByRole("heading", { name: "Bandit" }),
       ).toBeInTheDocument();
       expect(
-        screen.queryByRole("heading", { name: /환영합니다/ })
+        screen.queryByRole("heading", { name: /환영합니다/ }),
       ).not.toBeInTheDocument();
     });
 
@@ -215,16 +215,16 @@ describe("HomePage", () => {
         createAuthStoreMock({
           status: "authenticated",
           user: null,
-        })
+        }),
       );
 
       renderHomePage();
 
       expect(
-        screen.getByRole("heading", { name: "Bandit" })
+        screen.getByRole("heading", { name: "Bandit" }),
       ).toBeInTheDocument();
       expect(
-        screen.queryByRole("heading", { name: /환영합니다/ })
+        screen.queryByRole("heading", { name: /환영합니다/ }),
       ).not.toBeInTheDocument();
     });
 
@@ -232,16 +232,16 @@ describe("HomePage", () => {
       mockUseAuthStore.mockReturnValue(
         createAuthStoreMock({
           status: "unauthenticated",
-        })
+        }),
       );
 
       renderHomePage();
 
       expect(
-        screen.getByRole("heading", { name: "Bandit" })
+        screen.getByRole("heading", { name: "Bandit" }),
       ).toBeInTheDocument();
       expect(
-        screen.queryByRole("heading", { name: /환영합니다/ })
+        screen.queryByRole("heading", { name: /환영합니다/ }),
       ).not.toBeInTheDocument();
     });
   });
@@ -254,7 +254,7 @@ describe("HomePage", () => {
         createAuthStoreMock({
           user: testUser,
           status: "authenticated",
-        })
+        }),
       );
 
       renderHomePage();
@@ -275,7 +275,7 @@ describe("HomePage", () => {
         createAuthStoreMock({
           user: testUser,
           status: "authenticated",
-        })
+        }),
       );
 
       renderHomePage();
@@ -329,7 +329,7 @@ describe("HomePage", () => {
         createAuthStoreMock({
           user: testUser,
           status: "authenticated",
-        })
+        }),
       );
 
       renderHomePage();
@@ -362,7 +362,7 @@ describe("HomePage", () => {
         createAuthStoreMock({
           user: testUser,
           status: "authenticated",
-        })
+        }),
       );
 
       renderHomePage();
@@ -379,7 +379,7 @@ describe("HomePage", () => {
         createAuthStoreMock({
           user: testUser,
           status: "authenticated",
-        })
+        }),
       );
 
       renderHomePage();
@@ -405,16 +405,16 @@ describe("HomePage", () => {
       mockUseAuthStore.mockReturnValue(
         createAuthStoreMock({
           status: "error",
-        })
+        }),
       );
 
       renderHomePage();
 
       expect(
-        screen.getByRole("heading", { name: "Bandit" })
+        screen.getByRole("heading", { name: "Bandit" }),
       ).toBeInTheDocument();
       expect(
-        screen.queryByRole("heading", { name: /환영합니다/ })
+        screen.queryByRole("heading", { name: /환영합니다/ }),
       ).not.toBeInTheDocument();
     });
   });

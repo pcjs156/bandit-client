@@ -19,7 +19,7 @@ describe("NicknameField", () => {
     return render(<MantineProvider>{component}</MantineProvider>);
   };
 
-  const mockForm: UseFormReturnType<RegisterRequest> = {
+  const mockForm = {
     getInputProps: vi.fn((_fieldName: string) => ({
       value: "",
       onChange: vi.fn(),
@@ -31,7 +31,7 @@ describe("NicknameField", () => {
       password: "",
       nickname: "",
     },
-  } as any;
+  } as unknown as UseFormReturnType<RegisterRequest>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -54,7 +54,7 @@ describe("NicknameField", () => {
       renderWithMantine(<NicknameField form={mockForm} />);
 
       expect(
-        screen.getByText("다른 사용자에게 표시되는 이름입니다")
+        screen.getByText("다른 사용자에게 표시되는 이름입니다"),
       ).toBeInTheDocument();
     });
 
@@ -91,7 +91,7 @@ describe("NicknameField", () => {
       renderWithMantine(<NicknameField form={mockForm} />);
 
       expect(
-        screen.getByTestId("validation-icon-nickname")
+        screen.getByTestId("validation-icon-nickname"),
       ).toBeInTheDocument();
     });
 
@@ -172,13 +172,13 @@ describe("NicknameField", () => {
       renderWithMantine(<NicknameField form={mockForm} />);
 
       expect(
-        screen.getByText("다른 사용자에게 표시되는 이름입니다")
+        screen.getByText("다른 사용자에게 표시되는 이름입니다"),
       ).toBeInTheDocument();
     });
   });
 
   describe("다양한 폼 상태", () => {
-    it("에러가 있을 때 에러 상태를 표시해야 한다", () => {
+    it("에러가 있을 때 에러 상태를 표시해야 한다", async () => {
       const formWithError = {
         ...mockForm,
         getInputProps: vi.fn((_fieldName: string) => ({
@@ -192,7 +192,7 @@ describe("NicknameField", () => {
       renderWithMantine(<NicknameField form={formWithError} />);
 
       expect(
-        screen.getByText("닉네임은 2자 이상이어야 합니다")
+        screen.getByText("닉네임은 2자 이상이어야 합니다"),
       ).toBeInTheDocument();
     });
 
@@ -230,7 +230,7 @@ describe("NicknameField", () => {
       const input = screen.getByRole("textbox");
       expect(input).toBeDisabled();
       expect(
-        screen.getByTestId("validation-icon-nickname")
+        screen.getByTestId("validation-icon-nickname"),
       ).toBeInTheDocument();
     });
   });
@@ -268,7 +268,7 @@ describe("NicknameField", () => {
       renderWithMantine(<NicknameField form={mockForm} />);
 
       expect(
-        screen.getByText("다른 사용자에게 표시되는 이름입니다")
+        screen.getByText("다른 사용자에게 표시되는 이름입니다"),
       ).toBeInTheDocument();
     });
 

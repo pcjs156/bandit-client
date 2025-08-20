@@ -65,7 +65,7 @@ describe("PasswordUtils", () => {
       expect(result).toBe(false);
       expect(console.error).toHaveBeenCalledWith(
         "Password verification failed:",
-        error
+        error,
       );
     });
   });
@@ -93,11 +93,11 @@ describe("PasswordUtils", () => {
 
       // Act & Assert
       await expect(PasswordUtils.hashPassword(password)).rejects.toThrow(
-        "비밀번호 처리 중 오류가 발생했습니다"
+        "비밀번호 처리 중 오류가 발생했습니다",
       );
       expect(console.error).toHaveBeenCalledWith(
         "Password hashing failed:",
-        error
+        error,
       );
     });
 

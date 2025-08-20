@@ -70,7 +70,7 @@ export const useAuthStore = create<AuthStore>()(
                 user: response.user,
                 successMessage: "회원가입 성공",
               };
-            }
+            },
           );
         },
 
@@ -86,7 +86,7 @@ export const useAuthStore = create<AuthStore>()(
                 user: response.user,
                 successMessage: "로그인 성공",
               };
-            }
+            },
           );
         },
 
@@ -94,7 +94,7 @@ export const useAuthStore = create<AuthStore>()(
         logout: async () => {
           const currentUser = get().user;
           await executeLogout(currentUser, updateState, () =>
-            apiClient.auth.logout()
+            apiClient.auth.logout(),
           );
         },
 
@@ -120,7 +120,7 @@ export const useAuthStore = create<AuthStore>()(
           }
 
           await executeProfileUpdate(currentUser, nickname, updateState, () =>
-            apiClient.user.updateMe({ nickname })
+            apiClient.user.updateMe({ nickname }),
           );
         },
 
@@ -155,6 +155,6 @@ export const useAuthStore = create<AuthStore>()(
             ? "authenticated"
             : "unauthenticated",
       }),
-    }
-  )
+    },
+  ),
 );

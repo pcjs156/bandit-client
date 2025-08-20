@@ -19,7 +19,7 @@ describe("PasswordField", () => {
     return render(<MantineProvider>{component}</MantineProvider>);
   };
 
-  const mockForm: UseFormReturnType<RegisterRequest> = {
+  const mockForm = {
     getInputProps: vi.fn((_fieldName: string) => ({
       value: "",
       onChange: vi.fn(),
@@ -31,7 +31,7 @@ describe("PasswordField", () => {
       password: "",
       nickname: "",
     },
-  } as any;
+  } as unknown as UseFormReturnType<RegisterRequest>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -48,7 +48,7 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={mockForm} />);
 
       expect(
-        screen.getByPlaceholderText("영문, 숫자 포함 8자 이상")
+        screen.getByPlaceholderText("영문, 숫자 포함 8자 이상"),
       ).toBeInTheDocument();
     });
 
@@ -77,7 +77,7 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={formWithPassword} />);
 
       const strengthIndicator = screen.getByTestId(
-        "password-strength-indicator"
+        "password-strength-indicator",
       );
       expect(strengthIndicator).toHaveAttribute("data-password", "testpass123");
     });
@@ -86,21 +86,21 @@ describe("PasswordField", () => {
   describe("PasswordStrengthIndicator", () => {
     it("showStrengthIndicator가 true일 때 강도 표시기를 렌더링해야 한다", () => {
       renderWithMantine(
-        <PasswordField form={mockForm} showStrengthIndicator={true} />
+        <PasswordField form={mockForm} showStrengthIndicator={true} />,
       );
 
       expect(
-        screen.getByTestId("password-strength-indicator")
+        screen.getByTestId("password-strength-indicator"),
       ).toBeInTheDocument();
     });
 
     it("showStrengthIndicator가 false일 때 강도 표시기를 렌더링하지 않아야 한다", () => {
       renderWithMantine(
-        <PasswordField form={mockForm} showStrengthIndicator={false} />
+        <PasswordField form={mockForm} showStrengthIndicator={false} />,
       );
 
       expect(
-        screen.queryByTestId("password-strength-indicator")
+        screen.queryByTestId("password-strength-indicator"),
       ).not.toBeInTheDocument();
     });
 
@@ -108,7 +108,7 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={mockForm} />);
 
       expect(
-        screen.getByTestId("password-strength-indicator")
+        screen.getByTestId("password-strength-indicator"),
       ).toBeInTheDocument();
     });
 
@@ -121,11 +121,11 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={formWithPassword} />);
 
       const strengthIndicator = screen.getByTestId(
-        "password-strength-indicator"
+        "password-strength-indicator",
       );
       expect(strengthIndicator).toHaveAttribute(
         "data-password",
-        "strongpass123"
+        "strongpass123",
       );
     });
   });
@@ -211,7 +211,7 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={formWithError} />);
 
       expect(
-        screen.getByText("비밀번호는 8자 이상이어야 합니다")
+        screen.getByText("비밀번호는 8자 이상이어야 합니다"),
       ).toBeInTheDocument();
     });
 
@@ -219,7 +219,7 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={mockForm} />);
 
       const strengthIndicator = screen.getByTestId(
-        "password-strength-indicator"
+        "password-strength-indicator",
       );
       expect(strengthIndicator).toHaveTextContent("Password Strength: Weak");
     });
@@ -233,7 +233,7 @@ describe("PasswordField", () => {
       renderWithMantine(<PasswordField form={formWithPassword} />);
 
       const strengthIndicator = screen.getByTestId(
-        "password-strength-indicator"
+        "password-strength-indicator",
       );
       expect(strengthIndicator).toHaveTextContent("Password Strength: Strong");
     });
@@ -246,13 +246,13 @@ describe("PasswordField", () => {
           form={mockForm}
           disabled={true}
           showStrengthIndicator={false}
-        />
+        />,
       );
 
       const input = screen.getByDisplayValue("");
       expect(input).toBeDisabled();
       expect(
-        screen.queryByTestId("password-strength-indicator")
+        screen.queryByTestId("password-strength-indicator"),
       ).not.toBeInTheDocument();
     });
 
@@ -262,13 +262,13 @@ describe("PasswordField", () => {
           form={mockForm}
           disabled={true}
           showStrengthIndicator={true}
-        />
+        />,
       );
 
       const input = screen.getByDisplayValue("");
       expect(input).toBeDisabled();
       expect(
-        screen.getByTestId("password-strength-indicator")
+        screen.getByTestId("password-strength-indicator"),
       ).toBeInTheDocument();
     });
   });

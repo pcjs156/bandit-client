@@ -33,7 +33,7 @@ export const ColorNameInput = memo(
       maxLength={20}
       disabled={disabled}
     />
-  )
+  ),
 );
 
 ColorNameInput.displayName = "ColorNameInput";

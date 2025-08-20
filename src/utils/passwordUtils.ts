@@ -9,7 +9,7 @@ export class PasswordUtils {
    */
   static async verifyPassword(
     password: string,
-    hash: string
+    hash: string,
   ): Promise<boolean> {
     try {
       return await bcrypt.compare(password, hash);

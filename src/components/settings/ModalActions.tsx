@@ -34,7 +34,7 @@ export const ModalActions = memo(
         {submitText}
       </Button>
     </Group>
-  )
+  ),
 );
 
 ModalActions.displayName = "ModalActions";

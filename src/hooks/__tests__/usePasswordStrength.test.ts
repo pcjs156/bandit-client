@@ -109,7 +109,7 @@ describe("usePasswordStrength", () => {
     it("같은 비밀번호에 대해서는 같은 객체를 반환해야 한다", () => {
       const { result, rerender } = renderHook(
         ({ password }) => usePasswordStrength(password),
-        { initialProps: { password: "test123" } }
+        { initialProps: { password: "test123" } },
       );
 
       const firstResult = result.current;
@@ -126,7 +126,7 @@ describe("usePasswordStrength", () => {
     it("다른 비밀번호에 대해서는 다른 결과를 반환해야 한다", () => {
       const { result, rerender } = renderHook(
         ({ password }) => usePasswordStrength(password),
-        { initialProps: { password: "test123" } }
+        { initialProps: { password: "test123" } },
       );
 
       const firstResult = result.current;

@@ -20,16 +20,16 @@ vi.mock("@src/hooks/useRegisterForm", () => ({
     validateField: vi.fn(),
     onSubmit: vi.fn(
       (
-          handler: (values: {
-            userId: string;
-            password: string;
-            nickname: string;
-          }) => void
-        ) =>
+        handler: (values: {
+          userId: string;
+          password: string;
+          nickname: string;
+        }) => void,
+      ) =>
         (e: React.FormEvent) => {
           e.preventDefault();
           handler({ userId: "", password: "", nickname: "" });
-        }
+        },
     ),
     getInputProps: () => ({
       value: "",
@@ -63,12 +63,12 @@ describe("RegisterPage", () => {
 
       // AppLogo가 표시되어야 함
       expect(
-        screen.getByRole("heading", { name: "BANDIT" })
+        screen.getByRole("heading", { name: "BANDIT" }),
       ).toBeInTheDocument();
 
       // 페이지 제목이 표시되어야 함
       expect(
-        screen.getByRole("heading", { name: "회원가입" })
+        screen.getByRole("heading", { name: "회원가입" }),
       ).toBeInTheDocument();
 
       // 폼 필드들이 표시되어야 함
@@ -78,7 +78,7 @@ describe("RegisterPage", () => {
 
       // 제출 버튼이 표시되어야 함
       expect(
-        screen.getByRole("button", { name: "회원가입" })
+        screen.getByRole("button", { name: "회원가입" }),
       ).toBeInTheDocument();
 
       // 푸터 링크가 표시되어야 함
@@ -91,7 +91,7 @@ describe("RegisterPage", () => {
 
       // BANDIT 제목이 표시되어야 함
       expect(
-        screen.getByRole("heading", { name: "BANDIT" })
+        screen.getByRole("heading", { name: "BANDIT" }),
       ).toBeInTheDocument();
 
       // 음악 아이콘이 표시되어야 함
@@ -105,10 +105,10 @@ describe("RegisterPage", () => {
       renderRegisterPage();
 
       expect(
-        screen.getByPlaceholderText("영문, 숫자 4-20자")
+        screen.getByPlaceholderText("영문, 숫자 4-20자"),
       ).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText("영문, 숫자 포함 8자 이상")
+        screen.getByPlaceholderText("영문, 숫자 포함 8자 이상"),
       ).toBeInTheDocument();
       expect(screen.getByPlaceholderText("2-20자")).toBeInTheDocument();
     });

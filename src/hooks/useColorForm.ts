@@ -40,7 +40,7 @@ export function useColorForm({
     const validationError = validateColorInput(
       colorName,
       colorValue,
-      customColors
+      customColors,
     );
 
     if (validationError) {

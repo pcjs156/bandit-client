@@ -27,7 +27,7 @@ export function generateUUID(): string {
  * 새 사용자 객체 생성
  */
 export async function createStoredUser(
-  userData: CreateUserData
+  userData: CreateUserData,
 ): Promise<StoredUser> {
   const passwordHash = await PasswordUtils.hashPassword(userData.password);
 
@@ -46,7 +46,7 @@ export async function createStoredUser(
  */
 export function updateUserWithTimestamp(
   user: StoredUser,
-  updates: Partial<User>
+  updates: Partial<User>,
 ): StoredUser {
   return {
     ...user,
@@ -69,7 +69,7 @@ export function toPublicUser(storedUser: StoredUser): User {
  */
 export function findUserByUserId(
   users: StoredUser[],
-  userId: string
+  userId: string,
 ): StoredUser | null {
   return users.find((user) => user.userId === userId) || null;
 }
@@ -79,7 +79,7 @@ export function findUserByUserId(
  */
 export function findUserById(
   users: StoredUser[],
-  id: string
+  id: string,
 ): StoredUser | null {
   return users.find((user) => user.id === id) || null;
 }
@@ -90,7 +90,7 @@ export function findUserById(
 export function updateUserInArray(
   users: StoredUser[],
   id: string,
-  updates: Partial<User>
+  updates: Partial<User>,
 ): { updatedUsers: StoredUser[]; updatedUser: StoredUser | null } {
   const userIndex = users.findIndex((user) => user.id === id);
 
@@ -110,7 +110,7 @@ export function updateUserInArray(
  */
 export async function verifyUserPassword(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   return PasswordUtils.verifyPassword(password, hash);
 }

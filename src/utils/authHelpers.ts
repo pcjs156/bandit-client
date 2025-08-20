@@ -42,7 +42,7 @@ export async function executeAuthAction<T extends AuthActionResult>(
   actionName: string,
   userId: string | undefined,
   setState: AuthStateUpdater,
-  action: () => Promise<T>
+  action: () => Promise<T>,
 ): Promise<T> {
   // 시작 로깅
   logger.info(`${actionName} 시작`, createUserMetadata(undefined, { userId }));
@@ -56,7 +56,7 @@ export async function executeAuthAction<T extends AuthActionResult>(
     // 성공 로깅
     logger.info(
       result.successMessage || `${actionName} 성공`,
-      createUserMetadata(result.user?.id, { userId: result.user?.userId })
+      createUserMetadata(result.user?.id, { userId: result.user?.userId }),
     );
 
     // 성공 상태 설정
@@ -77,7 +77,7 @@ export async function executeAuthAction<T extends AuthActionResult>(
         userId,
         errorCode: apiError.detailCode,
         errorMessage: apiError.message,
-      })
+      }),
     );
 
     // 실패 상태 설정
@@ -97,7 +97,7 @@ export async function executeAuthAction<T extends AuthActionResult>(
 export async function executeLogout(
   currentUser: User | null,
   setState: AuthStateUpdater,
-  logoutAction: () => Promise<void>
+  logoutAction: () => Promise<void>,
 ): Promise<void> {
   logger.info("로그아웃 시작", createUserMetadata(currentUser?.id));
 
@@ -108,7 +108,7 @@ export async function executeLogout(
     // 로그아웃 에러는 무시 (이미 로그아웃된 상태일 수 있음)
     logger.warn(
       "로그아웃 중 오류 발생",
-      createUserMetadata(currentUser?.id, { error: String(error) })
+      createUserMetadata(currentUser?.id, { error: String(error) }),
     );
   } finally {
     // localStorage 완전 정리
@@ -129,11 +129,11 @@ export async function executeProfileUpdate(
   currentUser: User,
   nickname: string,
   setState: AuthStateUpdater,
-  updateAction: () => Promise<User>
+  updateAction: () => Promise<User>,
 ): Promise<void> {
   logger.info(
     "프로필 업데이트 시작",
-    createUserMetadata(currentUser.id, { nickname })
+    createUserMetadata(currentUser.id, { nickname }),
   );
 
   try {
@@ -144,7 +144,7 @@ export async function executeProfileUpdate(
       createUserMetadata(updatedUser.id, {
         oldNickname: currentUser.nickname,
         newNickname: updatedUser.nickname,
-      })
+      }),
     );
 
     setState({ user: updatedUser, error: null });
@@ -157,7 +157,7 @@ export async function executeProfileUpdate(
         nickname,
         errorCode: apiError.detailCode,
         errorMessage: apiError.message,
-      })
+      }),
     );
 
     setState({ error: apiError.message || "프로필 업데이트에 실패했습니다" });
@@ -170,7 +170,7 @@ export async function executeProfileUpdate(
  */
 export async function executeTokenRefresh(
   setState: AuthStateUpdater,
-  refreshAction: () => Promise<User>
+  refreshAction: () => Promise<User>,
 ): Promise<void> {
   logger.debug("토큰 갱신 시작");
 
@@ -193,7 +193,7 @@ export async function executeTokenRefresh(
  */
 export async function executeInitialize(
   setState: AuthStateUpdater,
-  getMeAction: () => Promise<User>
+  getMeAction: () => Promise<User>,
 ): Promise<void> {
   logger.info("인증 상태 초기화 시작");
   setState({ status: "loading" });

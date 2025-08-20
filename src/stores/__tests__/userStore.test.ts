@@ -65,7 +65,7 @@ describe("userStore", () => {
       const result = await createUser(mockCreateUserData);
 
       expect(userUtils.createStoredUser).toHaveBeenCalledWith(
-        mockCreateUserData
+        mockCreateUserData,
       );
       expect(result).toEqual(mockStoredUser);
 
@@ -118,7 +118,7 @@ describe("userStore", () => {
 
       expect(userUtils.findUserByUserId).toHaveBeenCalledWith(
         [mockStoredUser],
-        "testuser"
+        "testuser",
       );
       expect(result).toEqual(mockStoredUser);
     });
@@ -131,7 +131,7 @@ describe("userStore", () => {
 
       expect(userUtils.findUserByUserId).toHaveBeenCalledWith(
         [mockStoredUser],
-        "nonexistent"
+        "nonexistent",
       );
       expect(result).toBeNull();
     });
@@ -150,7 +150,7 @@ describe("userStore", () => {
 
       expect(userUtils.findUserById).toHaveBeenCalledWith(
         [mockStoredUser],
-        "user1"
+        "user1",
       );
       expect(result).toEqual(mockStoredUser);
     });
@@ -163,7 +163,7 @@ describe("userStore", () => {
 
       expect(userUtils.findUserById).toHaveBeenCalledWith(
         [mockStoredUser],
-        "nonexistent"
+        "nonexistent",
       );
       expect(result).toBeNull();
     });
@@ -223,7 +223,7 @@ describe("userStore", () => {
       expect(userUtils.updateUserInArray).toHaveBeenCalledWith(
         [mockStoredUser],
         "user1",
-        { nickname: "업데이트된닉네임" }
+        { nickname: "업데이트된닉네임" },
       );
       expect(result).toEqual(updatedStoredUser);
 
@@ -301,7 +301,7 @@ describe("userStore", () => {
 
       expect(userUtils.verifyUserPassword).toHaveBeenCalledWith(
         "password123",
-        "hashedPassword123"
+        "hashedPassword123",
       );
       expect(result).toBe(true);
     });

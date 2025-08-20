@@ -16,10 +16,20 @@ vi.mock("../tokenStorage");
 vi.mock("@src/stores/userStore");
 vi.mock("@src/utils/apiHelpers");
 
+// Mock 타입 정의
+interface MockUserStore {
+  createUser: ReturnType<typeof vi.fn>;
+  setCurrentUser: ReturnType<typeof vi.fn>;
+}
+
+interface MockTokenStorage {
+  clearTokens: ReturnType<typeof vi.fn>;
+}
+
 describe("LocalStorageAuthApi", () => {
   let authApi: LocalStorageAuthApi;
-  let mockUserStore: any;
-  let mockTokenStorage: any;
+  let mockUserStore: MockUserStore;
+  let mockTokenStorage: MockTokenStorage;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -29,20 +39,29 @@ describe("LocalStorageAuthApi", () => {
       createUser: vi.fn(),
       setCurrentUser: vi.fn(),
     };
-    (useUserStore.getState as any).mockReturnValue(mockUserStore);
+    (useUserStore.getState as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockUserStore,
+    );
 
     // Mock TokenStorage
     mockTokenStorage = {
       clearTokens: vi.fn(),
     };
-    (TokenStorage.clearTokens as any) = mockTokenStorage.clearTokens;
+    (TokenStorage.clearTokens as ReturnType<typeof vi.fn>) =
+      mockTokenStorage.clearTokens;
 
     // Mock AuthValidation
-    (AuthValidation.validateRegisterInput as any).mockReturnValue(null);
+    (
+      AuthValidation.validateRegisterInput as ReturnType<typeof vi.fn>
+    ).mockReturnValue(null);
 
     // Mock apiHelpers
-    (apiHelpers.validateUserIdNotExists as any).mockReturnValue(undefined);
-    (apiHelpers.findAndValidateUser as any).mockReturnValue({
+    (
+      apiHelpers.validateUserIdNotExists as ReturnType<typeof vi.fn>
+    ).mockReturnValue(undefined);
+    (
+      apiHelpers.findAndValidateUser as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
       id: "user-123",
       userId: "testuser",
       passwordHash: "hashedPassword",
@@ -50,37 +69,47 @@ describe("LocalStorageAuthApi", () => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
-    (apiHelpers.validatePassword as any).mockResolvedValue(undefined);
-    (apiHelpers.authenticateUser as any).mockReturnValue({
+    (apiHelpers.validatePassword as ReturnType<typeof vi.fn>).mockResolvedValue(
+      undefined,
+    );
+    (apiHelpers.authenticateUser as ReturnType<typeof vi.fn>).mockReturnValue({
       accessToken: "access-token",
       refreshToken: "refresh-token",
     });
-    (apiHelpers.createAuthResponse as any).mockReturnValue({
-      user: {
-        id: "user-123",
-        userId: "testuser",
-        nickname: "테스트유저",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+    (apiHelpers.createAuthResponse as ReturnType<typeof vi.fn>).mockReturnValue(
+      {
+        user: {
+          id: "user-123",
+          userId: "testuser",
+          nickname: "테스트유저",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        tokens: {
+          accessToken: "access-token",
+          refreshToken: "refresh-token",
+        },
       },
-      tokens: {
-        accessToken: "access-token",
-        refreshToken: "refresh-token",
-      },
-    });
-    (apiHelpers.validateAndParseRefreshToken as any).mockReturnValue({
+    );
+    (
+      apiHelpers.validateAndParseRefreshToken as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
       userId: "user-123",
     });
-    (apiHelpers.findUserByIdForRefresh as any).mockReturnValue({
+    (
+      apiHelpers.findUserByIdForRefresh as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
       id: "user-123",
       userId: "testuser",
       nickname: "테스트유저",
     });
-    (apiHelpers.generateAndStoreTokens as any).mockReturnValue({
+    (
+      apiHelpers.generateAndStoreTokens as ReturnType<typeof vi.fn>
+    ).mockReturnValue({
       accessToken: "new-access-token",
       refreshToken: "new-refresh-token",
     });
-    (apiHelpers.toPublicUser as any).mockReturnValue({
+    (apiHelpers.toPublicUser as ReturnType<typeof vi.fn>).mockReturnValue({
       id: "user-123",
       userId: "testuser",
       nickname: "테스트유저",
@@ -117,10 +146,10 @@ describe("LocalStorageAuthApi", () => {
       const result = await authApi.register(mockRegisterData);
 
       expect(AuthValidation.validateRegisterInput).toHaveBeenCalledWith(
-        mockRegisterData
+        mockRegisterData,
       );
       expect(apiHelpers.validateUserIdNotExists).toHaveBeenCalledWith(
-        mockRegisterData.userId
+        mockRegisterData.userId,
       );
       expect(mockUserStore.createUser).toHaveBeenCalledWith(mockRegisterData);
       expect(apiHelpers.authenticateUser).toHaveBeenCalled();
@@ -131,23 +160,25 @@ describe("LocalStorageAuthApi", () => {
 
     it("입력값 검증 실패 시 에러를 던져야 한다", async () => {
       const validationError = new Error("입력값 검증 실패");
-      (AuthValidation.validateRegisterInput as any).mockReturnValue(
-        validationError
-      );
+      (
+        AuthValidation.validateRegisterInput as ReturnType<typeof vi.fn>
+      ).mockReturnValue(validationError);
 
       await expect(authApi.register(mockRegisterData)).rejects.toThrow(
-        "입력값 검증 실패"
+        "입력값 검증 실패",
       );
     });
 
     it("중복 사용자 확인 실패 시 에러를 던져야 한다", async () => {
       const duplicateError = new Error("이미 존재하는 사용자입니다");
-      (apiHelpers.validateUserIdNotExists as any).mockImplementation(() => {
+      (
+        apiHelpers.validateUserIdNotExists as ReturnType<typeof vi.fn>
+      ).mockImplementation(() => {
         throw duplicateError;
       });
 
       await expect(authApi.register(mockRegisterData)).rejects.toThrow(
-        "이미 존재하는 사용자입니다"
+        "이미 존재하는 사용자입니다",
       );
     });
 
@@ -156,7 +187,7 @@ describe("LocalStorageAuthApi", () => {
       mockUserStore.createUser.mockRejectedValue(createError);
 
       await expect(authApi.register(mockRegisterData)).rejects.toThrow(
-        "사용자 생성 실패"
+        "사용자 생성 실패",
       );
     });
   });
@@ -171,11 +202,11 @@ describe("LocalStorageAuthApi", () => {
       const result = await authApi.login(mockLoginData);
 
       expect(apiHelpers.findAndValidateUser).toHaveBeenCalledWith(
-        mockLoginData.userId
+        mockLoginData.userId,
       );
       expect(apiHelpers.validatePassword).toHaveBeenCalledWith(
         mockLoginData.password,
-        "hashedPassword"
+        "hashedPassword",
       );
       expect(apiHelpers.authenticateUser).toHaveBeenCalled();
       expect(apiHelpers.createAuthResponse).toHaveBeenCalled();
@@ -185,21 +216,25 @@ describe("LocalStorageAuthApi", () => {
 
     it("사용자 찾기 실패 시 에러를 던져야 한다", async () => {
       const findError = new Error("사용자를 찾을 수 없습니다");
-      (apiHelpers.findAndValidateUser as any).mockImplementation(() => {
+      (
+        apiHelpers.findAndValidateUser as ReturnType<typeof vi.fn>
+      ).mockImplementation(() => {
         throw findError;
       });
 
       await expect(authApi.login(mockLoginData)).rejects.toThrow(
-        "사용자를 찾을 수 없습니다"
+        "사용자를 찾을 수 없습니다",
       );
     });
 
     it("비밀번호 검증 실패 시 에러를 던져야 한다", async () => {
       const passwordError = new Error("비밀번호가 일치하지 않습니다");
-      (apiHelpers.validatePassword as any).mockRejectedValue(passwordError);
+      (
+        apiHelpers.validatePassword as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(passwordError);
 
       await expect(authApi.login(mockLoginData)).rejects.toThrow(
-        "비밀번호가 일치하지 않습니다"
+        "비밀번호가 일치하지 않습니다",
       );
     });
   });
@@ -222,13 +257,13 @@ describe("LocalStorageAuthApi", () => {
       const result = await authApi.refreshToken(mockRefreshData);
 
       expect(apiHelpers.validateAndParseRefreshToken).toHaveBeenCalledWith(
-        mockRefreshData.refreshToken
+        mockRefreshData.refreshToken,
       );
       expect(apiHelpers.findUserByIdForRefresh).toHaveBeenCalledWith(
-        "user-123"
+        "user-123",
       );
       expect(apiHelpers.generateAndStoreTokens).toHaveBeenCalledWith(
-        "user-123"
+        "user-123",
       );
       expect(result).toHaveProperty("accessToken");
       expect(result).toHaveProperty("refreshToken");
@@ -236,25 +271,27 @@ describe("LocalStorageAuthApi", () => {
 
     it("리프레시 토큰 검증 실패 시 에러를 던져야 한다", async () => {
       const tokenError = new Error("유효하지 않은 토큰입니다");
-      (apiHelpers.validateAndParseRefreshToken as any).mockImplementation(
-        () => {
-          throw tokenError;
-        }
-      );
+      (
+        apiHelpers.validateAndParseRefreshToken as ReturnType<typeof vi.fn>
+      ).mockImplementation(() => {
+        throw tokenError;
+      });
 
       await expect(authApi.refreshToken(mockRefreshData)).rejects.toThrow(
-        "유효하지 않은 토큰입니다"
+        "유효하지 않은 토큰입니다",
       );
     });
 
     it("사용자 찾기 실패 시 에러를 던져야 한다", async () => {
       const userError = new Error("사용자를 찾을 수 없습니다");
-      (apiHelpers.findUserByIdForRefresh as any).mockImplementation(() => {
+      (
+        apiHelpers.findUserByIdForRefresh as ReturnType<typeof vi.fn>
+      ).mockImplementation(() => {
         throw userError;
       });
 
       await expect(authApi.refreshToken(mockRefreshData)).rejects.toThrow(
-        "사용자를 찾을 수 없습니다"
+        "사용자를 찾을 수 없습니다",
       );
     });
   });

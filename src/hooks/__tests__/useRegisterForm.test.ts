@@ -45,7 +45,7 @@ describe("useRegisterForm", () => {
         });
 
         expect(result.current.errors.userId).toBe(
-          "아이디는 4자 이상이어야 합니다"
+          "아이디는 4자 이상이어야 합니다",
         );
       });
 
@@ -58,7 +58,7 @@ describe("useRegisterForm", () => {
         });
 
         expect(result.current.errors.userId).toBe(
-          "아이디는 20자 이하여야 합니다"
+          "아이디는 20자 이하여야 합니다",
         );
       });
 
@@ -71,7 +71,7 @@ describe("useRegisterForm", () => {
         });
 
         expect(result.current.errors.userId).toBe(
-          "아이디는 영문과 숫자만 사용할 수 있습니다"
+          "아이디는 영문과 숫자만 사용할 수 있습니다",
         );
       });
 
@@ -108,7 +108,7 @@ describe("useRegisterForm", () => {
         });
 
         expect(result.current.errors.password).toBe(
-          "비밀번호는 8자 이상이어야 합니다"
+          "비밀번호는 8자 이상이어야 합니다",
         );
       });
 
@@ -121,7 +121,7 @@ describe("useRegisterForm", () => {
         });
 
         expect(result.current.errors.password).toBe(
-          "비밀번호는 영문과 숫자를 모두 포함해야 합니다"
+          "비밀번호는 영문과 숫자를 모두 포함해야 합니다",
         );
       });
 
@@ -158,7 +158,7 @@ describe("useRegisterForm", () => {
         });
 
         expect(result.current.errors.nickname).toBe(
-          "닉네임은 2자 이상이어야 합니다"
+          "닉네임은 2자 이상이어야 합니다",
         );
       });
 
@@ -352,7 +352,7 @@ describe("useRegisterForm", () => {
       });
 
       expect(result.current.errors.userId).toBe(
-        "아이디는 영문과 숫자만 사용할 수 있습니다"
+        "아이디는 영문과 숫자만 사용할 수 있습니다",
       );
       // 다른 필드는 검증되지 않음
       expect(result.current.errors.password).toBeUndefined();

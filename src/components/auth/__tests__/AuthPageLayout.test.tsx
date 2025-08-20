@@ -15,7 +15,7 @@ const renderWithRouter = (component: React.ReactElement) => {
   return render(
     <MantineProvider>
       <BrowserRouter>{component}</BrowserRouter>
-    </MantineProvider>
+    </MantineProvider>,
   );
 };
 
@@ -156,7 +156,7 @@ describe("AuthPageLayout", () => {
       );
 
       renderWithRouter(
-        <AuthPageLayout {...defaultProps} children={complexChildren} />
+        <AuthPageLayout {...defaultProps} children={complexChildren} />,
       );
 
       expect(screen.getByPlaceholderText("이메일")).toBeInTheDocument();

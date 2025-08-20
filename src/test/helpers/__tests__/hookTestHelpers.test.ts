@@ -102,7 +102,7 @@ describe("hookTestHelpers", () => {
         (hookResult) => {
           hookResult.increment();
         },
-        { count: 1 }
+        { count: 1 },
       );
     });
 
@@ -113,7 +113,7 @@ describe("hookTestHelpers", () => {
           hookResult.increment();
           hookResult.setMessage("updated");
         },
-        { count: 1, message: "updated" }
+        { count: 1, message: "updated" },
       );
     });
   });
@@ -125,7 +125,7 @@ describe("hookTestHelpers", () => {
         async (hookResult) => {
           await hookResult.asyncIncrement();
         },
-        { count: 1, loading: false }
+        { count: 1, loading: false },
       );
     });
 
@@ -134,7 +134,7 @@ describe("hookTestHelpers", () => {
         useAsyncCounter,
         async (hookResult) => {
           await hookResult.asyncIncrement();
-        }
+        },
       );
 
       expect(result.current.count).toBe(1);
@@ -146,7 +146,7 @@ describe("hookTestHelpers", () => {
         (hookResult) => {
           hookResult.increment();
         },
-        { count: 1 }
+        { count: 1 },
       );
     });
   });
@@ -175,7 +175,7 @@ describe("hookTestHelpers", () => {
         },
         (result) => {
           result.current.validate();
-        }
+        },
       );
 
       expect(tests).toHaveLength(2);
@@ -197,7 +197,7 @@ describe("hookTestHelpers", () => {
         useFormWithValidation,
         "name",
         vi.fn(),
-        vi.fn()
+        vi.fn(),
       );
 
       expect(tests).toHaveLength(0);

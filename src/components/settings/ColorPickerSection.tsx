@@ -26,7 +26,7 @@ export const ColorPickerSection = memo(
         swatches={defaultColorSwatches}
       />
     </div>
-  )
+  ),
 );
 
 ColorPickerSection.displayName = "ColorPickerSection";

@@ -68,7 +68,7 @@ export class ConsoleLogOutput implements ILogOutput {
     const color = this.colors[entry.level];
     const levelName =
       Object.keys(LogLevel).find(
-        (key) => LogLevel[key as keyof typeof LogLevel] === entry.level
+        (key) => LogLevel[key as keyof typeof LogLevel] === entry.level,
       ) || "UNKNOWN";
     const prefix = `${color}[${levelName}]${this.reset}`;
 
@@ -205,7 +205,7 @@ export function createLogger(source: string): ILogger {
  */
 export function createUserMetadata(
   userId?: string,
-  additionalData?: LogMetadata
+  additionalData?: LogMetadata,
 ): LogMetadata {
   return {
     userId,

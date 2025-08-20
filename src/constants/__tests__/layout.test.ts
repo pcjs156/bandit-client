@@ -105,12 +105,12 @@ describe("layout", () => {
     it("레이아웃 상수들이 서로 일관성을 가져야 한다", () => {
       // USER_MENU_WIDTH가 헤더 높이보다 충분히 커야 함
       expect(LAYOUT_CONSTANTS.USER_MENU_WIDTH).toBeGreaterThan(
-        LAYOUT_CONSTANTS.HEADER_HEIGHT
+        LAYOUT_CONSTANTS.HEADER_HEIGHT,
       );
 
       // LOGO 아이콘이 헤더 높이보다 작아야 함
       expect(LAYOUT_CONSTANTS.ICON_SIZES.LOGO).toBeLessThan(
-        LAYOUT_CONSTANTS.HEADER_HEIGHT
+        LAYOUT_CONSTANTS.HEADER_HEIGHT,
       );
     });
 
@@ -187,7 +187,7 @@ describe("layout", () => {
       // ICON_SIZES가 중첩 객체로 잘 구성되어 있는지 확인
       expect(typeof LAYOUT_CONSTANTS.ICON_SIZES).toBe("object");
       expect(Object.keys(LAYOUT_CONSTANTS.ICON_SIZES).length).toBeGreaterThan(
-        0
+        0,
       );
     });
 

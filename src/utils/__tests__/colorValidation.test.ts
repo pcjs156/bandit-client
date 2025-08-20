@@ -84,28 +84,28 @@ describe("colorValidation", () => {
     it("잘못된 길이의 hex 색상은 에러를 반환해야 한다", () => {
       expect(validateColorValue("#f")).toBe("올바른 hex 색상 형식이 아닙니다.");
       expect(validateColorValue("#ff")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
       expect(validateColorValue("#ffff")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
       expect(validateColorValue("#fffff")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
       expect(validateColorValue("#fffffff")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
     });
 
     it("잘못된 문자가 포함된 hex 색상은 에러를 반환해야 한다", () => {
       expect(validateColorValue("#gggggg")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
       expect(validateColorValue("#ff00zz")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
       expect(validateColorValue("#가나다")).toBe(
-        "올바른 hex 색상 형식이 아닙니다."
+        "올바른 hex 색상 형식이 아닙니다.",
       );
     });
 
@@ -130,7 +130,7 @@ describe("colorValidation", () => {
       const result = validateColorInput(
         "유효한이름",
         "invalid",
-        existingColors
+        existingColors,
       );
       expect(result).toBe("올바른 hex 색상 형식이 아닙니다.");
     });
