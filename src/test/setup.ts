@@ -99,9 +99,7 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  // 각 테스트 전에 localStorage 초기화
-  localStorage.clear();
-  sessionStorage.clear();
+  // 각 테스트 전에 모킹된 함수들 초기화
 
   // 모킹된 함수들 초기화
   vi.clearAllMocks();
