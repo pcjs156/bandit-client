@@ -1,23 +1,19 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { TokenStorage } from "../tokenStorage";
-
-// Mock localStorage
-const mockLocalStorage = {
-  setItem: vi.fn(),
-  getItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
+import {
+  LocalStorageMockHelper,
+  setupCommonTestEnvironment,
+} from "@src/test/helpers/commonTestHelpers";
 
 describe("TokenStorage", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  let localStorageMock: LocalStorageMockHelper;
 
-    // Mock localStorage
-    Object.defineProperty(global, "localStorage", {
-      value: mockLocalStorage,
-      writable: true,
-    });
+  // 공통 테스트 환경 설정
+  setupCommonTestEnvironment();
+
+  beforeEach(() => {
+    localStorageMock = new LocalStorageMockHelper();
+    localStorageMock.setup();
   });
 
   afterEach(() => {
@@ -28,31 +24,28 @@ describe("TokenStorage", () => {
     it("액세스 토큰과 리프레시 토큰을 localStorage에 저장해야 한다", () => {
       const accessToken = "access-token-123";
       const refreshToken = "refresh-token-123";
+      const mock = localStorageMock.getMock();
 
       TokenStorage.setTokens(accessToken, refreshToken);
 
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      expect(mock.setItem).toHaveBeenCalledWith(
         "bandit_access_token",
-        accessToken,
+        accessToken
       );
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      expect(mock.setItem).toHaveBeenCalledWith(
         "bandit_refresh_token",
-        refreshToken,
+        refreshToken
       );
-      expect(mockLocalStorage.setItem).toHaveBeenCalledTimes(2);
+      expect(mock.setItem).toHaveBeenCalledTimes(2);
     });
 
     it("빈 문자열 토큰도 저장할 수 있어야 한다", () => {
+      const mock = localStorageMock.getMock();
+
       TokenStorage.setTokens("", "");
 
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-        "bandit_access_token",
-        "",
-      );
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-        "bandit_refresh_token",
-        "",
-      );
+      expect(mock.setItem).toHaveBeenCalledWith("bandit_access_token", "");
+      expect(mock.setItem).toHaveBeenCalledWith("bandit_refresh_token", "");
     });
   });
 
@@ -60,19 +53,16 @@ describe("TokenStorage", () => {
     it("저장된 토큰들을 올바르게 조회해야 한다", () => {
       const mockAccessToken = "access-token-123";
       const mockRefreshToken = "refresh-token-123";
+      const mock = localStorageMock.getMock();
 
-      mockLocalStorage.getItem
+      mock.getItem
         .mockReturnValueOnce(mockAccessToken)
         .mockReturnValueOnce(mockRefreshToken);
 
       const result = TokenStorage.getTokens();
 
-      expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
-        "bandit_access_token",
-      );
-      expect(mockLocalStorage.getItem).toHaveBeenCalledWith(
-        "bandit_refresh_token",
-      );
+      expect(mock.getItem).toHaveBeenCalledWith("bandit_access_token");
+      expect(mock.getItem).toHaveBeenCalledWith("bandit_refresh_token");
       expect(result).toEqual({
         accessToken: mockAccessToken,
         refreshToken: mockRefreshToken,
@@ -80,7 +70,8 @@ describe("TokenStorage", () => {
     });
 
     it("토큰이 없는 경우 null을 반환해야 한다", () => {
-      mockLocalStorage.getItem.mockReturnValue(null);
+      const mock = localStorageMock.getMock();
+      mock.getItem.mockReturnValue(null);
 
       const result = TokenStorage.getTokens();
 
@@ -91,7 +82,8 @@ describe("TokenStorage", () => {
     });
 
     it("일부 토큰만 있는 경우 해당 값과 null을 반환해야 한다", () => {
-      mockLocalStorage.getItem
+      const mock = localStorageMock.getMock();
+      mock.getItem
         .mockReturnValueOnce("access-token-123")
         .mockReturnValueOnce(null);
 
@@ -106,15 +98,13 @@ describe("TokenStorage", () => {
 
   describe("clearTokens", () => {
     it("저장된 모든 토큰을 삭제해야 한다", () => {
+      const mock = localStorageMock.getMock();
+
       TokenStorage.clearTokens();
 
-      expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
-        "bandit_access_token",
-      );
-      expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
-        "bandit_refresh_token",
-      );
-      expect(mockLocalStorage.removeItem).toHaveBeenCalledTimes(2);
+      expect(mock.removeItem).toHaveBeenCalledWith("bandit_access_token");
+      expect(mock.removeItem).toHaveBeenCalledWith("bandit_refresh_token");
+      expect(mock.removeItem).toHaveBeenCalledTimes(2);
     });
   });
 
