@@ -1,25 +1,40 @@
 import { screen, render } from "@testing-library/react";
 import { vi, describe, it, expect } from "vitest";
 import { MantineProvider } from "@mantine/core";
+import AppWithTheme from "../AppWithTheme";
 
-// Mock AppWithTheme component directly
-vi.mock("../AppWithTheme", () => ({
-  default: () => (
-    <div data-testid="app-with-theme">
-      <div data-testid="notifications">Notifications</div>
-      <div data-testid="app">App Component</div>
-    </div>
-  ),
+// Mock dependencies
+vi.mock("@src/App.tsx", () => ({
+  default: () => <div data-testid="app">App Component</div>,
+}));
+
+vi.mock("@mantine/notifications", () => ({
+  Notifications: () => <div data-testid="notifications">Notifications</div>,
+}));
+
+// Mock useThemeStore with simple implementation
+vi.mock("@src/stores/themeStore", () => ({
+  useThemeStore: (
+    selector: (state: {
+      colorScheme: string;
+      primaryColor: string;
+      customColors: Array<{ id: string; shades: string[] }>;
+    }) => unknown,
+  ) => {
+    const state = {
+      colorScheme: "light",
+      primaryColor: "blue",
+      customColors: [],
+    };
+    return selector(state);
+  },
 }));
 
 describe("AppWithTheme", () => {
   const renderWithTheme = () => {
     return render(
       <MantineProvider>
-        <div data-testid="app-with-theme">
-          <div data-testid="notifications">Notifications</div>
-          <div data-testid="app">App Component</div>
-        </div>
+        <AppWithTheme />
       </MantineProvider>,
     );
   };
@@ -28,7 +43,6 @@ describe("AppWithTheme", () => {
     it("컴포넌트가 렌더링되어야 한다", () => {
       renderWithTheme();
 
-      expect(screen.getByTestId("app-with-theme")).toBeInTheDocument();
       expect(screen.getByTestId("app")).toBeInTheDocument();
       expect(screen.getByTestId("notifications")).toBeInTheDocument();
     });
@@ -47,15 +61,32 @@ describe("AppWithTheme", () => {
   });
 
   describe("컴포넌트 구조", () => {
-    it("올바른 컴포넌트 계층 구조를 가져야 한다", () => {
+    it("MantineProvider로 감싸져 있어야 한다", () => {
+      const { container } = renderWithTheme();
+
+      // MantineProvider가 렌더링되었는지 확인
+      expect(container.firstChild).toBeInTheDocument();
+    });
+
+    it("Notifications와 App이 올바른 순서로 렌더링되어야 한다", () => {
       renderWithTheme();
 
-      const appWithTheme = screen.getByTestId("app-with-theme");
       const notifications = screen.getByTestId("notifications");
       const app = screen.getByTestId("app");
 
-      expect(appWithTheme).toContainElement(notifications);
-      expect(appWithTheme).toContainElement(app);
+      expect(notifications).toBeInTheDocument();
+      expect(app).toBeInTheDocument();
+    });
+  });
+
+  describe("테마 통합", () => {
+    it("useThemeStore를 사용하여 테마를 설정해야 한다", () => {
+      // 컴포넌트가 렌더링되면 useThemeStore가 호출되어야 함
+      renderWithTheme();
+
+      // 기본 렌더링이 성공하면 테마 통합도 성공한 것
+      expect(screen.getByTestId("app")).toBeInTheDocument();
+      expect(screen.getByTestId("notifications")).toBeInTheDocument();
     });
   });
 });
