@@ -452,7 +452,7 @@ describe("logger", () => {
 
       setEnvironmentLogLevel(testLogger, true);
 
-      expect((testLogger as any).level).toBe(LogLevel.DEBUG);
+      expect((testLogger as Logger).level).toBe(LogLevel.DEBUG);
     });
 
     it("운영 환경에서는 INFO 레벨로 설정해야 한다", () => {
@@ -460,7 +460,7 @@ describe("logger", () => {
 
       setEnvironmentLogLevel(testLogger, false);
 
-      expect((testLogger as any).level).toBe(LogLevel.INFO);
+      expect((testLogger as Logger).level).toBe(LogLevel.INFO);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { screen, fireEvent, waitFor, act } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { render } from "@src/test/helpers/testUtils";
 import LoginPage from "../LoginPage";
@@ -17,11 +17,6 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockNavigate,
   };
 });
-
-// Mock AppLogo component
-vi.mock("@src/components/common/AppLogo", () => ({
-  default: () => <div data-testid="app-logo">AppLogo</div>,
-}));
 
 // Test data factories
 const createTestUser = () => ({
@@ -62,7 +57,9 @@ describe("LoginPage", () => {
     it("로그인 페이지가 올바르게 렌더링되어야 한다", () => {
       renderLoginPage();
 
-      expect(screen.getByTestId("app-logo")).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "BANDIT" })
+      ).toBeInTheDocument();
       expect(
         screen.getByRole("heading", { name: "로그인" })
       ).toBeInTheDocument();
@@ -73,6 +70,21 @@ describe("LoginPage", () => {
       ).toBeInTheDocument();
       expect(screen.getByText("계정이 없으신가요?")).toBeInTheDocument();
       expect(screen.getByText("회원가입")).toBeInTheDocument();
+    });
+
+    it("AppLogo가 올바르게 렌더링되어야 한다", () => {
+      renderLoginPage();
+
+      // BANDIT 제목이 표시되어야 함
+      expect(
+        screen.getByRole("heading", { name: "BANDIT" })
+      ).toBeInTheDocument();
+
+      // 음악 아이콘이 표시되어야 함 (SVG 요소)
+      const musicIcon =
+        document.querySelector('svg[data-icon="music"]') ||
+        document.querySelector(".tabler-icon-music");
+      expect(musicIcon).toBeInTheDocument();
     });
 
     it("폼 필드들이 올바른 placeholder를 가져야 한다", () => {
