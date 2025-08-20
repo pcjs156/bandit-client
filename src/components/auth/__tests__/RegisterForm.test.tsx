@@ -16,7 +16,7 @@ vi.mock("@src/hooks/useRegisterSubmit", () => ({
 
 // Mock child components
 vi.mock("../UserIdField", () => ({
-  UserIdField: ({ form, disabled }: any) => (
+  UserIdField: ({ disabled }: any) => (
     <div data-testid="user-id-field" data-disabled={disabled}>
       User ID Field
     </div>
@@ -24,7 +24,7 @@ vi.mock("../UserIdField", () => ({
 }));
 
 vi.mock("../PasswordField", () => ({
-  PasswordField: ({ form, disabled }: any) => (
+  PasswordField: ({ disabled }: any) => (
     <div data-testid="password-field" data-disabled={disabled}>
       Password Field
     </div>
@@ -32,7 +32,7 @@ vi.mock("../PasswordField", () => ({
 }));
 
 vi.mock("../NicknameField", () => ({
-  NicknameField: ({ form, disabled }: any) => (
+  NicknameField: ({ disabled }: any) => (
     <div data-testid="nickname-field" data-disabled={disabled}>
       Nickname Field
     </div>
@@ -69,7 +69,7 @@ describe("RegisterForm", () => {
 
     const { useRegisterForm } = await import("@src/hooks/useRegisterForm");
     const { useRegisterSubmit } = await import("@src/hooks/useRegisterSubmit");
-    
+
     vi.mocked(useRegisterForm).mockReturnValue(mockForm as any);
     vi.mocked(useRegisterSubmit).mockReturnValue(mockSubmitHook as any);
   });
@@ -114,9 +114,7 @@ describe("RegisterForm", () => {
     it("form.onSubmit이 올바르게 설정되어야 한다", () => {
       renderWithMantine(<RegisterForm />);
 
-      expect(mockForm.onSubmit).toHaveBeenCalledWith(
-        expect.any(Function)
-      );
+      expect(mockForm.onSubmit).toHaveBeenCalledWith(expect.any(Function));
     });
   });
 
@@ -162,7 +160,9 @@ describe("RegisterForm", () => {
         isLoading: true,
       };
 
-      vi.mocked(useRegisterSubmit).mockReturnValue(submitHookWithLoading as any);
+      vi.mocked(useRegisterSubmit).mockReturnValue(
+        submitHookWithLoading as any
+      );
 
       renderWithMantine(<RegisterForm />);
 
@@ -185,7 +185,9 @@ describe("RegisterForm", () => {
         isFormDisabled: true,
       };
 
-      vi.mocked(useRegisterSubmit).mockReturnValue(submitHookWithDisabled as any);
+      vi.mocked(useRegisterSubmit).mockReturnValue(
+        submitHookWithDisabled as any
+      );
 
       renderWithMantine(<RegisterForm />);
 
@@ -228,7 +230,9 @@ describe("RegisterForm", () => {
         isSubmitDisabled: vi.fn(() => true),
       };
 
-      vi.mocked(useRegisterSubmit).mockReturnValue(submitHookWithDisabled as any);
+      vi.mocked(useRegisterSubmit).mockReturnValue(
+        submitHookWithDisabled as any
+      );
 
       renderWithMantine(<RegisterForm />);
 
@@ -334,17 +338,13 @@ describe("RegisterForm", () => {
     it("useRegisterForm을 호출해야 한다", () => {
       renderWithMantine(<RegisterForm />);
 
-      expect(
-        vi.mocked(useRegisterForm)
-      ).toHaveBeenCalled();
+      expect(vi.mocked(useRegisterForm)).toHaveBeenCalled();
     });
 
     it("useRegisterSubmit을 호출해야 한다", () => {
       renderWithMantine(<RegisterForm />);
 
-      expect(
-        vi.mocked(useRegisterSubmit)
-      ).toHaveBeenCalled();
+      expect(vi.mocked(useRegisterSubmit)).toHaveBeenCalled();
     });
   });
 });

@@ -20,7 +20,7 @@ describe("PasswordField", () => {
   };
 
   const mockForm: UseFormReturnType<RegisterRequest> = {
-    getInputProps: vi.fn((fieldName: string) => ({
+    getInputProps: vi.fn((_fieldName: string) => ({
       value: "",
       onChange: vi.fn(),
       onBlur: vi.fn(),
@@ -85,7 +85,9 @@ describe("PasswordField", () => {
 
   describe("PasswordStrengthIndicator", () => {
     it("showStrengthIndicator가 true일 때 강도 표시기를 렌더링해야 한다", () => {
-      renderWithMantine(<PasswordField form={mockForm} showStrengthIndicator={true} />);
+      renderWithMantine(
+        <PasswordField form={mockForm} showStrengthIndicator={true} />
+      );
 
       expect(
         screen.getByTestId("password-strength-indicator")
@@ -93,7 +95,9 @@ describe("PasswordField", () => {
     });
 
     it("showStrengthIndicator가 false일 때 강도 표시기를 렌더링하지 않아야 한다", () => {
-      renderWithMantine(<PasswordField form={mockForm} showStrengthIndicator={false} />);
+      renderWithMantine(
+        <PasswordField form={mockForm} showStrengthIndicator={false} />
+      );
 
       expect(
         screen.queryByTestId("password-strength-indicator")
@@ -119,7 +123,10 @@ describe("PasswordField", () => {
       const strengthIndicator = screen.getByTestId(
         "password-strength-indicator"
       );
-      expect(strengthIndicator).toHaveAttribute("data-password", "strongpass123");
+      expect(strengthIndicator).toHaveAttribute(
+        "data-password",
+        "strongpass123"
+      );
     });
   });
 
@@ -193,7 +200,7 @@ describe("PasswordField", () => {
     it("에러가 있을 때 에러 상태를 표시해야 한다", () => {
       const formWithError = {
         ...mockForm,
-        getInputProps: vi.fn((fieldName: string) => ({
+        getInputProps: vi.fn((_fieldName: string) => ({
           value: "invalid",
           onChange: vi.fn(),
           onBlur: vi.fn(),
@@ -211,7 +218,9 @@ describe("PasswordField", () => {
     it("빈 비밀번호일 때 강도 표시기가 Weak를 표시해야 한다", () => {
       renderWithMantine(<PasswordField form={mockForm} />);
 
-      const strengthIndicator = screen.getByTestId("password-strength-indicator");
+      const strengthIndicator = screen.getByTestId(
+        "password-strength-indicator"
+      );
       expect(strengthIndicator).toHaveTextContent("Password Strength: Weak");
     });
 
@@ -223,7 +232,9 @@ describe("PasswordField", () => {
 
       renderWithMantine(<PasswordField form={formWithPassword} />);
 
-      const strengthIndicator = screen.getByTestId("password-strength-indicator");
+      const strengthIndicator = screen.getByTestId(
+        "password-strength-indicator"
+      );
       expect(strengthIndicator).toHaveTextContent("Password Strength: Strong");
     });
   });

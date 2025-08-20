@@ -20,7 +20,7 @@ describe("NicknameField", () => {
   };
 
   const mockForm: UseFormReturnType<RegisterRequest> = {
-    getInputProps: vi.fn((fieldName: string) => ({
+    getInputProps: vi.fn((_fieldName: string) => ({
       value: "",
       onChange: vi.fn(),
       onBlur: vi.fn(),
@@ -144,7 +144,6 @@ describe("NicknameField", () => {
     it("rightSection에 ValidationIcon이 배치되어야 한다", () => {
       renderWithMantine(<NicknameField form={mockForm} />);
 
-      const input = screen.getByRole("textbox");
       const validationIcon = screen.getByTestId("validation-icon-nickname");
 
       expect(validationIcon).toBeInTheDocument();
@@ -182,7 +181,7 @@ describe("NicknameField", () => {
     it("에러가 있을 때 에러 상태를 표시해야 한다", () => {
       const formWithError = {
         ...mockForm,
-        getInputProps: vi.fn((fieldName: string) => ({
+        getInputProps: vi.fn((_fieldName: string) => ({
           value: "invalid",
           onChange: vi.fn(),
           onBlur: vi.fn(),
@@ -219,24 +218,14 @@ describe("NicknameField", () => {
 
   describe("props 조합", () => {
     it("모든 props가 올바르게 적용되어야 한다", () => {
-      renderWithMantine(
-        <NicknameField
-          form={mockForm}
-          disabled={true}
-        />
-      );
+      renderWithMantine(<NicknameField form={mockForm} disabled={true} />);
 
       const input = screen.getByRole("textbox");
       expect(input).toBeDisabled();
     });
 
     it("disabled 상태와 ValidationIcon이 독립적으로 작동해야 한다", () => {
-      renderWithMantine(
-        <NicknameField
-          form={mockForm}
-          disabled={true}
-        />
-      );
+      renderWithMantine(<NicknameField form={mockForm} disabled={true} />);
 
       const input = screen.getByRole("textbox");
       expect(input).toBeDisabled();

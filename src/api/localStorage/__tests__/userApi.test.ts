@@ -4,7 +4,6 @@ import { AuthValidation } from "@src/utils/authValidation";
 import { useUserStore } from "@src/stores/userStore";
 import { ApiErrorCode } from "@src/types/api";
 import type { UpdateUserRequest, ApiError } from "@src/types/api";
-import type { User } from "@src/types/user";
 
 // Mock dependencies
 vi.mock("@src/utils/authValidation");
@@ -111,7 +110,7 @@ describe("LocalStorageUserApi", () => {
 
       expect(result).not.toHaveProperty("passwordHash");
       expect(result).toHaveProperty("extraField");
-      expect(result.extraField).toBe("extraValue");
+      expect(result).toMatchObject({ extraField: "extraValue" });
     });
   });
 

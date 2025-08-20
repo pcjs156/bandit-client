@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { useForm, type UseFormReturnType } from "@mantine/form";
+import { type UseFormReturnType } from "@mantine/form";
 import { MantineProvider } from "@mantine/core";
 import { UserIdField } from "../UserIdField";
 import type { RegisterRequest } from "@src/types/api";
@@ -16,7 +16,7 @@ vi.mock("@src/components/common/ValidationIcon", () => ({
 
 // Mock useForm hook
 const mockForm = {
-  getInputProps: vi.fn((fieldName: string) => ({
+  getInputProps: vi.fn((_fieldName: string) => ({
     value: "",
     onChange: vi.fn(),
     onBlur: vi.fn(),
@@ -107,7 +107,9 @@ describe("UserIdField", () => {
 
   describe("disabled 상태", () => {
     it("disabled가 false일 때 입력 필드가 활성화되어야 한다", () => {
-      renderWithMantine(<UserIdField form={mockForm as any} disabled={false} />);
+      renderWithMantine(
+        <UserIdField form={mockForm as any} disabled={false} />
+      );
 
       const input = screen.getByRole("textbox");
       expect(input).not.toBeDisabled();
@@ -139,7 +141,6 @@ describe("UserIdField", () => {
     it("rightSection에 ValidationIcon이 배치되어야 한다", () => {
       renderWithMantine(<UserIdField form={mockForm as any} />);
 
-      const input = screen.getByRole("textbox");
       const validationIcon = screen.getByTestId("validation-icon-userId");
 
       expect(validationIcon).toBeInTheDocument();
@@ -169,7 +170,7 @@ describe("UserIdField", () => {
     it("에러가 있을 때 에러 상태를 표시해야 한다", () => {
       const formWithError = {
         ...mockForm,
-        getInputProps: vi.fn((fieldName: string) => ({
+        getInputProps: vi.fn((_fieldName: string) => ({
           value: "invalid",
           onChange: vi.fn(),
           onBlur: vi.fn(),
@@ -188,7 +189,7 @@ describe("UserIdField", () => {
       const mockOnChange = vi.fn();
       const formWithOnChange = {
         ...mockForm,
-        getInputProps: vi.fn((fieldName: string) => ({
+        getInputProps: vi.fn((_fieldName: string) => ({
           value: "",
           onChange: mockOnChange,
           onBlur: vi.fn(),
