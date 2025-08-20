@@ -19,12 +19,43 @@ vi.mock("@src/stores/themeStore", () => ({
       colorScheme: string;
       primaryColor: string;
       customColors: Array<{ id: string; shades: string[] }>;
-    }) => unknown,
+    }) => unknown
   ) => {
     const state = {
       colorScheme: "light",
       primaryColor: "blue",
-      customColors: [],
+      customColors: [
+        {
+          id: "custom-blue",
+          shades: [
+            "#E3F2FD",
+            "#BBDEFB",
+            "#90CAF9",
+            "#64B5F6",
+            "#42A5F5",
+            "#2196F3",
+            "#1E88E5",
+            "#1976D2",
+            "#1565C0",
+            "#0D47A1",
+          ],
+        },
+        {
+          id: "custom-red",
+          shades: [
+            "#FFEBEE",
+            "#FFCDD2",
+            "#EF9A9A",
+            "#E57373",
+            "#EF5350",
+            "#F44336",
+            "#E53935",
+            "#D32F2F",
+            "#C62828",
+            "#B71C1C",
+          ],
+        },
+      ],
     };
     return selector(state);
   },
@@ -35,7 +66,7 @@ describe("AppWithTheme", () => {
     return render(
       <MantineProvider>
         <AppWithTheme />
-      </MantineProvider>,
+      </MantineProvider>
     );
   };
 
@@ -85,6 +116,14 @@ describe("AppWithTheme", () => {
       renderWithTheme();
 
       // 기본 렌더링이 성공하면 테마 통합도 성공한 것
+      expect(screen.getByTestId("app")).toBeInTheDocument();
+      expect(screen.getByTestId("notifications")).toBeInTheDocument();
+    });
+
+    it("customColors가 있을 때 테마에 추가되어야 한다", () => {
+      renderWithTheme();
+
+      // customColors가 있을 때 reduce 메서드가 실행되어야 함
       expect(screen.getByTestId("app")).toBeInTheDocument();
       expect(screen.getByTestId("notifications")).toBeInTheDocument();
     });

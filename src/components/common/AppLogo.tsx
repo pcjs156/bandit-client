@@ -20,6 +20,7 @@ function AppLogo({ size = "lg", showTitle = true }: AppLogoProps) {
         <IconMusic
           size={iconSize}
           style={{ color: "var(--mantine-primary-color-6)" }}
+          data-testid="icon-music"
         />
         {showTitle && (
           <Title
