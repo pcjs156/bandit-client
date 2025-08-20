@@ -21,7 +21,10 @@ vi.mock("@mantine/colors-generator", () => ({
 
 // Date.now 모킹 (일관된 테스트를 위해)
 const mockTimestamp = 1234567890;
-vi.spyOn(Date, "now").mockReturnValue(mockTimestamp);
+vi.stubGlobal("Date", {
+  ...Date,
+  now: vi.fn(() => mockTimestamp),
+});
 
 describe("themeStore", () => {
   beforeEach(() => {
