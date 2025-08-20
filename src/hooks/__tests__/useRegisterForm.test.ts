@@ -34,56 +34,62 @@ describe("useRegisterForm", () => {
     describe("userId 검증", () => {
       it("빈 값이면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("userId", "");
           result.current.validate();
         });
-        
+
         expect(result.current.errors.userId).toBe("아이디를 입력해주세요");
       });
 
       it("최소 길이보다 짧으면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("userId", "abc");
           result.current.validate();
         });
-        
-        expect(result.current.errors.userId).toBe("아이디는 4자 이상이어야 합니다");
+
+        expect(result.current.errors.userId).toBe(
+          "아이디는 4자 이상이어야 합니다"
+        );
       });
 
       it("최대 길이보다 길면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("userId", "a".repeat(21));
           result.current.validate();
         });
-        
-        expect(result.current.errors.userId).toBe("아이디는 20자 이하여야 합니다");
+
+        expect(result.current.errors.userId).toBe(
+          "아이디는 20자 이하여야 합니다"
+        );
       });
 
       it("영문과 숫자가 아닌 문자가 포함되면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("userId", "test@123");
           result.current.validate();
         });
-        
-        expect(result.current.errors.userId).toBe("아이디는 영문과 숫자만 사용할 수 있습니다");
+
+        expect(result.current.errors.userId).toBe(
+          "아이디는 영문과 숫자만 사용할 수 있습니다"
+        );
       });
 
       it("유효한 값이면 에러가 없어야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("userId", "test123");
           result.current.validate();
         });
-        
+
         expect(result.current.errors.userId).toBeUndefined();
       });
     });
@@ -91,45 +97,49 @@ describe("useRegisterForm", () => {
     describe("password 검증", () => {
       it("빈 값이면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("password", "");
           result.current.validate();
         });
-        
+
         expect(result.current.errors.password).toBe("비밀번호를 입력해주세요");
       });
 
       it("최소 길이보다 짧으면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("password", "pass1");
           result.current.validate();
         });
-        
-        expect(result.current.errors.password).toBe("비밀번호는 8자 이상이어야 합니다");
+
+        expect(result.current.errors.password).toBe(
+          "비밀번호는 8자 이상이어야 합니다"
+        );
       });
 
       it("영문과 숫자를 모두 포함하지 않으면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("password", "password");
           result.current.validate();
         });
-        
-        expect(result.current.errors.password).toBe("비밀번호는 영문과 숫자를 모두 포함해야 합니다");
+
+        expect(result.current.errors.password).toBe(
+          "비밀번호는 영문과 숫자를 모두 포함해야 합니다"
+        );
       });
 
       it("유효한 값이면 에러가 없어야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("password", "password123");
           result.current.validate();
         });
-        
+
         expect(result.current.errors.password).toBeUndefined();
       });
     });
@@ -137,34 +147,36 @@ describe("useRegisterForm", () => {
     describe("nickname 검증", () => {
       it("빈 값이면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("nickname", "");
           result.current.validate();
         });
-        
+
         expect(result.current.errors.nickname).toBe("닉네임을 입력해주세요");
       });
 
       it("최소 길이보다 짧으면 에러가 발생해야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("nickname", "테");
           result.current.validate();
         });
-        
-        expect(result.current.errors.nickname).toBe("닉네임은 2자 이상이어야 합니다");
+
+        expect(result.current.errors.nickname).toBe(
+          "닉네임은 2자 이상이어야 합니다"
+        );
       });
 
       it("유효한 값이면 에러가 없어야 한다", () => {
         const { result } = renderHook(() => useRegisterForm());
-        
+
         act(() => {
           result.current.setFieldValue("nickname", "테스트");
           result.current.validate();
         });
-        
+
         expect(result.current.errors.nickname).toBeUndefined();
       });
     });
@@ -201,11 +213,11 @@ describe("useRegisterForm", () => {
   describe("상태 변화", () => {
     it("필드 값 설정 후 상태가 올바르게 변경되어야 한다", () => {
       const { result } = renderHook(() => useRegisterForm());
-      
+
       act(() => {
         result.current.setFieldValue("userId", "newuser");
       });
-      
+
       expect(result.current.values.userId).toBe("newuser");
       expect(result.current.values.password).toBe("");
       expect(result.current.values.nickname).toBe("");
@@ -213,7 +225,7 @@ describe("useRegisterForm", () => {
 
     it("여러 필드 값을 한 번에 설정할 수 있어야 한다", () => {
       const { result } = renderHook(() => useRegisterForm());
-      
+
       act(() => {
         result.current.setValues({
           userId: "user1",
@@ -221,7 +233,7 @@ describe("useRegisterForm", () => {
           nickname: "nick1",
         });
       });
-      
+
       expect(result.current.values.userId).toBe("user1");
       expect(result.current.values.password).toBe("pass1");
       expect(result.current.values.nickname).toBe("nick1");
@@ -231,34 +243,34 @@ describe("useRegisterForm", () => {
   describe("에러 처리", () => {
     it("빈 userId로 검증 시 에러가 발생해야 한다", () => {
       const { result } = renderHook(() => useRegisterForm());
-      
+
       act(() => {
         result.current.setFieldValue("userId", "");
         result.current.validate();
       });
-      
+
       expect(result.current.errors.userId).toBe("아이디를 입력해주세요");
     });
 
     it("빈 password로 검증 시 에러가 발생해야 한다", () => {
       const { result } = renderHook(() => useRegisterForm());
-      
+
       act(() => {
         result.current.setFieldValue("password", "");
         result.current.validate();
       });
-      
+
       expect(result.current.errors.password).toBe("비밀번호를 입력해주세요");
     });
 
     it("빈 nickname으로 검증 시 에러가 발생해야 한다", () => {
       const { result } = renderHook(() => useRegisterForm());
-      
+
       act(() => {
         result.current.setFieldValue("nickname", "");
         result.current.validate();
       });
-      
+
       expect(result.current.errors.nickname).toBe("닉네임을 입력해주세요");
     });
   });

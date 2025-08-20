@@ -173,11 +173,7 @@ export function createFormValidationTests<T>(
  */
 export function createCompleteFormTests<T>(
   hookFn: () => T,
-  setFieldAction: (
-    result: T,
-    field: string,
-    value: string
-  ) => void,
+  setFieldAction: (result: T, field: string, value: string) => void,
   validateAction: (result: T) => void
 ) {
   const fieldConfigs = [

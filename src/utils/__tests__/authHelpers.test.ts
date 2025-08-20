@@ -31,11 +31,14 @@ vi.mock("@src/utils/logger", () => ({
 // localStorage 모킹
 const mockLocalStorage = {
   clear: vi.fn(),
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
 };
-Object.defineProperty(window, "localStorage", {
-  value: mockLocalStorage,
-  writable: true,
-});
+
+vi.mock("global", () => ({
+  localStorage: mockLocalStorage,
+}));
 
 describe("authHelpers", () => {
   // 테스트용 데이터
