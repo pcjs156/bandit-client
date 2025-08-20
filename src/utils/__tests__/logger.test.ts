@@ -1,16 +1,38 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
+  Logger,
   LogLevel,
   ConsoleLogOutput,
-  Logger,
-  createUserMetadata,
   createLogger,
-  logger,
+  createUserMetadata,
   setEnvironmentLogLevel,
+  logger,
 } from "../logger";
-import type { LogEntry, LogMetadata } from "../logger";
 
 describe("logger", () => {
+  let consoleSpy: {
+    debug: ReturnType<typeof vi.spyOn>;
+    info: ReturnType<typeof vi.spyOn>;
+    warn: ReturnType<typeof vi.spyOn>;
+    error: ReturnType<typeof vi.spyOn>;
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    // console 메서드들을 spy로 설정
+    consoleSpy = {
+      debug: vi.spyOn(console, "debug").mockImplementation(() => {}),
+      info: vi.spyOn(console, "info").mockImplementation(() => {}),
+      warn: vi.spyOn(console, "warn").mockImplementation(() => {}),
+      error: vi.spyOn(console, "error").mockImplementation(() => {}),
+    };
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe("LogLevel", () => {
     it("올바른 로그 레벨 상수를 가져야 한다", () => {
       expect(LogLevel.DEBUG).toBe(0);
@@ -62,7 +84,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringMatching(/\[DEBUG\].*\[TestSource\].*Debug message/),
+        expect.stringMatching(/\[DEBUG\].*\[TestSource\].*Debug message/)
       );
     });
 
@@ -77,7 +99,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.info).toHaveBeenCalledWith(
-        expect.stringContaining("[INFO]"),
+        expect.stringContaining("[INFO]")
       );
     });
 
@@ -92,7 +114,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.warn).toHaveBeenCalledWith(
-        expect.stringContaining("[WARN]"),
+        expect.stringContaining("[WARN]")
       );
     });
 
@@ -107,7 +129,7 @@ describe("logger", () => {
       consoleOutput.write(entry);
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringContaining("[ERROR]"),
+        expect.stringContaining("[ERROR]")
       );
     });
 
@@ -142,7 +164,7 @@ describe("logger", () => {
       expect(consoleSpy.info).toHaveBeenCalledWith(expect.any(String));
       expect(consoleSpy.info).not.toHaveBeenCalledWith(
         expect.any(String),
-        expect.any(Object),
+        expect.any(Object)
       );
     });
   });
@@ -204,7 +226,7 @@ describe("logger", () => {
         logger.info("Test message");
 
         expect(mockOutput.write).toHaveBeenCalledWith(
-          expect.objectContaining({ source: "App" }),
+          expect.objectContaining({ source: "App" })
         );
       });
 
@@ -213,7 +235,7 @@ describe("logger", () => {
         logger.info("Test message");
 
         expect(mockOutput.write).toHaveBeenCalledWith(
-          expect.objectContaining({ source: "CustomModule" }),
+          expect.objectContaining({ source: "CustomModule" })
         );
       });
     });
@@ -245,7 +267,7 @@ describe("logger", () => {
               timestamp: "2024-01-01T12:00:00.000Z",
               userAgent: expect.any(String), // jsdom에서는 userAgent가 있음
             }),
-          }),
+          })
         );
       });
     });
@@ -277,7 +299,7 @@ describe("logger", () => {
         expect(mockOutput.write).toHaveBeenCalledTimes(1);
         expect(consoleErrorSpy).toHaveBeenCalledWith(
           "로그 출력 중 오류 발생:",
-          expect.any(Error),
+          expect.any(Error)
         );
 
         consoleErrorSpy.mockRestore();
@@ -392,7 +414,7 @@ describe("logger", () => {
           source: "TestModule",
           message: "테스트 메시지",
           level: LogLevel.INFO,
-        }),
+        })
       );
     });
 
@@ -417,7 +439,7 @@ describe("logger", () => {
         expect.objectContaining({
           level: LogLevel.ERROR,
           message: "출력될 메시지",
-        }),
+        })
       );
 
       // 원래 레벨로 복원
@@ -442,7 +464,7 @@ describe("logger", () => {
         expect.objectContaining({
           source: "App",
           message: "테스트 메시지",
-        }),
+        })
       );
     });
   });

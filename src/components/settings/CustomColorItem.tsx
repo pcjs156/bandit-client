@@ -60,4 +60,6 @@ const CustomColorItem = memo(function CustomColorItem({
   );
 });
 
+CustomColorItem.displayName = "CustomColorItem";
+
 export default CustomColorItem;

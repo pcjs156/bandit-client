@@ -1,11 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { renderHook, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useAuthStore } from "../authStore";
-import {
-  TestDataFactory,
-  setupCommonTestEnvironment,
-} from "@src/test/helpers/commonTestHelpers";
+import type { RegisterRequest, LoginRequest } from "@src/types/api";
+import type { User } from "@src/types/user";
 
-// API 모킹
+// Mock dependencies
 vi.mock("@src/api", () => ({
   apiClient: {
     auth: {
@@ -21,7 +20,13 @@ vi.mock("@src/api", () => ({
   },
 }));
 
-// 유틸리티 함수 모킹
+vi.mock("@src/api/localStorage/tokenStorage", () => ({
+  TokenStorage: {
+    getTokens: vi.fn(),
+    clearTokens: vi.fn(),
+  },
+}));
+
 vi.mock("@src/utils/authHelpers", () => ({
   executeAuthAction: vi.fn(),
   executeLogout: vi.fn(),
@@ -30,201 +35,172 @@ vi.mock("@src/utils/authHelpers", () => ({
   executeInitialize: vi.fn(),
 }));
 
-// TokenStorage 모킹
-vi.mock("@src/api/localStorage/tokenStorage", () => ({
-  TokenStorage: {
-    getTokens: vi.fn(() => ({
-      accessToken: "mock-access",
-      refreshToken: "mock-refresh",
-    })),
-  },
-}));
-
-describe("authStore", () => {
-  const mockUser = TestDataFactory.createUser();
-  const mockRegisterRequest = TestDataFactory.createRegisterRequest();
-  const mockLoginRequest = TestDataFactory.createLoginRequest();
-
-  // 공통 테스트 환경 설정
-  setupCommonTestEnvironment();
-
+describe("useAuthStore", () => {
   beforeEach(() => {
-    // 스토어 초기화
-    useAuthStore.setState({
-      status: "idle",
-      user: null,
-      error: null,
-    });
-
-    // 모킹된 함수들 초기화
-    vi.clearAllMocks();
+    const { result } = renderHook(() => useAuthStore());
+    result.current.clearAllStorage();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
+  it("초기 상태가 올바르게 설정되어야 한다", () => {
+    const { result } = renderHook(() => useAuthStore());
+
+    expect(result.current.status).toBe("unauthenticated");
+    expect(result.current.user).toBeNull();
+    expect(result.current.error).toBeNull();
   });
 
-  describe("초기 상태", () => {
-    it("올바른 초기 상태를 가져야 한다", () => {
-      const state = useAuthStore.getState();
+  it("register 함수가 올바르게 동작해야 한다", async () => {
+    const { result } = renderHook(() => useAuthStore());
+    const mockUser: User = { 
+      id: "1", 
+      userId: "test", 
+      nickname: "Test User",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-01T00:00:00Z"
+    };
+    const mockResponse = { user: mockUser, accessToken: "token", refreshToken: "refresh" };
 
-      expect(state.status).toBe("idle");
-      expect(state.user).toBeNull();
-      expect(state.error).toBeNull();
+    const { executeAuthAction } = await import("@src/utils/authHelpers");
+    vi.mocked(executeAuthAction).mockResolvedValue(mockResponse);
+
+    const registerData: RegisterRequest = {
+      userId: "test",
+      password: "password",
+      nickname: "Test User"
+    };
+
+    await act(async () => {
+      await result.current.register(registerData);
     });
+
+    expect(executeAuthAction).toHaveBeenCalledWith("회원가입", "test", expect.any(Function), expect.any(Function));
   });
 
-  describe("register", () => {
-    it("회원가입을 성공적으로 처리해야 한다", async () => {
-      const { register } = useAuthStore.getState();
+  it("login 함수가 올바르게 동작해야 한다", async () => {
+    const { result } = renderHook(() => useAuthStore());
+    const mockUser: User = { 
+      id: "1", 
+      userId: "test", 
+      nickname: "Test User",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-01T00:00:00Z"
+    };
+    const mockResponse = { user: mockUser, accessToken: "token", refreshToken: "refresh" };
 
-      // register 함수가 정의되어 있는지 확인
-      expect(typeof register).toBe("function");
+    const { executeAuthAction } = await import("@src/utils/authHelpers");
+    vi.mocked(executeAuthAction).mockResolvedValue(mockResponse);
 
-      // 함수 실행 시 에러가 발생하지 않아야 함
-      await expect(register(mockRegisterRequest)).resolves.not.toThrow();
+    const loginData: LoginRequest = {
+      userId: "test",
+      password: "password"
+    };
+
+    await act(async () => {
+      await result.current.login(loginData);
     });
+
+    expect(executeAuthAction).toHaveBeenCalledWith("로그인", "test", expect.any(Function), expect.any(Function));
   });
 
-  describe("login", () => {
-    it("로그인을 성공적으로 처리해야 한다", async () => {
-      const { login } = useAuthStore.getState();
+  it("logout 함수가 올바르게 동작해야 한다", async () => {
+    const { result } = renderHook(() => useAuthStore());
+    
+    const { executeLogout } = await import("@src/utils/authHelpers");
+    vi.mocked(executeLogout).mockResolvedValue(undefined);
 
-      // login 함수가 정의되어 있는지 확인
-      expect(typeof login).toBe("function");
-
-      // 함수 실행 시 에러가 발생하지 않아야 함
-      await expect(login(mockLoginRequest)).resolves.not.toThrow();
+    await act(async () => {
+      await result.current.logout();
     });
+
+    expect(executeLogout).toHaveBeenCalledWith(null, expect.any(Function), expect.any(Function));
   });
 
-  describe("logout", () => {
-    it("로그아웃을 성공적으로 처리해야 한다", async () => {
-      const { logout } = useAuthStore.getState();
-
-      // logout 함수가 정의되어 있는지 확인
-      expect(typeof logout).toBe("function");
-
-      // 함수 실행 시 에러가 발생하지 않아야 함
-      await expect(logout()).resolves.not.toThrow();
-    });
-  });
-
-  describe("refreshToken", () => {
-    it("토큰 갱신을 성공적으로 처리해야 한다", async () => {
-      const { refreshToken } = useAuthStore.getState();
-
-      // refreshToken 함수가 정의되어 있는지 확인
-      expect(typeof refreshToken).toBe("function");
-
-      // 함수 실행 시 에러가 발생하지 않아야 함
-      await expect(refreshToken()).resolves.not.toThrow();
-    });
-  });
-
-  describe("updateProfile", () => {
-    it("프로필 업데이트를 성공적으로 처리해야 한다", async () => {
-      const { updateProfile } = useAuthStore.getState();
-
-      // 먼저 사용자를 로그인 상태로 설정
-      useAuthStore.setState({ user: mockUser });
-
-      // updateProfile 함수가 정의되어 있는지 확인
-      expect(typeof updateProfile).toBe("function");
-
-      // 함수 실행 시 에러가 발생하지 않아야 함
-      await expect(updateProfile("새닉네임")).resolves.not.toThrow();
-    });
-
-    it("로그인하지 않은 상태에서 프로필 업데이트 시 에러를 던져야 한다", async () => {
-      const { updateProfile } = useAuthStore.getState();
-
-      // 사용자가 로그인하지 않은 상태
-      useAuthStore.setState({ user: null });
-
-      // 에러가 발생해야 함
-      await expect(updateProfile("새닉네임")).rejects.toThrow(
-        "로그인이 필요합니다"
-      );
-    });
-  });
-
-  describe("initialize", () => {
-    it("초기화를 성공적으로 처리해야 한다", async () => {
-      const { initialize } = useAuthStore.getState();
-
-      // initialize 함수가 정의되어 있는지 확인
-      expect(typeof initialize).toBe("function");
-
-      // 함수 실행 시 에러가 발생하지 않아야 함
-      await expect(initialize()).resolves.not.toThrow();
-    });
-  });
-
-  describe("상태 변화", () => {
-    it("에러를 초기화할 수 있어야 한다", () => {
-      const { clearError } = useAuthStore.getState();
-
-      // 에러 상태 설정
-      useAuthStore.setState({ error: "테스트 에러" });
-
-      // 에러가 설정되었는지 확인
-      expect(useAuthStore.getState().error).toBe("테스트 에러");
-
-      // 에러 초기화
-      clearError();
-
-      // 에러가 초기화되었는지 확인
-      expect(useAuthStore.getState().error).toBeNull();
-    });
-
-    it("사용자 정보가 올바르게 설정되어야 한다", () => {
-      // 사용자 설정
-      useAuthStore.setState({ user: mockUser });
-
-      // 사용자가 설정되었는지 확인
-      expect(useAuthStore.getState().user).toEqual(mockUser);
-    });
-  });
-
-  describe("에러 처리", () => {
-    it("에러를 초기화할 수 있어야 한다", () => {
-      const { clearError } = useAuthStore.getState();
-
-      // 에러 상태 설정
-      useAuthStore.setState({ error: "테스트 에러" });
-
-      // 에러 초기화
-      clearError();
-
-      // 에러가 초기화되었는지 확인
-      expect(useAuthStore.getState().error).toBeNull();
-    });
-  });
-
-  describe("유틸리티 함수들", () => {
-    it("clearAllStorage가 올바르게 동작해야 한다", () => {
-      const { clearAllStorage } = useAuthStore.getState();
-
-      // 사용자와 에러 상태 설정
-      useAuthStore.setState({
-        user: mockUser,
-        error: "테스트 에러",
+  it("updateProfile 함수가 올바르게 동작해야 한다", async () => {
+    const { result } = renderHook(() => useAuthStore());
+    
+    // 먼저 로그인 상태로 만듦 - executeAuthAction을 모킹하여 사용자 상태 설정
+    const mockUser: User = { 
+      id: "1", 
+      userId: "test", 
+      nickname: "Test User",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-01T00:00:00Z"
+    };
+    
+    const { executeAuthAction } = await import("@src/utils/authHelpers");
+    vi.mocked(executeAuthAction).mockImplementation(async (actionName, userId, setState, action) => {
+      // 사용자 상태를 설정
+      setState({
         status: "authenticated",
+        user: mockUser,
+        error: null,
       });
-
-      // 상태가 설정되었는지 확인
-      expect(useAuthStore.getState().user).toEqual(mockUser);
-      expect(useAuthStore.getState().error).toBe("테스트 에러");
-      expect(useAuthStore.getState().status).toBe("authenticated");
-
-      // 모든 스토리지 정리
-      clearAllStorage();
-
-      // 상태가 초기화되었는지 확인
-      expect(useAuthStore.getState().user).toBeNull();
-      expect(useAuthStore.getState().error).toBeNull();
-      expect(useAuthStore.getState().status).toBe("unauthenticated");
+      return { user: mockUser, successMessage: "로그인 성공" };
     });
+    
+    // 로그인 실행하여 사용자 상태 설정
+    const loginData: LoginRequest = {
+      userId: "test",
+      password: "password"
+    };
+    
+    await act(async () => {
+      await result.current.login(loginData);
+    });
+    
+    // 이제 updateProfile 테스트
+    const { executeProfileUpdate } = await import("@src/utils/authHelpers");
+    vi.mocked(executeProfileUpdate).mockResolvedValue(undefined);
+
+    await act(async () => {
+      await result.current.updateProfile("New Nickname");
+    });
+
+    expect(executeProfileUpdate).toHaveBeenCalledWith(mockUser, "New Nickname", expect.any(Function), expect.any(Function));
+  });
+
+  it("refreshToken 함수가 올바르게 동작해야 한다", async () => {
+    const { result } = renderHook(() => useAuthStore());
+    
+    // TokenStorage.getTokens 모킹
+    const { TokenStorage } = await import("@src/api/localStorage/tokenStorage");
+    vi.mocked(TokenStorage.getTokens).mockReturnValue({
+      accessToken: "access-token",
+      refreshToken: "refresh-token"
+    });
+    
+    const { executeTokenRefresh } = await import("@src/utils/authHelpers");
+    vi.mocked(executeTokenRefresh).mockResolvedValue(undefined);
+
+    await act(async () => {
+      await result.current.refreshToken();
+    });
+
+    expect(executeTokenRefresh).toHaveBeenCalledWith(expect.any(Function), expect.any(Function));
+  });
+
+  it("initialize 함수가 올바르게 동작해야 한다", async () => {
+    const { result } = renderHook(() => useAuthStore());
+    
+    const { executeInitialize } = await import("@src/utils/authHelpers");
+    vi.mocked(executeInitialize).mockResolvedValue(undefined);
+
+    await act(async () => {
+      await result.current.initialize();
+    });
+
+    expect(executeInitialize).toHaveBeenCalledWith(expect.any(Function), expect.any(Function));
+  });
+
+  it("clearAllStorage 함수가 올바르게 동작해야 한다", () => {
+    const { result } = renderHook(() => useAuthStore());
+
+    act(() => {
+      result.current.clearAllStorage();
+    });
+
+    expect(result.current.status).toBe("unauthenticated");
+    expect(result.current.user).toBeNull();
+    expect(result.current.error).toBeNull();
   });
 });

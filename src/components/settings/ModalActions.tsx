@@ -21,20 +21,46 @@ export const ModalActions = memo(
     isSubmitDisabled = false,
     submitText = "추가",
     cancelText = "취소",
-  }: ModalActionsProps) => (
-    <Group justify="flex-end">
-      <Button variant="outline" onClick={onCancel} disabled={isLoading}>
-        {cancelText}
-      </Button>
-      <Button
-        onClick={onSubmit}
-        disabled={isSubmitDisabled || isLoading}
-        loading={isLoading}
-      >
-        {submitText}
-      </Button>
-    </Group>
-  ),
+  }: ModalActionsProps) => {
+    const handleSubmitKeyDown = (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        if (!isSubmitDisabled && !isLoading) {
+          onSubmit();
+        }
+      }
+    };
+
+    const handleCancelKeyDown = (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        if (!isLoading) {
+          onCancel();
+        }
+      }
+    };
+
+    return (
+      <Group justify="flex-end">
+        <Button 
+          variant="outline" 
+          onClick={onCancel} 
+          disabled={isLoading}
+          onKeyDown={handleCancelKeyDown}
+        >
+          {cancelText}
+        </Button>
+        <Button
+          onClick={onSubmit}
+          disabled={isSubmitDisabled || isLoading}
+          loading={isLoading}
+          onKeyDown={handleSubmitKeyDown}
+        >
+          {submitText}
+        </Button>
+      </Group>
+    );
+  },
 );
 
 ModalActions.displayName = "ModalActions";
