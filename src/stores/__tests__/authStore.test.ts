@@ -86,10 +86,16 @@ describe("authStore", () => {
     });
 
     it("회원가입 시 올바른 API를 호출해야 한다", async () => {
-      const mockExecuteAuthAction = vi.mocked(authHelpers.executeAuthAction);
+      const mockApiResponse = {
+        user: mockUser,
+        accessToken: "access_token",
+        refreshToken: "refresh_token",
+      };
 
-      // executeAuthAction의 콜백 함수를 실행
-      mockExecuteAuthAction.mockImplementation(
+      vi.mocked(apiClient.auth.register).mockResolvedValue(mockApiResponse);
+
+      // executeAuthAction 모킹을 제거하여 실제 함수 사용
+      vi.mocked(authHelpers.executeAuthAction).mockImplementation(
         async (_action, _userId, _updateState, apiCall) => {
           return await apiCall();
         }
@@ -125,9 +131,16 @@ describe("authStore", () => {
     });
 
     it("로그인 시 올바른 API를 호출해야 한다", async () => {
-      const mockExecuteAuthAction = vi.mocked(authHelpers.executeAuthAction);
+      const mockApiResponse = {
+        user: mockUser,
+        accessToken: "access_token",
+        refreshToken: "refresh_token",
+      };
 
-      mockExecuteAuthAction.mockImplementation(
+      vi.mocked(apiClient.auth.login).mockResolvedValue(mockApiResponse);
+
+      // executeAuthAction 모킹을 제거하여 실제 함수 사용
+      vi.mocked(authHelpers.executeAuthAction).mockImplementation(
         async (_action, _userId, _updateState, apiCall) => {
           return await apiCall();
         }
